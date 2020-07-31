@@ -7,6 +7,15 @@
   }
 }
 
+.todo__list-name {
+  border: 2px solid var(--main-bg);
+  border-radius: 0;
+
+  &:focus {
+    border-bottom: 2px solid var(--focus);
+  }
+}
+
 .tasks {
   color: var(--main-text);
 

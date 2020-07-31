@@ -137,6 +137,10 @@ let taskManager = {
 
 
     changeListName: function(prevName, newName) {
+        if (prevName === newName) {
+            console.log(createConsoleLogMessage("Changing list name was aborted, new name is already equal to current"))
+            return;
+        }
         let obj = Object.assign({}, this.toDoLists[prevName]);
 
         if (obj === {}) {
@@ -146,8 +150,12 @@ let taskManager = {
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
 
+        let menuListName = document.querySelector(".menu__todo-list-name--active").firstChild;
+        menuListName.innerText = newName;
+
         delete this.toDoLists[prevName];
         this.toDoLists[newName] = Object.assign({}, obj);
+        appManager.rememberLastUsedList(newName);
         saveCurrentListToLocalStorage();
     },
 
@@ -192,7 +200,7 @@ tasksList.addEventListener('mouseleave', removeTaskControlButtons);
 
 
 
-// Listens click and delegates it to nex functions: "Add task", "Clear task" or "Restore list".
+// Listens click and delegates it to next functions: "Add task", "Clear task" or "Restore list".
 toDoListWrapper.addEventListener('click', function(event) {
     clickListener(event);
 });
@@ -210,7 +218,29 @@ taskInput.addEventListener("keydown", function(event) {
 
 // initialize loading saved data
 let currentListName = appManager.options.lastUsedList;
-document.querySelector(".todo__list-name").innerText = currentListName;
+let listHeader = document.querySelector(".todo__list-name");
+listHeader.innerText = currentListName;
+
+listHeader.addEventListener("blur", editCurrentListName);
+listHeader.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        this.blur();
+    }
+})
+
+function editCurrentListName() {
+    let newName = this.innerText;
+    if (currentListName === newName) {
+        return;
+    }
+    taskManager.changeListName(currentListName, newName);
+    currentListName = newName;
+
+
+}
+
+
+
 loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
 
 
@@ -467,7 +497,6 @@ function editElementsInnerHTML(element) {
         element.innerHTML = taskValue;
     }
 }
-
 
 
 
