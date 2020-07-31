@@ -4,8 +4,6 @@ let timerApp = document.querySelector('.menu__timer');
 let calendarApp = document.querySelector('.menu__calendar');
 let converterApp = document.querySelector('.menu__converter');
 
-let apps = [toDoListApp, timerApp, calendarApp, converterApp];
-
 let appManager = {
     options: {},
 
@@ -28,7 +26,7 @@ let appManager = {
         localStorage.setItem("appManager", JSON.stringify(this));
         console.log(`[${appName}] is last used app now`);
     }
-}
+};
 
 
 if (!localStorage.getItem("appManager")) {
@@ -38,7 +36,7 @@ if (!localStorage.getItem("appManager")) {
 
 let appData = JSON.parse(localStorage.appManager);
 appManager.options = Object.assign(appData.options);
-console.log("app options data was loaded from {localStorage.appManager}")
+console.log("app options data was loaded from {localStorage.appManager}");
 
 
 document.addEventListener("DOMContentLoaded", loadLastAppState);
@@ -152,7 +150,7 @@ function loadListNamesToMenu() {
 
     if (!listNamesWrapper.classList.contains('active-tab')) {
         let listNames = document.querySelector('.menu__todo-list-names');
-        if (!listNames) return
+        if (!listNames) return;
         
         document.querySelector('.menu__todo-list-names').remove();
         updateDropDownPosition();
@@ -329,7 +327,7 @@ function createListSettingsOnHover(target) {
     target.addEventListener('mouseleave', removeSettingsIcon);
 
     function removeSettingsIcon() {
-        settings.remove()
+        settings.remove();
         target.removeEventListener('mouseleave', removeSettingsIcon);
     }
 
@@ -339,9 +337,8 @@ function createListSettingsOnHover(target) {
     function calculateOffsets(target) {
         let range = document.createRange();
         range.selectNode(target);
-        
-        let rect = range.getBoundingClientRect();
-        return rect;
+
+        return range.getBoundingClientRect();
     }
 
     
@@ -436,7 +433,7 @@ function menuListControlsHandler(target, buttonPressed) {
                     target.blur();
                     target.removeAttribute("contenteditable");
                 }
-            })
+            });
 
             function blurListener() {
                 let newListName = target.innerText;
@@ -448,14 +445,14 @@ function menuListControlsHandler(target, buttonPressed) {
                 }
                 
                 target.removeAttribute("contenteditable");
-                target.dataset.status === "changingName"
+                target.dataset.status === "changingName";
 
                 taskManager.changeListName(prevListName, newListName);
                 appManager.rememberLastUsedList(newListName);
                 target.removeEventListener("blur", blurListener);
             }
 
-            console.log("task is ready to be renamed")
+            console.log("task is ready to be renamed");
             break;
 
         case("remove list"):
@@ -464,7 +461,7 @@ function menuListControlsHandler(target, buttonPressed) {
             loadListNamesToMenu();
             updateMenuToDoListsHeight();
 
-            let firstList = document.querySelector(".menu__todo-list-name").innerText
+            let firstList = document.querySelector(".menu__todo-list-name").innerText;
 
             taskManager.loadList(firstList);
             appManager.rememberLastUsedList(firstList);
@@ -475,7 +472,7 @@ function menuListControlsHandler(target, buttonPressed) {
 
         case("save lists backup"):
             localStorage.setItem("toDoListsBackup", JSON.stringify(taskManager));
-            console.log(createConsoleLogMessage("toDoListsBackup saved to localStorage"))
+            console.log(createConsoleLogMessage("toDoListsBackup saved to localStorage"));
             break;
 
         case("load lists backup"):
@@ -519,7 +516,7 @@ function highlightCurrentList(listName) {
 
 function menuCreateNewTaskList(node) {
     let input = document.createElement('input');
-    input.className = "menu__todo-list__create-new-task--input"
+    input.className = "menu__todo-list__create-new-task--input";
     node.replaceWith(input);
     input.focus();
 
@@ -530,7 +527,6 @@ function menuCreateNewTaskList(node) {
 
         if (event.key === "Enter" && event.target.value.length === 0) {
             alert("list name can't be empty");
-            return;
         }
     });
 
@@ -553,7 +549,7 @@ function menuCreateNewTaskList(node) {
             popup.innerHTML = "! Task name is already used !";
 
             popup.style.top = menuLists.clientHeight - inputPlacement.height - 2 + "px";
-            popup.style.left = inputPlacement.left + inputPlacement.width + 25 + "px"
+            popup.style.left = inputPlacement.left + inputPlacement.width + 25 + "px";
             input.after(popup);
             return;
         } 
@@ -572,7 +568,7 @@ function menuCreateNewTaskList(node) {
 function getListNamesFromTaskManager() {
     listsCount = Object.keys(taskManager.toDoLists).length;
     let toDoLists = Object.keys(taskManager.toDoLists);
-    toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated)
+    toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated);
 //     let listsArray = [];
 
 //     for (let list in taskManager.toDoLists) {

@@ -432,7 +432,6 @@ function editElementsInnerHTML(element) {
 
     function keydownListener(event) {
         if (event.key === "Enter") {
-            let value = element.innerHTML;
             event.target.blur();
         }
         
@@ -510,11 +509,11 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
 
         button.addEventListener("mouseover", function() {
             target.classList.add("tasks-list--removing");
-        })
+        });
         
         button.addEventListener("mouseleave", function() {
             target.classList.remove("tasks-list--removing");
-        })
+        });
     
     } else {
         button.style.top = targetCoords.top + targetCoords.height + window.scrollY + "px";        
@@ -787,9 +786,5 @@ function getDate(timeStamp, format = "dd.mm.yyyy") {
     let minutes = ("0" + date.getMinutes()).slice(-2);
     let seconds = ("0" + date.getSeconds()).slice(-2);
 
-    let time = `${day}.${month}.${year}`;
-    return time;
+    return `${day}.${month}.${year}`;
 }
-
-// Сделать чтобы добавляло в таскменеджер данные о завершенном задании
-// Научить загружать данные из базы при загрузке страницы
