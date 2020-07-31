@@ -1,0 +1,17 @@
+.content-wrapper {
+  width: 500px;
+  margin: 100px auto;
+  padding: 15px;
+}
+
+.active-app {
+  display: block;
+}
+
+.inactive-app {
+  display: none;
+}
+
+.select-app {
+  color: var(--main-text);
+}

@@ -1,0 +1,275 @@
+.menu {
+  position: fixed;
+  width: 300px;
+  height: 100vh;
+  background-color: var(--accent-secondary-bg);
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+  }
+
+  &__space-holder {
+    width: 300px;
+    min-width: 300px;
+  }
+
+  &__tab {
+    font-size: 35px;
+    letter-spacing: 1px;
+    width: 100%;
+    height: 150px;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    color: var(--active-text);
+    background-color: var(--accent-bg);
+
+    &:hover {
+      background-color: var(--accent-active-bg);
+    }
+
+    &-header {
+      position: absolute;
+      top: 50px;
+      width: 150px;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+  }
+
+  &__timer,
+  &__calendar,
+  &__converter,
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__task-name-edit,
+  &__task-remove {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+  }
+
+  &__list-name-hovered {
+    background-color: var(--accent-bg) !important;
+  }
+}
+
+
+.menu__todo-list {
+  position: relative;
+  transition: all .1s ease-out;
+
+  &-heading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    //justify-content: center;
+    flex-direction: column;
+  }
+
+  &-header {
+    position: absolute;
+    top: 50px;
+    width: 150px;
+    margin: 0;
+  }
+
+  &-dropdown {
+    position: absolute;
+    top: 105px;
+    width: 30px;
+    height: 30px;
+    fill: var(--active-text);
+    transition: all .2s ease-out;
+  }
+
+  &-names {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+  }
+
+  &-name,
+  &__add-new-list {
+    font-size: 20px;
+    width: 100%;
+    padding: 3px 0;
+    color: var(--accent-text);
+    border: 0;
+    outline: none;
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--accent-hover);
+    }
+  }
+
+  &-name {
+    border-top: 1px solid var(--separator);
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--header {
+      width: 200px;
+      word-break: break-all;
+      margin: 0 auto;
+      border: 1px solid transparent;
+
+      &:focus {
+        cursor: text;
+        border: 1px solid var(--focus);
+        padding-left: 5px;
+      }
+    }
+
+    &--list-create {
+      margin: 0 auto;
+      padding: 0;
+      height: 30px;
+      width: fit-content;
+    }
+  }
+
+  &-name--active {
+    font-size: 20px;
+    width: 100%;
+    padding: 3px 0;
+    border: 0;
+    outline: none;
+    background-color: var(--main-bg);
+    color: var(--menu-selected-list);
+    cursor: cell;
+
+    &:hover {
+      background-color: var(--main-bg);
+      cursor: auto;
+    }
+  }
+
+  &__add-new-list {
+    &:hover {
+      cursor: pointer;
+      background-color: var(--accent-hover);
+    }
+  }
+
+
+  &__create-new-task--input {
+    width: 200px;
+    margin: 5px auto;
+    height: 30px;
+    font-size: 20px;
+  }
+}
+
+
+.menu__list-settings {
+
+  &--wrapper {
+    margin: 20px 0 0;
+
+    div {
+      transition: none;
+    }
+
+    p {
+      font-family: Gudea-Regular, sans-serif;
+      font-size: 15px;
+      color: var(--settings-btn);
+      padding: 5px 0 5px 20px;
+      margin: 0;
+      user-select: auto;
+      cursor: auto;
+    }
+  }
+
+  &--controls {
+    font-family: Gudea-Bold, sans-serif;
+    font-size: 17px;
+    width: fit-content;
+    //text-align: center;
+    margin: 5px auto;
+    border-bottom: 1px solid var(--main-bg);
+    //text-transform: uppercase;
+
+    &:hover {
+      cursor: pointer;
+      border-bottom: 1px solid var(--focus);
+    }
+
+    &.edit-name {
+
+      margin: 20px auto 5px;
+    }
+
+    &.save-backup {
+
+    }
+
+    &.load-backup {
+
+    }
+
+    &.remove-list {
+      &:hover {
+        color: var(--warning-color);
+        border-bottom: 1px solid var(--accent-bg);
+      }
+    }
+  }
+
+  &__button {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    opacity: 90%;
+    fill: var(--settings-btn);
+
+    &:hover {
+      fill: var(--settings-btn-hover);
+    }
+  }
+}
+
+svg[data-button-parent-status="active"] {
+  &:hover {
+    fill: var(--settings-btn-active-hover);
+  }
+}
+
+.task-name {
+  &__already-used {
+    font-size: 20px;
+    position: absolute;
+    width: 270px;
+    background-color: var(--main-bg);
+    text-align: center;
+    z-index: 2;
+    color: var(--main-text);
+    border: 2px solid var(--accent-hover);
+  }
+}
+
+.rotate180 {
+  transform: rotate(-180deg);
+}
+
+.active-tab {
+  background-color: var(--accent-active-bg);
+}

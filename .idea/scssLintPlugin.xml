@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScssLintProjectComponent">
+    <option name="scssLintConfigFile" value="C:\Users\Goodex\AppData\Roaming\npm\node_modules\sass-lint\lib\config\default.yml" />
+    <option name="scssLintExecutable" value="C:\Ruby26-x64\bin\scss-lint.bat" />
+    <option name="pluginEnabled" value="true" />
+  </component>
+</project>

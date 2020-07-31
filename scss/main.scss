@@ -1,0 +1,152 @@
+@import 'fonts';
+@import 'colors';
+
+:root[data-theme="light-mode"] {
+  //base colors:
+  --main-bg: #{$main-bg};
+
+  --main-text: #{$main-text};
+  --accent-text: #{$accent-text};
+  --active-text: #{$active-text};
+
+  --accent-bg: #{$accent-bg};
+  --accent-secondary-bg: #{$accent-secondary-bg};
+  --accent-active-bg: #{$accent-active-bg};
+  --accent-hover: #{$accent-hover};
+
+  //action colors:
+  --settings-btn: #{$settings-btn};
+  --settings-btn-hover: #{$settings-btn-hover};
+  --settings-btn-active-hover: #{$settings-btn-active-hover};
+
+  --scroll-track: #{$scroll-track};
+  --scroll-thumb: #{$scroll-thumb};
+
+  --menu-selected-list: #{$menu-selected-list};
+
+  --separator: #{$separator};
+  --placeholder: #{$placeholder};
+  --input-field: #{$input-field};
+  --task-is-done: #{$task-is-done};
+  --safe-color: #{$safe-color};
+  --warning-color: #{$warning-color};
+  --load-backup-purple: #{$load-backup-purple};
+  --focus: #{$focus};
+}
+
+:root[data-theme="dark-mode"] {
+  //base colors:
+  --main-bg: #{$main-bg-dark};
+
+  --main-text: #{$main-text-dark};
+  --accent-text: #{$accent-text-dark};
+  --active-text: #{$active-text-dark};
+
+  --accent-bg: #{$accent-bg-dark};
+  --accent-secondary-bg: #{$accent-secondary-bg-dark};
+  --accent-active-bg: #{$accent-active-bg-dark};
+  --accent-hover: #{$accent-hover-dark};
+
+
+  //action colors:
+  --settings-btn: #{$settings-btn-dark};
+  --settings-btn-hover: #{$settings-btn-hover-dark};
+  --settings-btn-active-hover: #{$settings-btn-active-hover-dark};
+
+  --scroll-track: #{$scroll-track-dark};
+  --scroll-thumb: #{$scroll-thumb-dark};
+
+  --menu-selected-list: #{$menu-selected-list-dark};
+
+  --separator: #{$separator};
+  --placeholder: #{$placeholder-dark};
+  --input-field: #{$input-field-dark};
+  --task-is-done: #{$task-is-done-dark};
+  --safe-color: #{$safe-color-dark};
+  --warning-color: #{$warning-color-dark};
+  --load-backup-purple: #{$load-backup-purple-dark};
+  --focus: #{$focus-dark};
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+}
+
+.theme-changer[data-daytime-status*="mode"] {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 60px;
+  width: 60px;
+  background-color: #9d9ce9;
+  z-index: 1000;
+}
+
+//.theme-changer {
+//  background-color: red;
+//  //background-image: -webkit-linear-gradient(    left, rgba( 0,0,0,0.9 ) 25%, rgba( 0,0,0,0.1 ) 50%, rgba( 0,0,0,0.9 ) 75%);
+//  //background-image:    -moz-linear-gradient(    left, rgba( 0,0,0,0.9 ) 25%, rgba( 0,0,0,0.1 ) 50%, rgba( 0,0,0,0.9 ) 75%);
+//  //background-image:      -o-linear-gradient(    left, rgba( 0,0,0,0.9 ) 25%, rgba( 0,0,0,0.1 ) 50%, rgba( 0,0,0,0.9 ) 75%);
+//  background-image:         linear-gradient(to right, rgba( 0,0,0,0.9 ) 25%, rgba( 0,0,0,0.1 ) 50%, rgba( 0,0,0,0.9 ) 75%);
+//  //color: white;
+//  height: 100%;
+//  width: 100%;
+//
+//  //-webkit-animation: 4s linear 0s infinite alternate move_eye;
+//  //-moz-animation: 4s linear 0s infinite alternate move_eye;
+//  //-o-animation: 4s linear 0s infinite alternate move_eye;
+//  animation: 2s linear 0s infinite alternate theme-changer;
+//}
+//
+////@-webkit-keyframes theme-changer { from { margin-right:0; } to { margin-left:100%; margin-top: 100%;}  }
+////@-moz-keyframes theme-changer { from { margin-right:-20%; } to { margin-left:100%; margin-top: 100%;}  }
+////@-o-keyframes theme-changer { from { margin-right:-20%; } to { margin-left:100%; margin-top: 100%;}  }
+//@keyframes theme-changer { from { right:0; top: 0} to { margin-left:100vw; margin-top: calc(100vh - 30px);}  }
+
+
+//fonts
+//Gudea-Regular
+//Gudea-Italic
+//Gudea-Bold
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--main-bg);
+}
+
+p,
+h1,
+h2,
+input,
+button {
+  font-family: Gudea-Bold, sans-serif;
+}
+
+*:focus {
+  outline: none;
+  border: 2px solid var(--focus);
+  border-radius: 10px;
+}
+
+.main-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+@import 'menu/menu';
+@import 'content/content';
+@import 'content/apps/todo-list';
+@import 'content/apps/timer';
+@import 'content/apps/converter';
+@import 'content/apps/calendar';

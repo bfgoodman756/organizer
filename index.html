@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="main-wrapper">
+            <input class="theme-changer" type="checkbox" data-daytime-status="light-mode">
+            <div class="menu">
+                <div class="menu__tab menu__header"><p class="menu__tab-header">Menu</p></div>
+                
+                <div class="menu__tab menu__todo-list" data-app-name="ToDoList">
+                    
+                    <div class="menu__todo-list-heading">
+                        <p class="menu__todo-list-header">ToDo List</p>
+                        <svg class="menu__todo-list-dropdown" enable-background="new 0 0 306 306" height="30" version="1.1" viewBox="0 0 306 306" width="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+		                    <polygon points="270.3 58.65 153 175.95 35.7 58.65 0 94.35 153 247.35 306 94.35"></polygon>
+                        </svg>
+<!--                        <img alt="dropdown-icon" class="menu__todo-list-dropdown" src="images/menu-expand.svg">-->
+                    </div>
+                    
+                    <div class="menu__todo-list-names"></div>
+                </div>
+                
+                <div class="menu__tab menu__timer" data-app-name="Timer"><p class="menu__tab-header">Timer</p></div>
+                <div class="menu__tab menu__calendar" data-app-name="Calendar"><p class="menu__tab-header">Calendar</p></div>
+                <div class="menu__tab menu__converter" data-app-name="Converter"><p class="menu__tab-header">Converter</p></div>
+            </div>
+            <div class="menu__space-holder"></div>
+            
+            <div class="content-wrapper">
+                
+                <div class="app-placeholder inactive-app">
+                    <div class="content-placeholder">
+                        <p class="select-app">Select app you want</p>
+                    </div>
+                </div>
+                
+                <div class="todo-list-wrapper active-app" data-app-name="ToDoList">
+                    
+                    <div class="tasks-section">
+                        <p class="tasks-header">
+                            <span class="todo__list-name">katya sobaka</span>:
+                        </p>
+                        <ol class="tasks-list"></ol>
+                    </div>
+                    
+                    <div class="tasks-input-wrapper">
+                        <input class="tasks__input-field" placeholder="add any task"/>
+                        <button class="tasks__submit-button">Add task</button>
+                    </div>
+                    
+                    <div class="tasks__control-buttons-wrapper">
+                        <button class="tasks__clear-button">Clear tasks</button>
+                        <button class="tasks__manual-backup-save-button">Save backup</button>
+                        <button class="tasks__manual-backup-restore-button">Load backup</button>
+                    </div>
+                </div>
+                
+                <div class="timer-wrapper inactive-app" data-app-name="Timer"></div>
+                
+                <div class="calendar-wrapper inactive-app" data-app-name="Calendar">
+                    <div id='calendar'></div>
+                </div>
+                
+                <div class="converter-wrapper inactive-app" data-app-name="Converter"></div>
+            </div>
+        </div>
+        <script src="js/index.js"></script>
+        <script src="js/menu/menu.js"></script>
+        <script src="js/todoList/todoList.js"></script>
+        <!--         <script src="js/timer/timer.js"></script> -->
+        <!--         <script src="js/calendar/calendar.js"></script> -->
+        <!--         <script src="js/converter/converter.js"></script> -->
+    </body>
+</html>
