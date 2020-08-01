@@ -4,41 +4,6 @@ let timerApp = document.querySelector('.menu__timer');
 let calendarApp = document.querySelector('.menu__calendar');
 let converterApp = document.querySelector('.menu__converter');
 
-let appManager = {
-    options: {},
-
-    rememberLastUsedList: function(listName) {
-        if (!this.options.lastUsedList) {
-            this.options.lastUsedList = {};
-        }
-        
-        this.options.lastUsedList = listName;
-        localStorage.setItem("appManager", JSON.stringify(this));
-        console.log(`[${listName}] is last used list now`);
-    },
-
-    rememberLastUsedApp: function(appName) {
-        if (!this.options.lastUsedApp) {
-            this.options.lastUsedApp = {};
-        }
-
-        this.options.lastUsedApp = appName;
-        localStorage.setItem("appManager", JSON.stringify(this));
-        console.log(`[${appName}] is last used app now`);
-    }
-};
-
-
-if (!localStorage.getItem("appManager")) {
-    localStorage.setItem("appManager", JSON.stringify(appManager));
-}
-
-
-let appData = JSON.parse(localStorage.appManager);
-appManager.options = Object.assign(appData.options);
-console.log("app options data was loaded from {localStorage.appManager}");
-
-
 document.addEventListener("DOMContentLoaded", loadLastAppState);
 
 

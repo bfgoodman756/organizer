@@ -65,6 +65,7 @@
 
 .menu__todo-list {
   position: relative;
+  transition: all .2s ease-out;
 
   &-heading {
     position: relative;

@@ -221,22 +221,25 @@ let currentListName = appManager.options.lastUsedList;
 let listHeader = document.querySelector(".todo__list-name");
 listHeader.innerText = currentListName;
 
-listHeader.addEventListener("blur", editCurrentListName);
 listHeader.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         this.blur();
     }
 })
 
+listHeader.addEventListener("blur", editCurrentListName);
+
 function editCurrentListName() {
     let newName = this.innerText;
     if (currentListName === newName) {
         return;
     }
+
     taskManager.changeListName(currentListName, newName);
     currentListName = newName;
 
-
+    appManager.rememberLastUsedList(newName);
+    loadListNamesToMenu();
 }
 
 
