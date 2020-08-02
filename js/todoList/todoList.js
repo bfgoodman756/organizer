@@ -146,9 +146,15 @@ let taskManager = {
         if (obj === {}) {
             console.log("wtf");
         }
+
+        if (!document.querySelector(".menu__todo-list-name--active")) {
+            highlightCurrentList(prevName);
+        }
         
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
+
+        highlightCurrentList(prevName);
 
         let menuListName = document.querySelector(".menu__todo-list-name--active").firstChild;
         menuListName.innerText = newName;
@@ -231,6 +237,7 @@ listHeader.addEventListener("blur", editCurrentListName);
 
 function editCurrentListName() {
     let newName = this.innerText;
+    
     if (currentListName === newName) {
         return;
     }
