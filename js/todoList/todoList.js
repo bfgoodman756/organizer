@@ -138,7 +138,7 @@ let taskManager = {
 
     changeListName: function(prevName, newName) {
         if (prevName === newName) {
-            console.log(createConsoleLogMessage("Changing list name was aborted, new name is already equal to current"))
+            console.log(createConsoleLogMessage("Changing list name was aborted, new name is already equal to current"));
             return;
         }
         let obj = Object.assign({}, this.toDoLists[prevName]);
@@ -220,9 +220,10 @@ taskInput.addEventListener("keydown", function(event) {
 let currentListName = appManager.options.lastUsedList;
 
 if (!currentListName) {
-    currentListName = "Your new list";
+    currentListName = "Your first list";
     taskManager.createNewList(currentListName);
     highlightCurrentList(currentListName);
+    appManager.rememberLastUsedList(currentListName);
 }
 
 
@@ -233,7 +234,7 @@ listHeader.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         this.blur();
     }
-})
+});
 
 listHeader.addEventListener("blur", editCurrentListName);
 
@@ -328,8 +329,6 @@ function renderTask(string, isNew = false, isDone = false) {
 
     if (taskPlaceholder) {
         taskPlaceholder.remove();
-
-        resetInputFieldAfterSubmit(string);
     }
 //     let neww = document.createElement("div");
 //     neww.innerHTML = `<li contenteditable="true">${string}</li>`;
@@ -833,8 +832,8 @@ function getDate(timeStamp, format = "dd.mm.yyyy") {
     let date = new Date(timeStamp);
 
     let year = date.getFullYear();
-    let month = ("0" + date.getMonth()).slice(-2);;
-    let day = ("0" + date.getDate()).slice(-2);;
+    let month = ("0" + (date.getMonth() + 1)).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
     let hours = ("0" + date.getHours()).slice(-2);
     let minutes = ("0" + date.getMinutes()).slice(-2);
     let seconds = ("0" + date.getSeconds()).slice(-2);
