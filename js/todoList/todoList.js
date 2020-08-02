@@ -154,8 +154,6 @@ let taskManager = {
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
 
-        highlightCurrentList(prevName);
-
         let menuListName = document.querySelector(".menu__todo-list-name--active").firstChild;
         menuListName.innerText = newName;
 
