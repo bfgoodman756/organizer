@@ -147,10 +147,6 @@ let taskManager = {
             console.log("wtf");
         }
 
-        if (!document.querySelector(".menu__todo-list-name--active")) {
-            highlightCurrentList(prevName + "");
-        }
-
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
 
@@ -220,8 +216,16 @@ taskInput.addEventListener("keydown", function(event) {
 
 
 
-// initialize loading saved data
+
 let currentListName = appManager.options.lastUsedList;
+
+if (!currentListName) {
+    currentListName = "Your new list";
+    taskManager.createNewList(currentListName);
+    highlightCurrentList(currentListName);
+}
+
+
 let listHeader = document.querySelector(".todo__list-name");
 listHeader.innerText = currentListName;
 
@@ -232,6 +236,8 @@ listHeader.addEventListener("keydown", function(event) {
 })
 
 listHeader.addEventListener("blur", editCurrentListName);
+
+
 
 function editCurrentListName() {
     let newName = this.innerText;
@@ -256,8 +262,7 @@ function editCurrentListName() {
 
 loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
 
-let debug = JSON.stringify(taskManager.toDoLists);
-alert(debug);
+
 
 
 // Loads saved localStorage data
@@ -764,6 +769,10 @@ function createRestoreButton() {
     if (currList.autoBackup || currList.manualBackup) {
         let restoreButton = createButton("tasks__restore-button", "Restore autosaved list");
         toDoListWrapper.append(restoreButton);
+    }
+
+    if (document.querySelector(".tasks-placeholder")) {
+        return;
     }
 
     createTasksPlaceholder();

@@ -132,7 +132,6 @@ function loadListNamesToMenu() {
     let listNamesNode = document.createElement('div');
     listNamesNode.classList.add('menu__todo-list-names');
 
-
     listNamesData.forEach(list => createTaskLinkInMenu(list));
 
     createTaskLinkInMenu("+", true);
@@ -160,7 +159,11 @@ function loadListNamesToMenu() {
         p.innerText = listName;
         p.classList.add(pClass);
 
-        div.classList.add("menu__todo-list-name");
+        if (listNamesData.length === 1 && !isPlusSign) {
+           div.classList.add("menu__todo-list-name--active"); 
+        } else {
+            div.classList.add("menu__todo-list-name");
+        }
         
         div.append(p);
         
