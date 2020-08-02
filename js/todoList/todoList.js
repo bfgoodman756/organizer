@@ -150,7 +150,7 @@ let taskManager = {
         if (!document.querySelector(".menu__todo-list-name--active")) {
             highlightCurrentList(prevName + "");
         }
-        
+
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
 
@@ -256,6 +256,8 @@ function editCurrentListName() {
 
 loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
 
+let debug = JSON.stringify(taskManager.toDoLists);
+alert(debug);
 
 
 // Loads saved localStorage data
