@@ -533,7 +533,16 @@ function menuCreateNewTaskList(node) {
 function getListNamesFromTaskManager() {
     listsCount = Object.keys(taskManager.toDoLists).length;
     let toDoLists = Object.keys(taskManager.toDoLists);
-    toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated);
+    toDoLists.sort((a, b) => {
+        if (!taskManager.toDoLists[a].options) {
+            taskManager.setListOptions(a);
+        }
+        if (!taskManager.toDoLists[b].options) {
+            taskManager.setListOptions(b);
+        }
+        
+        taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated;
+    });
 //     let listsArray = [];
 
 //     for (let list in taskManager.toDoLists) {
