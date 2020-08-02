@@ -133,7 +133,7 @@ function loadListNamesToMenu() {
     listNamesNode.classList.add('menu__todo-list-names');
 
 
-    listNamesData.forEach(list => {alert(list); createTaskLinkInMenu(list)});
+    listNamesData.forEach(list => createTaskLinkInMenu(list));
 
     createTaskLinkInMenu("+", true);
 

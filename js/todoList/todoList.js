@@ -236,10 +236,15 @@ function editCurrentListName() {
     }
 
     taskManager.changeListName(currentListName, newName);
-    currentListName = newName;
+
+    if (!taskManager.toDoLists[newName].options) {
+        taskManager.setListOptions(newName);
+    }
 
     appManager.rememberLastUsedList(newName);
     loadListNamesToMenu();
+
+    currentListName = newName;
 }
 
 
