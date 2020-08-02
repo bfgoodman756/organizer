@@ -285,15 +285,15 @@ function renderList(tasksData) {
         return;
     }
 
-    let taskLength = Object.keys(tasksData).length;
+    let totalTasks = Object.keys(tasksData).length;
 
-    if (taskLength < 1) {
+    if (totalTasks < 1) {
         createTasksPlaceholder();
         return;
     }
 
     let startIndex = 1;
-    while (startIndex <= taskLength) {
+    while (startIndex <= totalTasks) {
         renderTask(tasksData[startIndex].taskName, false, tasksData[startIndex].isDone);
         startIndex++;
     }
