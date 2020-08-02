@@ -148,7 +148,7 @@ let taskManager = {
         }
 
         if (!document.querySelector(".menu__todo-list-name--active")) {
-            highlightCurrentList(prevName);
+            highlightCurrentList(prevName.toString());
         }
         
         let listHeader = document.querySelector('.todo__list-name');
