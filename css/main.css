@@ -38,7 +38,7 @@
   --warning-color: #ff7c70;
   --load-backup-purple: #9d9ce9;
   --focus: #1e90ff;
-  --theme-selector-bg: #e9f2ff; }
+  --theme-selector-bg: #53739a; }
 
 :root[data-theme="dark-mode"] {
   transition: all .2s ease-out;
@@ -85,18 +85,17 @@ body::-webkit-scrollbar-thumb {
   width: 30px;
   z-index: 1000;
   margin: 15px;
-  padding: 5px;
+  padding: 7px;
   background-color: var(--theme-selector-bg);
   border-radius: 10px;
   cursor: pointer; }
 
 .light-theme-icon {
-  display: none;
-  fill: #ffff00; }
+  display: none; }
 
 .dark-theme-icon {
   display: none;
-  fill: #0d73ff; }
+  fill: #fffd59; }
 
 body {
   width: 100%;

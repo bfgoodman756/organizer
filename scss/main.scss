@@ -95,7 +95,7 @@ body::-webkit-scrollbar-thumb {
   width: 30px;
   z-index: 1000;
   margin: 15px;
-  padding: 5px;
+  padding: 7px;
   background-color: var(--theme-selector-bg);
   border-radius: 10px;
   cursor: pointer;
@@ -103,12 +103,11 @@ body::-webkit-scrollbar-thumb {
 
 .light-theme-icon {
   display: none;
-  fill: #ffff00;
 }
 
 .dark-theme-icon {
   display: none;
-  fill: #0c71ff;
+  fill: #fffd59;
 }
 
 
