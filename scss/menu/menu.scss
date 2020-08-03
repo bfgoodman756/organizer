@@ -142,10 +142,10 @@
   }
 
   &-name--active {
+    border-top: 1px solid var(--separator);
     font-size: 20px;
     width: 100%;
     padding: 3px 0;
-    border: 0;
     outline: none;
     background-color: var(--main-bg);
     color: var(--menu-selected-list);

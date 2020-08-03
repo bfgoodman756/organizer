@@ -47,29 +47,50 @@ createLightDarkModeToggle();
 
 function createLightDarkModeToggle() {
     let theme = appManager.options.lastUsedTheme || "light-mode";
+
+    let lightIcon = document.querySelector(".light-theme-icon");
+    let darkIcon = document.querySelector(".dark-theme-icon");
     
     let html = document.querySelector("html");
     html.setAttribute("data-theme", theme);
 
-    let input = document.querySelector(".theme-changer");
+    let themeSelector = document.querySelector(".theme-selector");
+    themeSelector.setAttribute("theme", theme);
 
-    if (theme === "dark-mode") {
-        input.checked = true;
-    } else {
-        input.checked = false;
+    switch(theme) {
+        case("dark-mode"):
+            darkIcon.style.display = "none";
+            lightIcon.style.display = "block";
+            break;
+        case("light-mode"):
+            lightIcon.style.display = "none";
+            darkIcon.style.display = "block";
+            break;
     }
 
-    input.addEventListener("click", function(event) {
+    themeSelector.addEventListener("click", function(event) {
         let themeName = "";
         
-        if (this.checked) {
+        if (themeSelector.getAttribute("theme") === "light-mode") {
             themeName = "dark-mode";
         } else {
             themeName = "light-mode"
         }
 
+        switch(themeName) {
+            case("dark-mode"):
+                darkIcon.style.display = "none";
+                lightIcon.style.display = "block";
+                break;
+
+            case("light-mode"):
+                lightIcon.style.display = "none";
+                darkIcon.style.display = "block";
+                break;
+        }
+
         html.dataset.theme = themeName;
-        input.dataset.daytimeStatus = themeName;
+        themeSelector.setAttribute("theme", themeName);
         appManager.rememberLastUsedTheme(themeName);
     })
 }

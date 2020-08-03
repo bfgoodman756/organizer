@@ -93,20 +93,23 @@
   }
 
   &__input-field {
+    font-family: Gudea-Bold, sans-serif;
     max-width: 100%;
     flex-grow: 1; //flex: 1 1;
     padding: 0 10px;
     margin: 0 5px 0 0;
-    font-size: 15px;
+    font-size: 16px;
     height: 37px;
     border-radius: 10px;
     border: 1px solid var(--main-bg);
     background-color: var(--input-field);
-    color: var(--main-text);
+    color: var(--input-text);
 
     &:focus {
-      color: var(--main-text);
       border: 1px solid var(--focus);
+    }
+    &::placeholder {
+      color: var(--input-text);
     }
   }
 

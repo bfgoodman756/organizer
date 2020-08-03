@@ -8,6 +8,8 @@ $accent-text: #fff;
 $hover-text: #2aece5;
 $active-text: #fff;
 
+$input-text: #000;
+$input-field: #f0f0f0;
 
 $accent-bg: #ab1131;
 $accent-secondary-bg: #c41133;
@@ -27,13 +29,13 @@ $scroll-thumb: #ff776f;
 $menu-selected-list: #000;
 
 
-$input-field: #f0f0f0;
 $task-is-done: #d2d2d2;
 $placeholder: #808080;
 $safe-color: #95ff86;
 $warning-color: #ff7c70;
 $load-backup-purple: #9d9ce9;
 $focus: #1e90ff;
+$theme-selector-bg: #8cbcee;
 
 
 
@@ -44,6 +46,9 @@ $main-bg-dark: #2e363f;
 $main-text-dark: #23bbb4;
 $accent-text-dark: #23bbb4;
 $active-text-dark: #2aece5;
+
+$input-text-dark: #000;
+$input-field-dark: rgba(255, 255, 255, .78);
 
 
 $accent-bg-dark: #30475e;
@@ -65,10 +70,10 @@ $menu-selected-list-dark: #2aece5;
 
 
 $separator: #00000012;
-$input-field-dark: #e2f0ed;
 $task-is-done-dark: #4c535c;
 $placeholder-dark: #515f75;
 $safe-color-dark: #77fffa;
 $warning-color-dark: #ff6356;
 $load-backup-purple-dark: #68a3e9;
 $focus-dark: #2aece5;
+$theme-selector-bg-dark: #30475e;

@@ -350,7 +350,7 @@ function createListSettingsOnHover(target) {
             <div class="menu__list-settings--controls edit-name" data-button-type="toDoControls">edit list name</div>
             <div class="menu__list-settings--controls save-backup" data-button-type="toDoControls">save lists backup</div>
             <div class="menu__list-settings--controls load-backup" data-button-type="toDoControls">load lists backup</div>
-            <div class="menu__list-settings--controls remove-list data-button-type="toDoControls">remove list</div>
+            <div class="menu__list-settings--controls remove-list" data-button-type="toDoControls">remove list</div>
         `;
 
         sWrapper.innerHTML += settings;
