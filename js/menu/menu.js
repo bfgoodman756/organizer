@@ -161,7 +161,6 @@ function loadListNamesToMenu() {
 
         if (listNamesData.length === 1 && !isPlusSign) {
            div.classList.add("menu__todo-list-name--active");
-           createMenuListSettings(div);/////////////////
         } else {
             div.classList.add("menu__todo-list-name");
         }
@@ -169,14 +168,19 @@ function loadListNamesToMenu() {
         div.append(p);
         
         listNamesNode.append(div);
+
+        if (isPlusSign) {
+            return;
+        }
+        createMenuListSettings(div);/////////////////
         
 
 //         highlightCurrentList(appManager.options.lastUsedList)
 
-        if (appManager.options.lastUsedList === listName) {
-            div.className = "menu__todo-list-name--active";
-            createMenuListSettings(div);////////////////////
-        }
+//         if (appManager.options.lastUsedList === listName) {
+//             div.className = "menu__todo-list-name--active";
+// //             createMenuListSettings(div);////////////////////
+//         }
     }
 }
 
