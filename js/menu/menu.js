@@ -132,13 +132,13 @@ function loadListNamesToMenu() {
     let listNamesNode = document.createElement('div');
     listNamesNode.classList.add('menu__todo-list-names');
 
-    listNamesData.forEach(list => createTaskLinkInMenu(list));
-
-    createTaskLinkInMenu("+", true);
-
     listNamesNode.style.top = 100 + "px";
     listNamesWrapper.append(listNamesNode);
 
+
+    listNamesData.forEach(list => createTaskLinkInMenu(list));////
+    createTaskLinkInMenu("+", true);
+    
     updateDropDownPosition(listNamesNode.clientHeight + 5);
     updateMenuToDoListsHeight();
 
@@ -160,7 +160,8 @@ function loadListNamesToMenu() {
         p.classList.add(pClass);
 
         if (listNamesData.length === 1 && !isPlusSign) {
-           div.classList.add("menu__todo-list-name--active"); 
+           div.classList.add("menu__todo-list-name--active");
+           createMenuListSettings(div);/////////////////
         } else {
             div.classList.add("menu__todo-list-name");
         }
@@ -174,6 +175,7 @@ function loadListNamesToMenu() {
 
         if (appManager.options.lastUsedList === listName) {
             div.className = "menu__todo-list-name--active";
+            createMenuListSettings(div);////////////////////
         }
     }
 }
@@ -229,49 +231,15 @@ function loadTaskListOnClick(listName) {
 
 
 
-
-toDoListApp.addEventListener('mouseover', toDoListMenuHoverSettings);
-
-
-function toDoListMenuHoverSettings(event) {
-    let node = event.target;
-
-    if (event.path[2].dataset.type === "menu_list-name") {
-        if (document.querySelector(".menu__list-settings__button")) {
-            return;
-        }
-        node = event.path[2];
-    }
-
-    if (event.path[1].dataset.type === "menu_list-name") {
-        if (document.querySelector(".menu__list-settings__button")) {
-            return;
-        }
-        node = event.path[1];
-    }
-
-    if (document.querySelector(".menu__list-settings__button")) {
-        return;
-    }
-
-    if (event.target.innerText === "+") {
-        return;
-    }
-
-    if (!node || node.dataset.type !== "menu_list-name") {
-       return;
-    }
-
-    node.addEventListener('mouseover', createListSettingsOnHover(node));
-}
-
-
-
-function createListSettingsOnHover(target) {
+function createMenuListSettings(target) {
     let settingsSelector = "menu__list-settings__button";
 
     if (target.classList.contains(settingsSelector)) {
         return;
+    }
+
+    if (document.querySelector(`.${settingsSelector}`)) {
+        document.querySelector(`.${settingsSelector}`).remove();
     }
 
     let settings = document.querySelector(`.${settingsSelector}`);
@@ -294,9 +262,12 @@ function createListSettingsOnHover(target) {
 
     target.addEventListener('mouseleave', removeSettingsIcon);
 
-    function removeSettingsIcon() {
+    function removeSettingsIcon(event) {
+        if (event.target.classList.contains("menu__todo-list-name--active")) {
+            return;
+        }
         settings.remove();
-        target.removeEventListener('mouseleave', removeSettingsIcon);
+        event.target.removeEventListener('mouseleave', removeSettingsIcon);
     }
 
     settings.addEventListener('click', () => openListSettings(target, settings));    
@@ -361,7 +332,7 @@ function createListSettingsOnHover(target) {
         updateMenuToDoListsHeight(sWrapper.clientHeight + 15);
         
         settingsButton.remove();
-        createListSettingsOnHover(node);
+        createMenuListSettings(node);
 
 //         sWrapper.addEventListener("blur", function() {
 //             sWrapper.remove();
@@ -458,6 +429,7 @@ function highlightCurrentList(listName) {
     menuLists.forEach(list => {
         if (list.firstChild.innerText === listName) {
             list.className = "menu__todo-list-name--active";
+            createMenuListSettings(list);//////////////////////
 
             let settingsSelector = "menu__list-settings__button";
             if (document.querySelector(`.${settingsSelector}`)) {

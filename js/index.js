@@ -88,9 +88,11 @@ function createLightDarkModeToggle() {
                 darkIcon.style.display = "block";
                 break;
         }
-
+        let page = document.querySelector("*");
+        html.classList.add("no-transition");
         html.dataset.theme = themeName;
         themeSelector.setAttribute("theme", themeName);
         appManager.rememberLastUsedTheme(themeName);
+//         html.classList.remove("no-transition");
     })
 }
