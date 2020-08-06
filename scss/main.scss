@@ -31,6 +31,7 @@
   --input-field: #{$input-field};
   --task-is-done: #{$task-is-done};
   --safe-color: #{$safe-color};
+  --atention-color: #{$atention-color};
   --warning-color: #{$warning-color};
   --load-backup-purple: #{$load-backup-purple};
   --focus: #{$focus};
@@ -68,6 +69,7 @@
   --input-field: #{$input-field-dark};
   --task-is-done: #{$task-is-done-dark};
   --safe-color: #{$safe-color-dark};
+  --atention-color: #{$atention-color-dark};
   --warning-color: #{$warning-color-dark};
   --load-backup-purple: #{$load-backup-purple-dark};
   --focus: #{$focus-dark};
@@ -89,16 +91,16 @@ body::-webkit-scrollbar-thumb {
 
 .theme-selector[data-daytime-status*="mode"] {
   position: fixed;
-  right: 0;
-  top: 0;
-  height: 30px;
-  width: 30px;
   z-index: 1000;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
   margin: 15px;
   padding: 7px;
-  background-color: var(--theme-selector-bg);
-  border-radius: 10px;
   cursor: pointer;
+  border-radius: 10px;
+  background-color: var(--theme-selector-bg);
 }
 
 .light-theme-icon {
@@ -133,15 +135,15 @@ button {
 }
 
 *:focus {
-  outline: none;
   border: 2px solid var(--focus);
   border-radius: 10px;
+  outline: none;
 }
 
 .no-transition {
-  -webkit-transition: none !important;
   -moz-transition: none !important;
   -o-transition: none !important;
+  -webkit-transition: none !important;
   transition: none !important;
 }
 

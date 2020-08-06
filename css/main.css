@@ -35,7 +35,8 @@
   --input-field: #f0f0f0;
   --task-is-done: #d2d2d2;
   --safe-color: #95ff86;
-  --warning-color: #ff7c70;
+  --atention-color: #ff7c70;
+  --warning-color: #ff2823;
   --load-backup-purple: #9d9ce9;
   --focus: #1e90ff;
   --theme-selector-bg: #53739a; }
@@ -62,7 +63,8 @@
   --input-field: rgba(255, 255, 255, 0.78);
   --task-is-done: #4c535c;
   --safe-color: #77fffa;
-  --warning-color: #ff6356;
+  --atention-color: #ff6356;
+  --warning-color: #ff2823;
   --load-backup-purple: #68a3e9;
   --focus: #2aece5;
   --theme-selector-bg: #30475e; }
@@ -79,16 +81,16 @@ body::-webkit-scrollbar-thumb {
 
 .theme-selector[data-daytime-status*="mode"] {
   position: fixed;
-  right: 0;
-  top: 0;
-  height: 30px;
-  width: 30px;
   z-index: 1000;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
   margin: 15px;
   padding: 7px;
-  background-color: var(--theme-selector-bg);
+  cursor: pointer;
   border-radius: 10px;
-  cursor: pointer; }
+  background-color: var(--theme-selector-bg); }
 
 .light-theme-icon {
   display: none; }
@@ -112,14 +114,14 @@ button {
   font-family: Gudea-Bold, sans-serif; }
 
 *:focus {
-  outline: none;
   border: 2px solid var(--focus);
-  border-radius: 10px; }
+  border-radius: 10px;
+  outline: none; }
 
 .no-transition {
-  -webkit-transition: none !important;
   -moz-transition: none !important;
   -o-transition: none !important;
+  -webkit-transition: none !important;
   transition: none !important; }
 
 .main-wrapper {
@@ -130,11 +132,11 @@ button {
   position: fixed;
   width: 300px;
   height: 100vh;
-  background-color: var(--accent-secondary-bg);
-  overflow: scroll; }
+  overflow: scroll;
+  background-color: var(--accent-secondary-bg); }
   .menu::-webkit-scrollbar {
-    height: 0;
-    width: 0; }
+    width: 0;
+    height: 0; }
   .menu__space-holder {
     width: 300px;
     min-width: 300px; }
@@ -186,8 +188,8 @@ button {
     top: 105px;
     width: 30px;
     height: 30px;
-    fill: var(--active-text);
-    transition: all .2s ease-out; }
+    transition: all .2s ease-out;
+    fill: var(--active-text); }
   .menu__todo-list-names {
     position: absolute;
     display: flex;
@@ -209,38 +211,38 @@ button {
       cursor: pointer; }
     .menu__todo-list-name--header {
       width: 66.6%;
-      word-break: break-all;
       margin: 0 auto;
+      word-break: break-all;
       border: 1px solid transparent; }
       .menu__todo-list-name--header:focus {
+        padding-left: 5px;
         cursor: text;
-        border: 1px solid var(--focus);
-        padding-left: 5px; }
+        border: 1px solid var(--focus); }
     .menu__todo-list-name--list-create {
-      margin: 0 auto;
-      padding: 0;
+      width: fit-content;
       height: 30px;
-      width: fit-content; }
+      margin: 0 auto;
+      padding: 0; }
   .menu__todo-list-name--active {
-    border-top: 1px solid var(--separator);
     font-size: 20px;
     width: 100%;
     padding: 3px 0;
-    outline: none;
-    background-color: var(--main-bg);
+    cursor: cell;
     color: var(--menu-selected-list);
-    cursor: cell; }
+    border-top: 1px solid var(--separator);
+    outline: none;
+    background-color: var(--main-bg); }
     .menu__todo-list-name--active:hover {
-      background-color: var(--main-bg);
-      cursor: auto; }
+      cursor: auto;
+      background-color: var(--main-bg); }
   .menu__todo-list__add-new-list:hover {
     cursor: pointer;
     background-color: var(--accent-hover); }
   .menu__todo-list__create-new-task--input {
+    font-size: 20px;
     width: 200px;
-    margin: 5px auto;
     height: 30px;
-    font-size: 20px; }
+    margin: 5px auto; }
 
 .menu__list-settings--wrapper {
   margin: 20px 0 0; }
@@ -249,11 +251,11 @@ button {
   .menu__list-settings--wrapper p {
     font-family: Gudea-Regular, sans-serif;
     font-size: 15px;
-    color: var(--settings-btn);
-    padding: 5px 0 5px 20px;
     margin: 0;
+    padding: 5px 0 5px 20px;
+    cursor: auto;
     user-select: auto;
-    cursor: auto; }
+    color: var(--settings-btn); }
 .menu__list-settings--controls {
   font-family: Gudea-Bold, sans-serif;
   font-size: 17px;
@@ -272,12 +274,12 @@ button {
   position: absolute;
   width: 26px;
   height: 26px;
-  background-color: transparent;
-  border: 0;
   padding: 0;
   cursor: pointer;
-  outline: none;
   opacity: 90%;
+  border: 0;
+  outline: none;
+  background-color: transparent;
   fill: var(--settings-btn); }
   .menu__list-settings__button:hover {
     fill: var(--settings-btn-active-hover); }
@@ -285,12 +287,12 @@ button {
 .task-name__already-used {
   font-size: 20px;
   position: absolute;
-  width: 270px;
-  background-color: var(--main-bg);
-  text-align: center;
   z-index: 2;
+  width: 270px;
+  text-align: center;
   color: var(--main-text);
-  border: 2px solid var(--accent-hover); }
+  border: 2px solid var(--accent-hover);
+  background-color: var(--main-bg); }
 
 .rotate180 {
   transform: rotate(-180deg); }
@@ -299,10 +301,11 @@ button {
   background-color: var(--accent-active-bg); }
 
 .content-wrapper {
-  width: 500px;
-  margin: 100px auto;
-  padding: 15px;
-  }
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  margin-left: 300px;
+  padding: 15px; }
 
 .active-app {
   display: block; }
@@ -314,7 +317,9 @@ button {
   color: var(--main-text); }
 
 .todo-list-wrapper {
-  padding-bottom: 400px; }
+  width: 500px;
+  margin: 0 auto;
+  padding: 100px 0 400px; }
   .todo-list-wrapper button {
     text-align: center;
     border: 0; }
@@ -325,104 +330,103 @@ button {
   .todo__list-name:focus {
     border-bottom: 2px solid var(--focus); }
 
-.tasks {
+.tasks-section {
+  position: relative;
+  margin: 0 auto; }
+.tasks-header {
+  margin: 0;
   color: var(--main-text); }
-  .tasks-section {
-    margin: 0 auto; }
-  .tasks-header {
-    margin: 0;
-    color: var(--main-text); }
-  .tasks-list {
-    font-family: Gudea-Regular, sans-serif;
-    color: var(--main-text);
-    font-size: 18px;
-    padding-left: 50px; }
-    .tasks-list li {
-      margin-top: 10px;
-      cursor: text;
-      word-break: break-word;
-      outline: none;
-      padding: 3px 15px 3px 2px;
-      border-top: 1px;
-      border-bottom: 1px;
-      border-left: 1px;
-      border-right: 1px;
-      border-style: solid;
-      border-radius: 5px;
-      border-color: var(--main-bg); }
-      .tasks-list li:focus {
-        outline: none;
-        border-bottom: 1px solid var(--focus);
-        border-radius: 0; }
-    .tasks-list--removing {
-      box-shadow: inset 0 0 0 1px var(--accent-active-bg);
-      border-radius: 5px;
-      transition: .2s ease-in; }
-  .tasks-placeholder {
-    font-family: Gudea-Italic, sans-serif;
-    color: var(--placeholder);
-    font-size: 18px;
-    cursor: default; }
-  .tasks-input-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 25px; }
-  .tasks__input-field {
-    font-family: Gudea-Bold, sans-serif;
-    max-width: 100%;
-    flex-grow: 1;
-    padding: 0 10px;
-    margin: 0 5px 0 0;
-    font-size: 16px;
-    height: 37px;
-    border-radius: 10px;
-    border: 1px solid var(--main-bg);
-    background-color: var(--input-field);
-    color: var(--input-text); }
-    .tasks__input-field:focus {
-      border: 1px solid var(--focus); }
-    .tasks__input-field::placeholder {
-      color: var(--input-text); }
-  .tasks__submit-button {
-    background-color: var(--safe-color);
-    padding: 10px; }
-  .tasks__clear-button {
+.tasks-list {
+  font-family: Gudea-Regular, sans-serif;
+  font-size: 18px;
+  padding-left: 50px;
+  color: var(--main-text); }
+  .tasks-list li {
     margin-top: 10px;
-    padding: 10px;
-    background-color: var(--warning-color); }
-  .tasks__manual-backup-save-button {
-    padding: 10px;
-    background-color: var(--safe-color); }
-  .tasks__manual-backup-restore-button {
-    padding: 10px;
-    background-color: var(--load-backup-purple); }
-  .tasks__restore-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    padding: 10px 15px 10px 10px;
-    background-color: var(--safe-color); }
-    .tasks__restore-button::before {
-      content: url("../images/undo.svg");
-      background-size: 20px 20px;
-      margin-right: 5px;
-      height: 20px;
-      width: 20px; }
-  .tasks__mark-as-done-button {
-    position: absolute;
-    border-radius: 10px;
-    padding: 0 6px; }
-  .tasks__remove-task-button {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    background-color: transparent;
-    color: var(--settings-btn-dark); }
-  .tasks-edit {
-    font-family: Gudea-Regular, sans-serif;
-    font-size: 18px;
+    padding: 3px 15px 3px 2px;
+    cursor: text;
+    word-break: break-word;
+    border-style: solid;
+    border-color: var(--main-bg);
+    border-top: 1px;
+    border-right: 1px;
+    border-bottom: 1px;
+    border-left: 1px;
+    border-radius: 5px;
     outline: none; }
+    .tasks-list li:focus {
+      border-bottom: 1px solid var(--focus);
+      border-radius: 0;
+      outline: none; }
+  .tasks-list--removing {
+    transition: .2s ease-in;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px var(--warning-color); }
+.tasks-placeholder {
+  font-family: Gudea-Italic, sans-serif;
+  font-size: 18px;
+  cursor: default;
+  color: var(--placeholder); }
+.tasks-input-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px; }
+.tasks__input-field {
+  font-family: Gudea-Bold, sans-serif;
+  font-size: 16px;
+  flex-grow: 1;
+  max-width: 100%;
+  height: 37px;
+  margin: 0 5px 0 0;
+  padding: 0 10px;
+  color: var(--input-text);
+  border: 1px solid var(--main-bg);
+  border-radius: 10px;
+  background-color: var(--input-field); }
+  .tasks__input-field:focus {
+    border: 1px solid var(--focus); }
+  .tasks__input-field::placeholder {
+    color: var(--input-text); }
+.tasks__submit-button {
+  padding: 10px;
+  background-color: var(--safe-color); }
+.tasks__clear-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--warning-color); }
+.tasks__manual-backup-save-button {
+  padding: 10px;
+  background-color: var(--safe-color); }
+.tasks__manual-backup-restore-button {
+  padding: 10px;
+  background-color: var(--load-backup-purple); }
+.tasks__restore-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 10px 15px 10px 10px;
+  background-color: var(--safe-color); }
+  .tasks__restore-button::before {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    content: url("../images/undo.svg");
+    background-size: 20px 20px; }
+.tasks__mark-as-done-button {
+  position: absolute;
+  padding: 0 6px;
+  border-radius: 10px; }
+.tasks__remove-task-button {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  color: var(--settings-btn-dark);
+  background-color: transparent; }
+.tasks-edit {
+  font-family: Gudea-Regular, sans-serif;
+  font-size: 18px;
+  outline: none; }
 
 .task-is-done {
   text-decoration: line-through;

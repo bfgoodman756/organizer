@@ -1,7 +1,12 @@
 .content-wrapper {
-  width: 500px;
-  margin: 100px auto;
+  position: relative;
+  //margin: 100px auto 0 300px;
+  width: 100%;
+  height: fit-content;
+  margin-left: 300px;
+
   padding: 15px;
+
 }
 
 .active-app {

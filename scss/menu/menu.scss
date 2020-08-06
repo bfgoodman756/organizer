@@ -2,12 +2,12 @@
   position: fixed;
   width: 300px;
   height: 100vh;
-  background-color: var(--accent-secondary-bg);
   overflow: scroll;
+  background-color: var(--accent-secondary-bg);
 
   &::-webkit-scrollbar {
-    height: 0;
     width: 0;
+    height: 0;
   }
 
   &__space-holder {
@@ -86,8 +86,8 @@
     top: 105px;
     width: 30px;
     height: 30px;
-    fill: var(--active-text);
     transition: all .2s ease-out;
+    fill: var(--active-text);
   }
 
   &-names {
@@ -121,38 +121,38 @@
 
     &--header {
       width: 66.6%;
-      word-break: break-all;
       margin: 0 auto;
+      word-break: break-all;
       border: 1px solid transparent;
 
       &:focus {
+        padding-left: 5px;
         cursor: text;
         border: 1px solid var(--focus);
-        padding-left: 5px;
       }
     }
 
     &--list-create {
+      width: fit-content;
+      height: 30px;
       margin: 0 auto;
       padding: 0;
-      height: 30px;
-      width: fit-content;
     }
   }
 
   &-name--active {
-    border-top: 1px solid var(--separator);
     font-size: 20px;
     width: 100%;
     padding: 3px 0;
+    cursor: cell;
+    color: var(--menu-selected-list);
+    border-top: 1px solid var(--separator);
     outline: none;
     background-color: var(--main-bg);
-    color: var(--menu-selected-list);
-    cursor: cell;
 
     &:hover {
-      background-color: var(--main-bg);
       cursor: auto;
+      background-color: var(--main-bg);
     }
   }
 
@@ -165,10 +165,10 @@
 
 
   &__create-new-task--input {
-    width: 200px;
-    margin: 5px auto;
-    height: 30px;
     font-size: 20px;
+    width: 200px;
+    height: 30px;
+    margin: 5px auto;
   }
 }
 
@@ -185,11 +185,11 @@
     p {
       font-family: Gudea-Regular, sans-serif;
       font-size: 15px;
-      color: var(--settings-btn);
-      padding: 5px 0 5px 20px;
       margin: 0;
-      user-select: auto;
+      padding: 5px 0 5px 20px;
       cursor: auto;
+      user-select: auto;
+      color: var(--settings-btn);
     }
   }
 
@@ -231,12 +231,12 @@
     position: absolute;
     width: 26px;
     height: 26px;
-    background-color: transparent;
-    border: 0;
     padding: 0;
     cursor: pointer;
-    outline: none;
     opacity: 90%;
+    border: 0;
+    outline: none;
+    background-color: transparent;
     fill: var(--settings-btn);
 
     &:hover {
@@ -255,12 +255,12 @@
   &__already-used {
     font-size: 20px;
     position: absolute;
-    width: 270px;
-    background-color: var(--main-bg);
-    text-align: center;
     z-index: 2;
+    width: 270px;
+    text-align: center;
     color: var(--main-text);
     border: 2px solid var(--accent-hover);
+    background-color: var(--main-bg);
   }
 }
 

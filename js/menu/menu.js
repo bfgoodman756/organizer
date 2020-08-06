@@ -169,18 +169,10 @@ function loadListNamesToMenu() {
         
         listNamesNode.append(div);
 
-        if (isPlusSign) {
-            return;
+        if (listName === appManager.options.lastUsedList) {
+            div.classList.add("menu__todo-list-name--active");
+            createMenuListSettings(div);
         }
-        createMenuListSettings(div);/////////////////
-        
-
-//         highlightCurrentList(appManager.options.lastUsedList)
-
-//         if (appManager.options.lastUsedList === listName) {
-//             div.className = "menu__todo-list-name--active";
-// //             createMenuListSettings(div);////////////////////
-//         }
     }
 }
 

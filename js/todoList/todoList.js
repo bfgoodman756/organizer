@@ -549,11 +549,12 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
     target.after(button);
 
     let targetCoords = target.getBoundingClientRect();
+    let taskSection = document.querySelector(".tasks-section");
     
     if (buttonName === "remove") {
         button.innerText ="X";
-        button.style.left = targetCoords.left + targetCoords.width - button.clientWidth + "px";
-        button.style.top = targetCoords.top + window.scrollY + "px";
+        button.style.left = taskSection.clientWidth - button.clientWidth + "px";
+        button.style.top = targetCoords.top - taskSection.offsetTop + window.scrollY + "px";
 
         button.addEventListener("mouseover", function() {
             target.classList.add("tasks-list--removing");
@@ -564,7 +565,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         });
     
     } else {
-        button.style.top = targetCoords.top + targetCoords.height + window.scrollY + "px";        
+        button.style.top = targetCoords.top + targetCoords.height - taskSection.offsetTop + window.scrollY +  - 3 + "px";       
     }
     
 
