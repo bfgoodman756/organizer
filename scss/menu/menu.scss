@@ -23,8 +23,8 @@
     margin: 0;
     cursor: pointer;
     user-select: none;
-    color: var(--active-text);
     background-color: var(--accent-bg);
+    transition: all .2s ease-out;
 
     &:hover {
       background-color: var(--accent-active-bg);
@@ -37,6 +37,7 @@
       margin: 0;
       padding: 0;
       text-align: center;
+      color: var(--active-text);
     }
   }
 
@@ -71,7 +72,6 @@
     position: relative;
     display: flex;
     align-items: center;
-    //justify-content: center;
     flex-direction: column;
   }
 
@@ -83,10 +83,10 @@
 
   &-dropdown {
     position: absolute;
+    display: none;
     top: 105px;
     width: 30px;
     height: 30px;
-    transition: all .2s ease-out;
     fill: var(--active-text);
   }
 

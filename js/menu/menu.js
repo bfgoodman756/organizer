@@ -142,6 +142,8 @@ function loadListNamesToMenu() {
     updateDropDownPosition(listNamesNode.clientHeight + 5);
     updateMenuToDoListsHeight();
 
+    listNamesWrapper.classList.remove("no-transition");
+
 
     function createTaskLinkInMenu(listName, isPlusSign = false) {
         let div = document.createElement("div");
@@ -540,5 +542,11 @@ function updateDropDownPosition(extraHeight = 0) {
         dropdown.style.top = "";
         dropdown.classList.remove('rotate180');
         listsTab.style.height = "150px";
-    }    
+    }
+
+    if (dropdown.style.display = "none") {
+        dropdown.style.display = "block";
+    }
+
+   
 }

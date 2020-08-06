@@ -88,11 +88,17 @@ function createLightDarkModeToggle() {
                 darkIcon.style.display = "block";
                 break;
         }
-        let page = document.querySelector("*");
-        html.classList.add("no-transition");
+
+        let listNamesWrapper = document.querySelector(".menu__todo-list");
+        listNamesWrapper.classList.add("no-transition");
+
+        listNamesWrapper.offsetHeight;
+
         html.dataset.theme = themeName;
         themeSelector.setAttribute("theme", themeName);
         appManager.rememberLastUsedTheme(themeName);
-//         html.classList.remove("no-transition");
+
+
+        listNamesWrapper.classList.remove("no-transition");
     })
 }

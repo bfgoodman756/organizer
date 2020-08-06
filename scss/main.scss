@@ -2,7 +2,6 @@
 @import 'colors';
 
 :root[data-theme="light-mode"] {
-  transition: all .2s ease-out;
   //base colors:
   --main-bg: #{$main-bg};
 
@@ -39,7 +38,6 @@
 }
 
 :root[data-theme="dark-mode"] {
-  transition: all .2s ease-out;
   //base colors:
   --main-bg: #{$main-bg-dark};
 
