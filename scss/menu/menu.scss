@@ -4,6 +4,7 @@
   height: 100vh;
   overflow: scroll;
   background-color: var(--accent-secondary-bg);
+  z-index: 2;
 
   &::-webkit-scrollbar {
     width: 0;

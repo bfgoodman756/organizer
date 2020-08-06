@@ -131,7 +131,8 @@ button {
   width: 300px;
   height: 100vh;
   overflow: scroll;
-  background-color: var(--accent-secondary-bg); }
+  background-color: var(--accent-secondary-bg);
+  z-index: 2; }
   .menu::-webkit-scrollbar {
     width: 0;
     height: 0; }
@@ -303,7 +304,6 @@ button {
   position: relative;
   width: 100%;
   height: fit-content;
-  margin-left: 300px;
   padding: 15px; }
 
 .active-app {
@@ -316,7 +316,7 @@ button {
   color: var(--main-text); }
 
 .todo-list-wrapper {
-  width: 500px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 100px 0 400px; }
   .todo-list-wrapper button {
