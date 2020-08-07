@@ -1,4 +1,4 @@
-// let mainWrapper = document.querySelector(".main-wrapper");
+let mainWrapper = document.querySelector(".main-wrapper");
 
 let appManager = {
     options: {},
