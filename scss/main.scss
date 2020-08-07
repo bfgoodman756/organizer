@@ -94,10 +94,10 @@ body::-webkit-scrollbar-thumb {
   right: 0;
   width: 30px;
   height: 30px;
-  margin: 15px;
+  //margin: 15px;
   padding: 7px;
   cursor: pointer;
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
   background-color: var(--theme-selector-bg);
 }
 
