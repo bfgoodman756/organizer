@@ -43,45 +43,56 @@ let appData = JSON.parse(localStorage.appManager);
 appManager.options = Object.assign(appData.options);
 console.log("app options data was loaded from {localStorage.appManager}");
 
-menuCloseOpenToggle();
+
+document.addEventListener("DOMContentLoaded", loadLastAppState);
+
+// initializeApp();
+
 lightDarkModeToggle();
 
+function initializeApp() {
+    let contentWrapper = document.querySelector(".content-wrapper");
+    let lastUsedApp = appManager.options.lastUsedApp;
 
-function menuCloseOpenToggle() {
-    let menu = document.querySelector(".menu");
-    let menuSpacer = document.querySelector(".menu__space-holder");
-    let button = document.querySelector(".menu__controls");
-
-    let menuStatus = button.dataset.menuStatus;
-
-    let openButton = document.querySelector(".menu__controls--open-button");
-    let closeButton = document.querySelector(".menu__controls--close-button");
-
-    button.addEventListener("click", function(event) {
-        let menuStatus = button.dataset.menuStatus;
-        let menuRect = menu.getBoundingClientRect();
-        switch(menuStatus) {
-            case("opened"):
-                button.dataset.menuStatus = "closed";
-                closeButton.style.display = "none";
-                openButton.style.display = "block";
-                menu.style.left = `-${menuRect.width}px`;
-                button.style.left = "0px";
-                menuSpacer.style.minWidth = "0px";
-                break;
-
-            case("closed"):
-                button.dataset.menuStatus = "opened";
-                closeButton.style.display = "block";
-                openButton.style.display = "none";
-                menu.style.left = `0px`;
-                button.style.left = "";
-                menuSpacer.style.minWidth = "300px";
-                break;
-        }
-    })
+    switch(lastUsedApp) {
+        case("ToDoList"):
+            let toDoListTemplate = `
+                <div class="todo-list-wrapper" data-app-name="ToDoList">
+                    
+                    <div class="tasks-section">
+                        <p class="tasks-header">
+                            <span class="todo__list-name" contenteditable="true" spellcheck="false"></span>:
+                        </p>
+                        <ol class="tasks-list"></ol>
+                    </div>
+                    
+                    <div class="tasks-input-wrapper">
+                        <input class="tasks__input-field" placeholder="add any task"/>
+                        <button class="tasks__submit-button">Add task</button>
+                    </div>
+                    
+                    <div class="tasks__control-buttons-wrapper">
+                        <button class="tasks__clear-button">Clear tasks</button>
+                        <button class="tasks__manual-backup-save-button">Save backup</button>
+                        <button class="tasks__manual-backup-restore-button">Load backup</button>
+                    </div>
+                </div>
+            `;
+            contentWrapper.innerHTML = toDoListTemplate;
+            break;
+        case("Timer"):
+            break;
+        case("Calendar"):
+            break;
+    }
 }
 
+
+function loadLastAppState() {
+    let lastUsedAppName = appManager.options.lastUsedApp;
+    activateAppsContent(lastUsedAppName);
+    showActiveAppOnMenu(lastUsedAppName);
+}
 
 
 function lightDarkModeToggle() {
