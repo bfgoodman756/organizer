@@ -128,16 +128,16 @@ button {
 
 .menu {
   position: fixed;
+  z-index: 1;
   width: 300px;
   height: 100vh;
   overflow: scroll;
   background-color: var(--accent-secondary-bg);
-  z-index: 2; }
+  transition: all .2s ease-out; }
   .menu::-webkit-scrollbar {
     width: 0;
     height: 0; }
   .menu__space-holder {
-    width: 300px;
     min-width: 300px; }
   .menu__tab {
     font-size: 35px;
@@ -147,8 +147,8 @@ button {
     margin: 0;
     cursor: pointer;
     user-select: none;
-    background-color: var(--accent-bg);
-    transition: all .2s ease-out; }
+    transition: all .2s ease-out;
+    background-color: var(--accent-bg); }
     .menu__tab:hover {
       background-color: var(--accent-active-bg); }
     .menu__tab-header {
@@ -159,6 +159,30 @@ button {
       padding: 0;
       text-align: center;
       color: var(--active-text); }
+  .menu__controls {
+    position: fixed;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    z-index: 3;
+    left: 300px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--accent-bg);
+    transition: all .2s ease-out;
+    border-bottom-right-radius: 10px;
+    cursor: pointer; }
+    .menu__controls:hover {
+      background-color: var(--accent-active-bg); }
+    .menu__controls--open-button, .menu__controls--close-button {
+      height: 20px;
+      width: 20px;
+      fill: var(--active-text); }
+    .menu__controls--open-button {
+      display: none; }
+    .menu__controls--hide-button {
+      display: block; }
   .menu__timer, .menu__calendar, .menu__converter, .menu__header {
     position: relative;
     display: flex;
@@ -317,8 +341,7 @@ button {
 
 .todo-list-wrapper {
   max-width: 500px;
-  margin: 0 auto;
-  padding: 100px 0 400px; }
+  margin: 100px auto 400px; }
   .todo-list-wrapper button {
     text-align: center;
     border: 0; }
