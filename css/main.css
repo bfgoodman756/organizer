@@ -79,11 +79,11 @@ body::-webkit-scrollbar-thumb {
 
 .theme-selector[data-daytime-status*="mode"] {
   position: fixed;
-  z-index: 1000;
+  z-index: 2;
   top: 0;
   right: 0;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   padding: 7px;
   cursor: pointer;
   border-bottom-left-radius: 10px;
@@ -164,7 +164,7 @@ button {
     justify-content: center;
     align-content: center;
     align-items: center;
-    z-index: 3;
+    z-index: 10;
     left: 300px;
     width: 50px;
     height: 50px;
@@ -362,6 +362,9 @@ button {
   font-size: 18px;
   padding-left: 50px;
   color: var(--main-text); }
+  @media only screen and (max-width: 768px) {
+    .tasks-list {
+      font-size: 1.4rem; } }
   .tasks-list li {
     margin-top: 10px;
     padding: 3px 15px 3px 2px;

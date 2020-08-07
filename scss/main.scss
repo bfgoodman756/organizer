@@ -1,6 +1,30 @@
 @import 'fonts';
 @import 'colors';
 
+@mixin media-queries_1440-and-more {
+  @media only screen and (min-width: 1440px) { @content; }
+}
+
+@mixin media-queries_1280-and-less {
+  @media only screen and (max-width: 1280px) { @content; }
+}
+
+@mixin media-queries_1024-and-less {
+  @media only screen and (max-width: 1024px) { @content; }
+}
+
+@mixin media-queries_768-and-less {
+  @media only screen and (max-width: 768px) { @content; }
+}
+
+@mixin media-queries_480-and-less {
+  @media only screen and (max-width: 480px) { @content; }
+}
+
+@mixin media-queries_320-and-less {
+  @media only screen and (max-width: 320px) { @content; }
+}
+
 :root[data-theme="light-mode"] {
   //base colors:
   --main-bg: #{$main-bg};
@@ -89,11 +113,11 @@ body::-webkit-scrollbar-thumb {
 
 .theme-selector[data-daytime-status*="mode"] {
   position: fixed;
-  z-index: 1000;
+  z-index: 2;
   top: 0;
   right: 0;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   //margin: 15px;
   padding: 7px;
   cursor: pointer;

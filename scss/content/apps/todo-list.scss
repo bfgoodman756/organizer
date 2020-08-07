@@ -37,8 +37,13 @@
   &-list {
     font-family: Gudea-Regular, sans-serif;
     font-size: 18px;
+    //font-size: 1.4rem;
     padding-left: 50px;
     color: var(--main-text);
+
+    @include  media-queries_768-and-less {
+      font-size: 1.4rem;
+    }
 
     li {
       //width: fit-content;
