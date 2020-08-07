@@ -2,7 +2,7 @@ const toDoListWrapper = document.querySelector('.todo-list-wrapper');
 const tasksList = document.querySelector('.tasks-list');
 const taskInput = document.querySelector('.tasks__input-field');
 
-console.log(createConsoleLogMessage("toDoList.js initialized"));
+// console.log(createConsoleLogMessage("toDoList.js initialized"));
 
 let taskManager = {
     toDoLists: {},
