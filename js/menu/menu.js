@@ -4,16 +4,7 @@ let timerApp = document.querySelector('.menu__timer');
 let calendarApp = document.querySelector('.menu__calendar');
 let converterApp = document.querySelector('.menu__converter');
 
-document.addEventListener("DOMContentLoaded", loadLastAppState);
-
-
-function loadLastAppState() {
-    let lastUsedAppName = appManager.options.lastUsedApp;
-    activateAppsContent(lastUsedAppName);
-    showActiveAppOnMenu(lastUsedAppName);
-}
-
-
+menuCloseOpenToggle();
 
 menu.addEventListener('click', function(event) {
     let node = getNode(event);
@@ -26,9 +17,6 @@ menu.addEventListener('click', function(event) {
         return;
     }
 
-//     if (node.tagName === "INPUT") {
-//         return;
-//     }
 
     if (node.dataset.type === "menu_list-create") {
         menuCreateNewTaskList(node);
@@ -40,9 +28,6 @@ menu.addEventListener('click', function(event) {
        return;
     }
 
-//     if (node.dataset.type === "menu_list-settings") {
-//         return;
-//     }
 
     if (node.dataset.type === "menu_list-name") {
         loadTaskListOnClick(node.firstChild.innerText);
@@ -86,7 +71,46 @@ menu.addEventListener('click', function(event) {
 
 
 
-function showActiveAppOnMenu(appName) {    
+function menuCloseOpenToggle() {
+    let menu = document.querySelector(".menu");
+    let menuSpacer = document.querySelector(".menu__space-holder");
+    let button = document.querySelector(".menu__controls");
+
+    let menuStatus = button.dataset.menuStatus;
+
+    let openButton = document.querySelector(".menu__controls--open-button");
+    let closeButton = document.querySelector(".menu__controls--close-button");
+
+    button.addEventListener("click", function(event) {
+        let menuStatus = button.dataset.menuStatus;
+        let menuRect = menu.getBoundingClientRect();
+        switch(menuStatus) {
+            case("opened"):
+                button.dataset.menuStatus = "closed";
+                closeButton.style.display = "none";
+                openButton.style.display = "block";
+                menu.style.left = `-${menuRect.width}px`;
+                button.style.left = "0px";
+                menuSpacer.style.minWidth = "0px";
+                break;
+
+            case("closed"):
+                button.dataset.menuStatus = "opened";
+                closeButton.style.display = "block";
+                openButton.style.display = "none";
+                menu.style.left = `0px`;
+                button.style.left = "";
+                menuSpacer.style.minWidth = "300px";
+                break;
+        }
+    })
+}
+
+
+
+
+function showActiveAppOnMenu(appName) {
+//     let mainPage = document.querySelector('.menu__tab menu__header');    
     let toDoList = document.querySelector('.menu__todo-list');
     let timer = document.querySelector('.menu__timer');
     let calendar = document.querySelector('.menu__calendar');
@@ -106,6 +130,18 @@ function showActiveAppOnMenu(appName) {
                 tab.classList.remove('active-tab');
             }  
         });
+
+        let app = document.querySelector('.active-tab');
+//         let appName = app.dataset.appName || "MainPage";
+        switch(appName || "MainPage") {
+            case("Mainpage"):
+                break;
+            case("ToDoList"):
+                initializeToDoList();
+                break;
+            case("Timer"):
+                break;
+        }
     }
 }
 
@@ -199,6 +235,26 @@ function activateAppsContent(selectedAppName) {
             item.classList.remove('active-app');
         }
     });
+
+    let app = document.querySelector('.active-tab');
+    
+    let appName = ""
+    if (!app) {
+        appName = "MainPage";
+    } else {
+        appName = app.dataset.appName;
+    }
+    
+    switch(appName) {
+        case("Mainpage"):
+            appPlaceholder.classList.add("active-app");
+            break;
+        case("ToDoList"):
+            initializeToDoList();
+            break;
+        case("Timer"):
+            break;
+    }
 }
 
 
@@ -507,11 +563,7 @@ function getListNamesFromTaskManager() {
     listsCount = Object.keys(taskManager.toDoLists).length;
     let toDoLists = Object.keys(taskManager.toDoLists);
     toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated);
-//     let listsArray = [];
 
-//     for (let list in taskManager.toDoLists) {
-//         listsArray.push(list);
-//     }
     return toDoLists;
 }
 

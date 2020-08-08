@@ -31,7 +31,7 @@ let appManager = {
         this.options.lastUsedTheme = themeName;
         localStorage.setItem("appManager", JSON.stringify(this));
         console.log(`[${themeName}] is last used app now`);
-    }  
+    }
 };
 
 if (!localStorage.getItem("appManager")) {
@@ -43,45 +43,17 @@ let appData = JSON.parse(localStorage.appManager);
 appManager.options = Object.assign(appData.options);
 console.log("app options data was loaded from {localStorage.appManager}");
 
-menuCloseOpenToggle();
+
+document.addEventListener("DOMContentLoaded", loadLastAppState);
+
+
 lightDarkModeToggle();
 
-
-function menuCloseOpenToggle() {
-    let menu = document.querySelector(".menu");
-    let menuSpacer = document.querySelector(".menu__space-holder");
-    let button = document.querySelector(".menu__controls");
-
-    let menuStatus = button.dataset.menuStatus;
-
-    let openButton = document.querySelector(".menu__controls--open-button");
-    let closeButton = document.querySelector(".menu__controls--close-button");
-
-    button.addEventListener("click", function(event) {
-        let menuStatus = button.dataset.menuStatus;
-        let menuRect = menu.getBoundingClientRect();
-        switch(menuStatus) {
-            case("opened"):
-                button.dataset.menuStatus = "closed";
-                closeButton.style.display = "none";
-                openButton.style.display = "block";
-                menu.style.left = `-${menuRect.width}px`;
-                button.style.left = "0px";
-                menuSpacer.style.minWidth = "0px";
-                break;
-
-            case("closed"):
-                button.dataset.menuStatus = "opened";
-                closeButton.style.display = "block";
-                openButton.style.display = "none";
-                menu.style.left = `0px`;
-                button.style.left = "";
-                menuSpacer.style.minWidth = "300px";
-                break;
-        }
-    })
+function loadLastAppState() {
+    let lastUsedAppName = appManager.options.lastUsedApp;
+    activateAppsContent(lastUsedAppName);
+    showActiveAppOnMenu(lastUsedAppName);
 }
-
 
 
 function lightDarkModeToggle() {

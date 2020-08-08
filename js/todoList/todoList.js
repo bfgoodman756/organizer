@@ -181,62 +181,68 @@ let taskManager = {
 };
 
 
+loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
 
-tasksList.addEventListener('mouseover', function(event){
-    let elem = event.target;
 
-    if (elem.tagName !== "LI") return;
+function initializeToDoList() {
+    tasksList.addEventListener('mouseover', function(event){
+        let elem = event.target;
 
-    let doneStatus = "mark as done";
+        if (elem.tagName !== "LI") return;
 
-    if (elem.classList.contains('task-is-done')) {
-        doneStatus = "undone";
+        let doneStatus = "mark as done";
+
+        if (elem.classList.contains('task-is-done')) {
+            doneStatus = "undone";
+        }
+        createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
+        createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
+    });
+
+    tasksList.addEventListener('mouseleave', removeTaskControlButtons);
+
+
+
+    // Listens click and delegates it to next functions: "Add task", "Clear task" or "Restore list".
+    toDoListWrapper.addEventListener('click', function(event) {
+        clickListener(event);
+    });
+
+
+
+
+    // Adds posiblity to submit new task by "enter" key from the input
+    taskInput.addEventListener("keydown", function(event) {
+        if (event.key !== "Enter") return;
+        renderTask(event.target.value, true);
+    });
+
+
+
+
+    let currentListName = appManager.options.lastUsedList;
+
+    if (!currentListName) {
+        currentListName = "Your first list";
+        taskManager.createNewList(currentListName);
+        highlightCurrentList(currentListName);
+        appManager.rememberLastUsedList(currentListName);
     }
-    createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
-    createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
-});
-
-tasksList.addEventListener('mouseleave', removeTaskControlButtons);
 
 
+    let listHeader = document.querySelector(".todo__list-name");
+    listHeader.innerText = currentListName;
 
-// Listens click and delegates it to next functions: "Add task", "Clear task" or "Restore list".
-toDoListWrapper.addEventListener('click', function(event) {
-    clickListener(event);
-});
+    listHeader.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            this.blur();
+        }
+    });
 
-
-
-
-// Adds posiblity to submit new task by "enter" key from the input
-taskInput.addEventListener("keydown", function(event) {
-    if (event.key !== "Enter") return;
-    renderTask(event.target.value, true);
-});
-
-
-
-
-let currentListName = appManager.options.lastUsedList;
-
-if (!currentListName) {
-    currentListName = "Your first list";
-    taskManager.createNewList(currentListName);
-    highlightCurrentList(currentListName);
-    appManager.rememberLastUsedList(currentListName);
+    listHeader.addEventListener("blur", editCurrentListName);
 }
 
 
-let listHeader = document.querySelector(".todo__list-name");
-listHeader.innerText = currentListName;
-
-listHeader.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        this.blur();
-    }
-});
-
-listHeader.addEventListener("blur", editCurrentListName);
 
 
 
@@ -261,9 +267,6 @@ function editCurrentListName() {
 
 
 
-loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
-
-
 
 
 // Loads saved localStorage data
@@ -280,12 +283,21 @@ function loadDataFromLocalStorage(JsonData) {
     taskManager.toDoLists = Object.assign(obj.toDoLists);
     console.log(createConsoleLogMessage("taskManager data was loaded from {localStorage.toDoLists}"));
 
-    //create restore button if there is no tasks key for current list or if there are less tasks than 1
-    if (!obj.toDoLists[currentListName].tasks || Object.keys(obj.toDoLists[currentListName].tasks).length === 0) {
-        createRestoreButton();
-        return;
+//     //create restore button if there is no tasks key for current list or if there are less tasks than 1
+//     if (!obj.toDoLists[currentListName].tasks || Object.keys(obj.toDoLists[currentListName].tasks).length === 0) {
+//         createRestoreButton();
+//         return;
+//     }
+
+    if (appManager.options.lastUsedApp === "ToDoList") {
+        let listName = appManager.options.lastUsedList;
+        //create restore button if there is no tasks key for current list or if there are less tasks than 1
+        if (!obj.toDoLists[listName].tasks || Object.keys(obj.toDoLists[listName].tasks).length === 0) {
+            createRestoreButton();
+            return;
+        }
+        renderList(obj.toDoLists[listName].tasks); 
     }
-    renderList(obj.toDoLists[currentListName].tasks);
 }
 
 
