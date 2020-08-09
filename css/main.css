@@ -182,7 +182,7 @@ button {
       display: none; }
     .menu__controls--hide-button {
       display: block; }
-  .menu__timer, .menu__calendar, .menu__converter, .menu__header {
+  .menu__timer, .menu__calendar, .menu__converter, .menu__main {
     position: relative;
     display: flex;
     align-items: center;
@@ -327,6 +327,7 @@ button {
   position: relative;
   width: 100%;
   height: fit-content;
+  margin: 100px auto 400px;
   padding: 15px; }
 
 .active-app {
@@ -340,7 +341,7 @@ button {
 
 .todo-list-wrapper {
   max-width: 500px;
-  margin: 100px auto 400px; }
+  margin: 0 auto; }
   .todo-list-wrapper button {
     text-align: center;
     border: 0; }

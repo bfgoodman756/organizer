@@ -2,6 +2,8 @@ const toDoListWrapper = document.querySelector('.todo-list-wrapper');
 const tasksList = document.querySelector('.tasks-list');
 const taskInput = document.querySelector('.tasks__input-field');
 
+let currentListName = appManager.options.lastUsedList;
+
 console.log(createConsoleLogMessage("toDoList.js initialized"));
 
 let taskManager = {
@@ -181,90 +183,69 @@ let taskManager = {
 };
 
 
+
+tasksList.addEventListener('mouseover', function(event){
+    let elem = event.target;
+
+    if (elem.tagName !== "LI") return;
+
+    let doneStatus = "mark as done";
+
+    if (elem.classList.contains('task-is-done')) {
+        doneStatus = "undone";
+    }
+    createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
+    createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
+});
+
+tasksList.addEventListener('mouseleave', removeTaskControlButtons);
+
+
+
+// Listens click and delegates it to next functions: "Add task", "Clear task" or "Restore list".
+toDoListWrapper.addEventListener('click', function(event) {
+    clickListener(event);
+});
+
+
+
+
+// Adds posiblity to submit new task by "enter" key from the input
+taskInput.addEventListener("keydown", function(event) {
+    if (event.key !== "Enter") return;
+    renderTask(event.target.value, true);
+});
+
+
+
+
+currentListName = appManager.options.lastUsedList;
+
+if (!currentListName) {
+    currentListName = "Your first list";
+    taskManager.createNewList(currentListName);
+    highlightCurrentList(currentListName);
+    appManager.rememberLastUsedList(currentListName);
+}
+
+
+
+
+let listHeader = document.querySelector(".todo__list-name");
+listHeader.innerText = currentListName;
+
+listHeader.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        this.blur();
+    }
+});
+
+listHeader.addEventListener("blur", editCurrentListName);
+
+
+
+
 loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
-
-
-function initializeToDoList() {
-    tasksList.addEventListener('mouseover', function(event){
-        let elem = event.target;
-
-        if (elem.tagName !== "LI") return;
-
-        let doneStatus = "mark as done";
-
-        if (elem.classList.contains('task-is-done')) {
-            doneStatus = "undone";
-        }
-        createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
-        createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
-    });
-
-    tasksList.addEventListener('mouseleave', removeTaskControlButtons);
-
-
-
-    // Listens click and delegates it to next functions: "Add task", "Clear task" or "Restore list".
-    toDoListWrapper.addEventListener('click', function(event) {
-        clickListener(event);
-    });
-
-
-
-
-    // Adds posiblity to submit new task by "enter" key from the input
-    taskInput.addEventListener("keydown", function(event) {
-        if (event.key !== "Enter") return;
-        renderTask(event.target.value, true);
-    });
-
-
-
-
-    let currentListName = appManager.options.lastUsedList;
-
-    if (!currentListName) {
-        currentListName = "Your first list";
-        taskManager.createNewList(currentListName);
-        highlightCurrentList(currentListName);
-        appManager.rememberLastUsedList(currentListName);
-    }
-
-
-    let listHeader = document.querySelector(".todo__list-name");
-    listHeader.innerText = currentListName;
-
-    listHeader.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            this.blur();
-        }
-    });
-
-    listHeader.addEventListener("blur", editCurrentListName);
-}
-
-
-
-
-
-function editCurrentListName() {
-    let newName = this.innerText;
-    
-    if (currentListName === newName) {
-        return;
-    }
-
-    taskManager.changeListName(currentListName, newName);
-
-    if (!taskManager.toDoLists[newName].options) {
-        taskManager.setListOptions(newName);
-    }
-
-    appManager.rememberLastUsedList(newName);
-    loadListNamesToMenu();
-
-    currentListName = newName;
-}
-
 
 
 
@@ -289,15 +270,32 @@ function loadDataFromLocalStorage(JsonData) {
 //         return;
 //     }
 
-    if (appManager.options.lastUsedApp === "ToDoList") {
-        let listName = appManager.options.lastUsedList;
-        //create restore button if there is no tasks key for current list or if there are less tasks than 1
-        if (!obj.toDoLists[listName].tasks || Object.keys(obj.toDoLists[listName].tasks).length === 0) {
-            createRestoreButton();
-            return;
-        }
-        renderList(obj.toDoLists[listName].tasks); 
+    //create restore button if there is no tasks key for current list or if there are less tasks than 1
+    if (!taskManager.toDoLists[currentListName].tasks || Object.keys(taskManager.toDoLists[currentListName].tasks).length === 0) {
+        createRestoreButton();
+        return;
     }
+    renderList(taskManager.toDoLists[currentListName].tasks); 
+}
+
+
+function editCurrentListName() {
+    let newName = this.innerText;
+    
+    if (currentListName === newName) {
+        return;
+    }
+
+    taskManager.changeListName(currentListName, newName);
+
+    if (!taskManager.toDoLists[newName].options) {
+        taskManager.setListOptions(newName);
+    }
+
+    appManager.rememberLastUsedList(newName);
+    loadListNamesToMenu();
+
+    currentListName = newName;
 }
 
 
@@ -565,8 +563,8 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
     
     if (buttonName === "remove") {
         button.innerText ="X";
+        button.style.top = target.offsetTop + window.scrollY + "px";
         button.style.left = taskSection.clientWidth - button.clientWidth + "px";
-        button.style.top = targetCoords.top - taskSection.offsetTop + window.scrollY + "px";
 
         button.addEventListener("mouseover", function() {
             target.classList.add("tasks-list--removing");
@@ -577,7 +575,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         });
     
     } else {
-        button.style.top = targetCoords.top + targetCoords.height - taskSection.offsetTop + window.scrollY +  - 3 + "px";       
+        button.style.top = targetCoords.height + target.offsetTop + window.scrollY + 1 + "px";       
     }
     
 
@@ -766,15 +764,6 @@ function resetInputFieldAfterSubmit() {
 
 
 
-// Restore deleted list and remove restore button from the DOM.
-// function backupRestore(deletedListJSON) {
-//     clearTaskList();
-//     loadDataFromLocalStorage(deletedListJSON);
-//     removeRestoreButton();
-// }
-
-
-
 function createRestoreButton() {
     let currList = taskManager.toDoLists[currentListName];
 
@@ -793,8 +782,6 @@ function createRestoreButton() {
 
 //Creating a button with parameters
 function createButton(buttonClass, buttonName, buttonDataset) {
-    if(document.querySelector(`.${buttonClass}`)) return;
-
     let button = document.createElement('button');
     button.innerHTML = buttonName;
     button.className = buttonClass;

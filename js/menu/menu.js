@@ -110,13 +110,13 @@ function menuCloseOpenToggle() {
 
 
 function showActiveAppOnMenu(appName) {
-//     let mainPage = document.querySelector('.menu__tab menu__header');    
+    let mainPage = document.querySelector('.menu__main');    
     let toDoList = document.querySelector('.menu__todo-list');
     let timer = document.querySelector('.menu__timer');
     let calendar = document.querySelector('.menu__calendar');
     let converter = document.querySelector('.menu__converter');
     
-    let menuTabs = [toDoList, timer, calendar, converter];
+    let menuTabs = [mainPage, toDoList, timer, calendar, converter];
     activateTab(menuTabs, appName);
     
     loadListNamesToMenu();
@@ -137,7 +137,7 @@ function showActiveAppOnMenu(appName) {
             case("Mainpage"):
                 break;
             case("ToDoList"):
-                initializeToDoList();
+//                 initializeToDoList();
                 break;
             case("Timer"):
                 break;
@@ -250,7 +250,6 @@ function activateAppsContent(selectedAppName) {
             appPlaceholder.classList.add("active-app");
             break;
         case("ToDoList"):
-            initializeToDoList();
             break;
         case("Timer"):
             break;
