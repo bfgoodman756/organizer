@@ -563,7 +563,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
     
     if (buttonName === "remove") {
         button.innerText ="X";
-        button.style.top = target.offsetTop + window.scrollY + "px";
+        button.style.top = target.offsetTop + "px";
         button.style.left = taskSection.clientWidth - button.clientWidth + "px";
 
         button.addEventListener("mouseover", function() {
@@ -575,7 +575,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         });
     
     } else {
-        button.style.top = targetCoords.height + target.offsetTop + window.scrollY + 1 + "px";       
+        button.style.top = targetCoords.height + target.offsetTop + 1 + "px";       
     }
     
 

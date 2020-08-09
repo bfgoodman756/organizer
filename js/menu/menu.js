@@ -85,6 +85,8 @@ function menuCloseOpenToggle() {
         let menuStatus = button.dataset.menuStatus;
         let menuRect = menu.getBoundingClientRect();
         switch(menuStatus) {
+
+            //close if opened
             case("opened"):
                 button.dataset.menuStatus = "closed";
                 closeButton.style.display = "none";
@@ -93,7 +95,8 @@ function menuCloseOpenToggle() {
                 button.style.left = "0px";
                 menuSpacer.style.minWidth = "0px";
                 break;
-
+            
+            //open if closed
             case("closed"):
                 button.dataset.menuStatus = "opened";
                 closeButton.style.display = "block";
