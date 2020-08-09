@@ -1,8 +1,8 @@
 let menu = document.querySelector('.menu');
-let toDoListApp = document.querySelector('.menu__todo-list');
-let timerApp = document.querySelector('.menu__timer');
-let calendarApp = document.querySelector('.menu__calendar');
-let converterApp = document.querySelector('.menu__converter');
+// let toDoListApp = document.querySelector('.menu__todo-list');
+// let timerApp = document.querySelector('.menu__timer');
+// let calendarApp = document.querySelector('.menu__calendar');
+// let converterApp = document.querySelector('.menu__converter');
 
 menuCloseOpenToggle();
 
@@ -238,7 +238,7 @@ function activateAppsContent(selectedAppName) {
 
     let app = document.querySelector('.active-tab');
     
-    let appName = ""
+    let appName = "";
     if (!app) {
         appName = "MainPage";
     } else {

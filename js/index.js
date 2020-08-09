@@ -79,7 +79,7 @@ function lightDarkModeToggle() {
             break;
     }
 
-    themeSelector.addEventListener("click", function(event) {
+    themeSelector.addEventListener("click", function() {
         let themeName = "";
         
         if (themeSelector.getAttribute("theme") === "light-mode") {

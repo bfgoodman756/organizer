@@ -308,7 +308,7 @@ function renderList(tasksData) {
         tasksDataLength = Object.keys(tasksData).length;
     }
     
-    if ( tasksDataLength === 0) {
+    if (!tasksDataLength) {
         createTasksPlaceholder();
         return;
     }
@@ -454,7 +454,7 @@ function saveCurrentListToLocalStorage() {
 
 
 
-function backupManager(saveOrLoad = false, backupType = "manualBackup") {
+function backupManager(saveOrLoad = null, backupType = "manualBackup") {
     if (!saveOrLoad) return;
     
     if (backupType !== "manualBackup") {
@@ -781,7 +781,7 @@ function createRestoreButton() {
 
 
 //Creating a button with parameters
-function createButton(buttonClass, buttonName, buttonDataset) {
+function createButton(buttonClass, buttonName) {
     let button = document.createElement('button');
     button.innerHTML = buttonName;
     button.className = buttonClass;
