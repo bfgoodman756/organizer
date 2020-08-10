@@ -21,6 +21,7 @@ let taskManager = {
             this.toDoLists[listName].tasks = {};
         }
         renderList(this.toDoLists[listName].tasks);
+        bottomControlsAppearance();
     },
 
     createNewList: function(listName) {
@@ -167,6 +168,9 @@ let taskManager = {
     },
 
     countListTasks: function(listName) {
+        if (!this.toDoLists[listName].tasks) {
+            this.toDoLists[listName].tasks = {};
+        }
         let tasks = Object.assign(this.toDoLists[listName].tasks);
         let tasksArr = Object.keys(this.toDoLists[listName].tasks);
         let totalTasks = tasksArr.length;
@@ -318,6 +322,7 @@ function renderList(tasksData) {
 
     if (totalTasks < 1) {
         createTasksPlaceholder();
+        bottomControlsAppearance();
         return;
     }
 
@@ -326,6 +331,7 @@ function renderList(tasksData) {
         renderTask(tasksData[startIndex].taskName, false, tasksData[startIndex].isDone);
         startIndex++;
     }
+    bottomControlsAppearance();
 }
 
 
@@ -340,10 +346,9 @@ function renderTask(string, isNew = false, isDone = false) {
 
     if (taskPlaceholder) {
         taskPlaceholder.remove();
+        bottomControlsAppearance();
     }
-//     let neww = document.createElement("div");
-//     neww.innerHTML = `<li contenteditable="true">${string}</li>`;
-//     tasksList.append(neww);
+
 
     let newTaskElem = document.createElement("li");
     newTaskElem.innerText = string;
@@ -382,17 +387,20 @@ function clickListener(event) {
     if (elem.tagName === "LI") {
         actionType = "Edit elements innerHTML";
     }
-
+    
     switch (actionType) {
         case ("Add task"):
             renderTask(taskString, true);
-
             if (taskString) {
                 removeRestoreButton();
             }
             break;
 
         case ("Clear tasks"):
+            let ask = confirm("Are you really want to clear all your tasks?");
+            if (!ask) return;
+
+            bottomControlsAppearance();
             clearTaskList();
             break;
 
@@ -400,11 +408,13 @@ function clickListener(event) {
         case ("Restore autosaved list"):
             backupManager("loadBackup", "autoBackup");
             createConsoleLogMessage("Last task list was restored");
+            controls.removeAttribute("style");
             break;
 
 
         case ("Save backup"):
             backupManager("saveBackup");
+            bottomControlsAppearance()
             break;
 
 
@@ -439,6 +449,7 @@ function clearTaskList() {
     currentTasks.forEach(item => item.remove());
 
     createRestoreButton();
+    bottomControlsAppearance();
 
     console.log(createConsoleLogMessage("task list was cleared"));
 }
@@ -464,6 +475,7 @@ function backupManager(saveOrLoad = null, backupType = "manualBackup") {
 
     if (saveOrLoad === "saveBackup") {
         taskManager.saveBackup(currentListName, backupType);
+        bottomControlsAppearance()
     
     } else if (saveOrLoad === "loadBackup") {
         taskManager.loadBackup(currentListName, backupType);
@@ -600,8 +612,12 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
             button.checked = false;
         }
 
+        if (target) {
+
+        }
+
         button.dataset.taskStatus = buttonName;
-        button.style.top = target.offsetTop + 7 + "px";
+        button.style.top = target.offsetTop + 5 + "px";
         button.style.left = "-10px";       
     
     } else {
@@ -618,7 +634,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         }
 
         switch(buttonName) {
-            case("remove"): 
+            case("remove"):
                 removeOnClick(target);
                 break;
 
@@ -649,6 +665,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
 
         document.querySelector('.tasks__remove-task-button').remove();
         document.querySelector('.tasks__mark-as-done-button').remove();
+        document.querySelector('.tasks__create-subtree-button').remove();
 
         let currentTasks = getCurrentTasksFromDOM();
         
@@ -777,8 +794,40 @@ function createTasksPlaceholder() {
     placeholder.innerHTML = "Your new tasks will appear here...";
     
     tasksList.append(placeholder);
+
+    bottomControlsAppearance()
     
     console.log(createConsoleLogMessage("Placeholder was created"));
+}
+
+function bottomControlsAppearance() {
+    let saveBackupButton = document.querySelector(".tasks__manual-backup-save-button");
+    let clearTasksButton = document.querySelector(".tasks__clear-button");
+    let loadManualBackupButton = document.querySelector(".tasks__manual-backup-restore-button");
+    let loadAutoBackupButton = document.querySelector(".tasks__restore-button");
+    let placeholder = document.querySelector(".tasks-placeholder");
+
+    if (!placeholder) {
+        saveBackupButton.removeAttribute("style");
+        clearTasksButton.removeAttribute("style");
+
+        if (loadAutoBackupButton) {
+            loadAutoBackupButton.remove();
+        } 
+    } else {
+        saveBackupButton.style.display = "none";
+        clearTasksButton.style.display = "none";
+
+        if (!taskManager.toDoLists[currentListName].autoBackup) {
+
+        }
+    }
+
+    if (!taskManager.toDoLists[currentListName].manualBackup) {
+        loadManualBackupButton.style.display = "none";
+    } else {
+        loadManualBackupButton.removeAttribute("style"); 
+    }
 }
 
 
@@ -828,10 +877,12 @@ function createButton(buttonClass, buttonName, buttonType = "button") {
 function removeTaskControlButtons() {
     let removeTaskButton = document.querySelector('.tasks__remove-task-button');
     let markAsDoneButton = document.querySelector('.tasks__mark-as-done-button');
+    let createSubTreeButton = document.querySelector('.tasks__create-subtree-button');
     
-    if (removeTaskButton && markAsDoneButton) {
+    if (removeTaskButton && markAsDoneButton && createSubTreeButton) {
         removeTaskButton.remove();
         markAsDoneButton.remove();
+        createSubTreeButton.remove();
     }
 }
 

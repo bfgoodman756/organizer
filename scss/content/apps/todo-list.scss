@@ -94,22 +94,28 @@
 
   &-input-wrapper {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-top: 25px;
   }
 
   &__input-field {
     font-family: Gudea-Bold, sans-serif;
     font-size: 16px;
-    flex-grow: 1; //flex: 1 1;
+    flex-grow: 10; //flex: 1 1;
     max-width: 100%;
     height: 37px;
-    margin: 0 5px 0 0;
+    //margin: 0 5px 0 0;
     padding: 0 10px;
     color: var(--input-text);
     border: 1px solid var(--main-bg);
     border-radius: 10px;
     background-color: var(--input-field);
+    flex-basis: 70%;
+
+    @include media-queries_768-and-less {
+      flex-basis: 100%;
+    }
 
     &:focus {
       border: 1px solid var(--focus);
@@ -121,23 +127,50 @@
   }
 
   &__submit-button {
+    margin: 0 0 0 5px;
     padding: 10px;
     background-color: var(--safe-color);
+    cursor: pointer;
+    flex-grow: 1;
+
+    @include media-queries_768-and-less {
+      margin: 10px 0 0;
+    }
+  }
+
+  &__control-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    //align-items: center;
+  }
+
+  &__clear-button,
+  &__manual-backup-save-button,
+  &__manual-backup-restore-button {
+    margin-top: 10px;
+    padding: 10px;
+    flex-basis: 50%;
+    min-width: 150px;
+    cursor: pointer;
+
+    &:focus {
+      border-radius: 0;
+    }
   }
 
   &__clear-button {
-    margin-top: 10px;
-    padding: 10px;
+    flex-grow: 1;
     background-color: var(--warning-color);
   }
 
   &__manual-backup-save-button {
-    padding: 10px;
+    flex-grow: 1;
     background-color: var(--safe-color);
   }
 
   &__manual-backup-restore-button {
-    padding: 10px;
+    flex-grow: 1;
     background-color: var(--load-backup-purple);
   }
 
@@ -148,6 +181,8 @@
     margin-top: 10px;
     padding: 10px 15px 10px 10px;
     background-color: var(--safe-color);
+    cursor: pointer;
+    width: 100%;
 
     &::before {
       width: 20px;
@@ -164,6 +199,7 @@
     width: 20px;
     height: 20px;
     border-radius: 10px;
+    cursor: pointer;
   }
 
   &__remove-task-button {
@@ -172,6 +208,7 @@
     height: 18px;
     color: var(--settings-btn-dark);
     background-color: transparent;
+    cursor: pointer;
     //margin-left: 100px;
   }
 
@@ -179,6 +216,7 @@
     position: absolute;
     padding: 0 6px;
     border-radius: 10px;
+    cursor: pointer;
   }
 
   &-edit {

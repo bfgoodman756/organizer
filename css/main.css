@@ -398,36 +398,57 @@ button {
   color: var(--placeholder); }
 .tasks-input-wrapper {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   margin-top: 25px; }
 .tasks__input-field {
   font-family: Gudea-Bold, sans-serif;
   font-size: 16px;
-  flex-grow: 1;
+  flex-grow: 10;
   max-width: 100%;
   height: 37px;
-  margin: 0 5px 0 0;
   padding: 0 10px;
   color: var(--input-text);
   border: 1px solid var(--main-bg);
   border-radius: 10px;
-  background-color: var(--input-field); }
+  background-color: var(--input-field);
+  flex-basis: 70%; }
+  @media only screen and (max-width: 768px) {
+    .tasks__input-field {
+      flex-basis: 100%; } }
   .tasks__input-field:focus {
     border: 1px solid var(--focus); }
   .tasks__input-field::placeholder {
     color: var(--input-text); }
 .tasks__submit-button {
+  margin: 0 0 0 5px;
   padding: 10px;
-  background-color: var(--safe-color); }
-.tasks__clear-button {
+  background-color: var(--safe-color);
+  cursor: pointer;
+  flex-grow: 1; }
+  @media only screen and (max-width: 768px) {
+    .tasks__submit-button {
+      margin: 10px 0 0; } }
+.tasks__control-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+.tasks__clear-button, .tasks__manual-backup-save-button, .tasks__manual-backup-restore-button {
   margin-top: 10px;
   padding: 10px;
+  flex-basis: 50%;
+  min-width: 150px;
+  cursor: pointer; }
+  .tasks__clear-button:focus, .tasks__manual-backup-save-button:focus, .tasks__manual-backup-restore-button:focus {
+    border-radius: 0; }
+.tasks__clear-button {
+  flex-grow: 1;
   background-color: var(--warning-color); }
 .tasks__manual-backup-save-button {
-  padding: 10px;
+  flex-grow: 1;
   background-color: var(--safe-color); }
 .tasks__manual-backup-restore-button {
-  padding: 10px;
+  flex-grow: 1;
   background-color: var(--load-backup-purple); }
 .tasks__restore-button {
   display: flex;
@@ -435,7 +456,9 @@ button {
   justify-content: center;
   margin-top: 10px;
   padding: 10px 15px 10px 10px;
-  background-color: var(--safe-color); }
+  background-color: var(--safe-color);
+  cursor: pointer;
+  width: 100%; }
   .tasks__restore-button::before {
     width: 20px;
     height: 20px;
@@ -447,17 +470,20 @@ button {
   padding: 0 6px;
   width: 20px;
   height: 20px;
-  border-radius: 10px; }
+  border-radius: 10px;
+  cursor: pointer; }
 .tasks__remove-task-button {
   position: absolute;
   width: 18px;
   height: 18px;
   color: var(--settings-btn-dark);
-  background-color: transparent; }
+  background-color: transparent;
+  cursor: pointer; }
 .tasks__create-subtree-button {
   position: absolute;
   padding: 0 6px;
-  border-radius: 10px; }
+  border-radius: 10px;
+  cursor: pointer; }
 .tasks-edit {
   font-family: Gudea-Regular, sans-serif;
   font-size: 18px;
