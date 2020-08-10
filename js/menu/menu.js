@@ -91,9 +91,10 @@ function menuCloseOpenToggle() {
                 button.dataset.menuStatus = "closed";
                 closeButton.style.display = "none";
                 openButton.style.display = "block";
+//                 menu.offsetHeight = menu.offsetHeight + 1;
                 menu.style.left = `-${menuRect.width}px`;
                 button.style.left = "0px";
-                menuSpacer.style.minWidth = "0px";
+                menuSpacer.className = "menu__space-holder--closed";
                 break;
             
             //open if closed
@@ -102,8 +103,8 @@ function menuCloseOpenToggle() {
                 closeButton.style.display = "block";
                 openButton.style.display = "none";
                 menu.style.left = `0px`;
-                button.style.left = "";
-                menuSpacer.style.minWidth = "300px";
+                button.removeAttribute("style");
+                menuSpacer.className = "menu__space-holder";
                 break;
         }
     })

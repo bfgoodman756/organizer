@@ -132,13 +132,16 @@ button {
   height: 100vh;
   overflow: scroll;
   background-color: var(--accent-secondary-bg);
-  transition: all .2s ease-out;
-  }
+  transition: all .2s ease-out; }
   .menu::-webkit-scrollbar {
     width: 0;
     height: 0; }
   .menu__space-holder {
-    min-width: 300px; }
+    min-width: 300px;
+    transition: all .2s ease-out; }
+    .menu__space-holder--closed {
+      min-width: auto;
+      transition: all .2s ease-out; }
   .menu__tab {
     font-size: 35px;
     letter-spacing: 1px;
@@ -161,7 +164,7 @@ button {
       color: var(--active-text); }
   .menu__controls {
     position: fixed;
-    display: flex;
+    display: grid;
     justify-content: center;
     align-content: center;
     align-items: center;
@@ -172,8 +175,7 @@ button {
     background-color: var(--accent-bg);
     transition: all .2s ease-out;
     border-bottom-right-radius: 10px;
-    cursor: pointer;
-    }
+    cursor: pointer; }
     .menu__controls:hover {
       background-color: var(--accent-active-bg); }
     .menu__controls--open-button, .menu__controls--close-button {
@@ -362,14 +364,14 @@ button {
   color: var(--main-text); }
 .tasks-list {
   font-family: Gudea-Regular, sans-serif;
-  font-size: 18px;
+  font-size: 1.4rem;
   padding-left: 50px;
   color: var(--main-text); }
   @media only screen and (max-width: 768px) {
     .tasks-list {
       font-size: 1.4rem; } }
   .tasks-list li {
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 3px 15px 3px 2px;
     cursor: text;
     word-break: break-word;
@@ -443,6 +445,8 @@ button {
 .tasks__mark-as-done-button {
   position: absolute;
   padding: 0 6px;
+  width: 20px;
+  height: 20px;
   border-radius: 10px; }
 .tasks__remove-task-button {
   position: absolute;
@@ -450,6 +454,10 @@ button {
   height: 18px;
   color: var(--settings-btn-dark);
   background-color: transparent; }
+.tasks__create-subtree-button {
+  position: absolute;
+  padding: 0 6px;
+  border-radius: 10px; }
 .tasks-edit {
   font-family: Gudea-Regular, sans-serif;
   font-size: 18px;

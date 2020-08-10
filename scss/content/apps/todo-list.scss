@@ -35,8 +35,8 @@
 
   &-list {
     font-family: Gudea-Regular, sans-serif;
-    font-size: 18px;
-    //font-size: 1.4rem;
+    //font-size: 18px;
+    font-size: 1.4rem;
     padding-left: 50px;
     color: var(--main-text);
 
@@ -46,7 +46,7 @@
 
     li {
       //width: fit-content;
-      margin-top: 10px;
+      margin-top: 15px;
       padding: 3px 15px 3px 2px;
       cursor: text;
       word-break: break-word;
@@ -161,6 +161,8 @@
   &__mark-as-done-button {
     position: absolute;
     padding: 0 6px;
+    width: 20px;
+    height: 20px;
     border-radius: 10px;
   }
 
@@ -171,6 +173,12 @@
     color: var(--settings-btn-dark);
     background-color: transparent;
     //margin-left: 100px;
+  }
+
+  &__create-subtree-button {
+    position: absolute;
+    padding: 0 6px;
+    border-radius: 10px;
   }
 
   &-edit {

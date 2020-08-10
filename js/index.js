@@ -101,15 +101,15 @@ function lightDarkModeToggle() {
         }
 
         let listNamesWrapper = document.querySelector(".menu__todo-list");
-        listNamesWrapper.classList.add("no-transition");
+//         listNamesWrapper.classList.add("no-transition");
 
-        listNamesWrapper.offsetHeight;
+//         listNamesWrapper.offsetHeight;
 
         html.dataset.theme = themeName;
         themeSelector.setAttribute("theme", themeName);
         appManager.rememberLastUsedTheme(themeName);
 
 
-        listNamesWrapper.classList.remove("no-transition");
+//         listNamesWrapper.classList.remove("no-transition");
     })
 }

@@ -189,13 +189,14 @@ tasksList.addEventListener('mouseover', function(event){
 
     if (elem.tagName !== "LI") return;
 
-    let doneStatus = "mark as done";
+    let doneStatus = "notDone";
 
     if (elem.classList.contains('task-is-done')) {
-        doneStatus = "undone";
+        doneStatus = "done";
     }
     createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
     createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
+    createOptionButtonsOnHover(elem, "tasks__create-subtree-button", "create subtree");
 });
 
 tasksList.addEventListener('mouseleave', removeTaskControlButtons);
@@ -512,7 +513,7 @@ function editElementsInnerHTML(element) {
         }
         
 
-        element.dataset.status = "changing";
+        element.dataset.status = "processing";
 
         let taskData = getElementIndexAndValueFromObject(element);
         let [taskIndex, taskValue] = taskData;
@@ -539,9 +540,19 @@ function removeRestoreButton() {
 }
 
 
+function createSubTree() {
+
+}
+
+function createSubTreeButton() {
+    createButton("tasks__subtree-button", "Create subtree");
+}
+
+
 
 function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDataset) {    
     let existButton = document.querySelector(`.${buttonSelector}`);
+    let button = null;
     
     if (document.querySelector('.tasks-edit') || target.className === "tasks-placeholder") {
         return;
@@ -554,8 +565,14 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
             existButton.remove();
         }
     }
+
+    if (buttonSelector === "tasks__mark-as-done-button") {
+        button = createButton(buttonSelector, buttonName, "input");
+    } else {
+        button = createButton(buttonSelector, buttonName);
+    }
     
-    let button = createButton(buttonSelector, buttonName, buttonDataset);
+
     target.after(button);
 
     let targetCoords = target.getBoundingClientRect();
@@ -574,17 +591,30 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
             target.classList.remove("tasks-list--removing");
         });
     
+    
+    } else if (buttonName === "done" || buttonName === "notDone"){
+        
+        if (buttonName === "done") {
+            button.checked = true;
+        } else {
+            button.checked = false;
+        }
+
+        button.dataset.taskStatus = buttonName;
+        button.style.top = target.offsetTop + 7 + "px";
+        button.style.left = "-10px";       
+    
     } else {
-        button.style.top = targetCoords.height + target.offsetTop + 1 + "px";       
+
     }
     
 
 
     button.addEventListener("click", function() {
         
-        if ( button.innerHTML === "mark as done" || button.innerHTML === "undone") {
-            target.dataset.status = "changing";
-            buttonName = "done/undone";
+        if (button.dataset.taskStatus === "done" || button.dataset.taskStatus === "notDone") {
+            target.dataset.status = "processing";
+            buttonName = "done/notDone";
         }
 
         switch(buttonName) {
@@ -592,8 +622,12 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
                 removeOnClick(target);
                 break;
 
-            case("done/undone"):
-                markAsDoneOnClick(target, button);
+            case("done/notDone"):
+                markAsDoneOnClick(target);
+                break;
+            
+            case("create subtree"):
+                
                 break;
         }
     });
@@ -602,20 +636,13 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
 
     function markAsDoneOnClick(element, button) {
         element.classList.toggle("task-is-done");
-
-        if (element.classList.contains("task-is-done")) {
-            button.innerHTML = "undone";
-        } else {
-            button.innerHTML = "mark as done";
-        }
-
         storeNewDataToList(element);   
     }
 
 
 
     function removeOnClick(element) {
-        element.dataset.status = "changing";
+        element.dataset.status = "processing";
         storeNewDataToList(element, "remove");
         element.remove();
         console.log(createConsoleLogMessage(`Task "${element.innerHTML}" was removed`));
@@ -781,9 +808,15 @@ function createRestoreButton() {
 
 
 //Creating a button with parameters
-function createButton(buttonClass, buttonName) {
-    let button = document.createElement('button');
-    button.innerHTML = buttonName;
+function createButton(buttonClass, buttonName, buttonType = "button") {
+    let button = document.createElement(buttonType);
+
+    if (buttonType === "button") {
+        button.innerHTML = buttonName;
+    } else {
+        button.type = "checkbox";
+    }
+   
     button.className = buttonClass;
     button.dataset.action = buttonName;
 
