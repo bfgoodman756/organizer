@@ -343,6 +343,10 @@ button {
 .select-app {
   color: var(--main-text); }
 
+.main-page-wrapper {
+  max-width: 500px;
+  margin: 0 auto; }
+
 .todo-list-wrapper {
   max-width: 500px;
   margin: 0 auto; }
@@ -428,7 +432,7 @@ button {
   flex-grow: 1; }
   @media only screen and (max-width: 768px) {
     .tasks__submit-button {
-      margin: 10px 0 0; } }
+      margin: 10px 0 20px; } }
 .tasks__control-buttons-wrapper {
   display: flex;
   flex-wrap: wrap;

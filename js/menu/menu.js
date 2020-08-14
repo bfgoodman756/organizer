@@ -221,13 +221,13 @@ function loadListNamesToMenu() {
 
 
 function activateAppsContent(selectedAppName) {    
-    let appPlaceholder = document.querySelector('.app-placeholder');
+    let mainPage = document.querySelector('.main-page-wrapper');
     let toDoList = document.querySelector('.todo-list-wrapper');
     let timer = document.querySelector('.timer-wrapper');
     let calendar = document.querySelector('.calendar-wrapper');
     let converter = document.querySelector('.converter-wrapper');
 
-    let apps = [appPlaceholder, toDoList, timer, calendar, converter];
+    let apps = [mainPage, toDoList, timer, calendar, converter];
 
     apps.forEach(item => {
         if (item.dataset.appName === selectedAppName) {
