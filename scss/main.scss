@@ -136,10 +136,11 @@ body::-webkit-scrollbar-thumb {
 
 body {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
   background-color: var(--main-bg);
+  display: flex;
+  height: 100vh;
 }
 
 p,
@@ -161,11 +162,6 @@ button {
   -o-transition: none !important;
   -webkit-transition: none !important;
   transition: none !important;
-}
-
-.main-wrapper {
-  display: flex;
-  height: 100vh;
 }
 
 @import 'menu/menu';

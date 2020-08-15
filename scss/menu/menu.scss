@@ -4,8 +4,8 @@
   width: 300px;
   height: 100vh;
   overflow: scroll;
-  background-color: var(--accent-secondary-bg);
   transition: all .2s ease-out;
+  background-color: var(--accent-secondary-bg);
 
   &::-webkit-scrollbar {
     width: 0;
@@ -15,6 +15,7 @@
   &__space-holder {
     min-width: 300px;
     transition: all .2s ease-out;
+
     &--closed {
       min-width: auto;
       transition: all .2s ease-out;
@@ -49,18 +50,19 @@
 
   &__controls {
     position: fixed;
-    display: grid;
-    justify-content: center;
+    display: flex;
+    z-index: 10;
+    top: 0;
+    left: 300px;
     align-content: center;
     align-items: center;
-    z-index: 10;
-    left: 300px;
+    justify-content: center;
     width: 50px;
     height: 50px;
-    background-color: var(--accent-bg);
+    cursor: pointer;
     transition: all .2s ease-out;
     border-bottom-right-radius: 10px;
-    cursor: pointer;
+    background-color: var(--accent-bg);
 
     &:hover {
       background-color: var(--accent-active-bg);
@@ -68,10 +70,10 @@
 
     &--open-button,
     &--close-button {
-      height: 20px;
       width: 20px;
+      height: 20px;
       fill: var(--active-text);
-    };
+    }
 
     &--open-button {
       display: none;
@@ -210,6 +212,8 @@
     width: 200px;
     height: 30px;
     margin: 5px auto;
+    border: 2px solid transparent;
+    border-radius: 10px;
   }
 }
 
@@ -297,11 +301,12 @@
     font-size: 20px;
     position: absolute;
     z-index: 2;
-    width: 270px;
+    width: 230px;
     text-align: center;
     color: var(--main-text);
     border: 2px solid var(--accent-hover);
     background-color: var(--main-bg);
+    border-radius: 10px;
   }
 }
 

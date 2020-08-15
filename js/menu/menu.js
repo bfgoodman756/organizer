@@ -37,12 +37,10 @@ menu.addEventListener('click', function(event) {
 
     
     let selectedAppName = node.dataset.appName;    
-    
+ 
+    appManager.rememberLastUsedApp(selectedAppName); 
+    activateAppsContent(selectedAppName);  
     showActiveAppOnMenu(selectedAppName);
-    
-    activateAppsContent(selectedAppName);
-    
-    appManager.rememberLastUsedApp(selectedAppName);
 
 
     function getNode(event) {
@@ -126,7 +124,18 @@ function showActiveAppOnMenu(appName) {
     loadListNamesToMenu();
 
     function activateTab(arr, appName) {
+
         arr.forEach(tab => {
+             //set main page active if we click on currently active tab
+            if (tab.dataset.appName === appName && tab.classList.contains('active-tab')) {
+                tab.classList.remove('active-tab');
+                mainPage.classList.add('active-tab');
+                appManager.rememberLastUsedApp("MainPage");
+                activateAppsContent("MainPage");
+                return;
+            }
+
+            //set tab as active if it was not active before
             if (tab.dataset.appName === appName && !tab.classList.contains('active-tab')) {
                 tab.classList.add('active-tab');
                 console.log(`tab ${tab.innerText} is active now`);
@@ -176,7 +185,7 @@ function loadListNamesToMenu() {
     listNamesWrapper.append(listNamesNode);
 
 
-    listNamesData.forEach(list => createTaskLinkInMenu(list));////
+    listNamesData.forEach(list => createTaskLinkInMenu(list));
     createTaskLinkInMenu("+", true);
     
     updateDropDownPosition(listNamesNode.clientHeight + 5);
@@ -221,7 +230,7 @@ function loadListNamesToMenu() {
 
 
 function activateAppsContent(selectedAppName) {    
-    let mainPage = document.querySelector('.main-page-wrapper');
+    let mainPage = document.querySelector('.welcome-page-wrapper');
     let toDoList = document.querySelector('.todo-list-wrapper');
     let timer = document.querySelector('.timer-wrapper');
     let calendar = document.querySelector('.calendar-wrapper');
@@ -535,19 +544,24 @@ function menuCreateNewTaskList(node) {
             return;
         }
 
-        if (taskManager.toDoLists[listName]) {
+        if (taskManager.toDoLists[listName]) {            
             console.log(createConsoleLogMessage(`[${listName}] name already used. try another one.`));
+
+            let contentZone = document.querySelector(".content-wrapper");
 
             let inputPlacement = input.getBoundingClientRect();
             let menuLists = document.querySelector('.menu__todo-list-names');
 
             let popup = document.createElement('div');
             popup.classList.add('task-name__already-used');
-            popup.innerHTML = "! Task name is already used !";
+            popup.innerHTML = "Task name is already used";
 
-            popup.style.top = menuLists.clientHeight - inputPlacement.height - 2 + "px";
-            popup.style.left = inputPlacement.left + inputPlacement.width + 25 + "px";
-            input.after(popup);
+            popup.style.top = inputPlacement.top + 5 + "px";
+            popup.style.left = 300 + 10 + "px";
+            contentZone.after(popup);
+            
+            setTimeout(() => {popup.remove()}, 1500);
+
             return;
         } 
 

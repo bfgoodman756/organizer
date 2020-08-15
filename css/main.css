@@ -58,7 +58,7 @@
   --menu-selected-list: #2aece5;
   --separator: #00000012;
   --placeholder: #23bbb4;
-  --input-field: rgba(255, 255, 255, 0.78);
+  --input-field: rgba(255, 255, 255, 0.13);
   --task-is-done: #4c535c;
   --safe-color: #77fffa;
   --atention-color: #ff6356;
@@ -98,10 +98,11 @@ body::-webkit-scrollbar-thumb {
 
 body {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--main-bg); }
+  background-color: var(--main-bg);
+  display: flex;
+  height: 100vh; }
 
 p,
 h1,
@@ -121,18 +122,14 @@ button {
   -webkit-transition: none !important;
   transition: none !important; }
 
-.main-wrapper {
-  display: flex;
-  height: 100vh; }
-
 .menu {
   position: fixed;
   z-index: 1;
   width: 300px;
   height: 100vh;
   overflow: scroll;
-  background-color: var(--accent-secondary-bg);
-  transition: all .2s ease-out; }
+  transition: all .2s ease-out;
+  background-color: var(--accent-secondary-bg); }
   .menu::-webkit-scrollbar {
     width: 0;
     height: 0; }
@@ -164,23 +161,24 @@ button {
       color: var(--active-text); }
   .menu__controls {
     position: fixed;
-    display: grid;
-    justify-content: center;
+    display: flex;
+    z-index: 10;
+    top: 0;
+    left: 300px;
     align-content: center;
     align-items: center;
-    z-index: 10;
-    left: 300px;
+    justify-content: center;
     width: 50px;
     height: 50px;
-    background-color: var(--accent-bg);
+    cursor: pointer;
     transition: all .2s ease-out;
     border-bottom-right-radius: 10px;
-    cursor: pointer; }
+    background-color: var(--accent-bg); }
     .menu__controls:hover {
       background-color: var(--accent-active-bg); }
     .menu__controls--open-button, .menu__controls--close-button {
-      height: 20px;
       width: 20px;
+      height: 20px;
       fill: var(--active-text); }
     .menu__controls--open-button {
       display: none; }
@@ -269,7 +267,9 @@ button {
     font-size: 20px;
     width: 200px;
     height: 30px;
-    margin: 5px auto; }
+    margin: 5px auto;
+    border: 2px solid transparent;
+    border-radius: 10px; }
 
 .menu__list-settings--wrapper {
   margin: 20px 0 0; }
@@ -315,11 +315,12 @@ button {
   font-size: 20px;
   position: absolute;
   z-index: 2;
-  width: 270px;
+  width: 230px;
   text-align: center;
   color: var(--main-text);
   border: 2px solid var(--accent-hover);
-  background-color: var(--main-bg); }
+  background-color: var(--main-bg);
+  border-radius: 10px; }
 
 .rotate180 {
   transform: rotate(-180deg); }
@@ -340,10 +341,11 @@ button {
 .inactive-app {
   display: none; }
 
-.select-app {
+.welcome-page--header {
+  margin: 0;
   color: var(--main-text); }
 
-.main-page-wrapper {
+.welcome-page-wrapper {
   max-width: 500px;
   margin: 0 auto; }
 
@@ -412,7 +414,6 @@ button {
   max-width: 100%;
   height: 37px;
   padding: 0 10px;
-  color: var(--input-text);
   border: 1px solid var(--main-bg);
   border-radius: 10px;
   background-color: var(--input-field);
@@ -423,7 +424,7 @@ button {
   .tasks__input-field:focus {
     border: 1px solid var(--focus); }
   .tasks__input-field::placeholder {
-    color: var(--input-text); }
+    color: var(--placeholder); }
 .tasks__submit-button {
   margin: 0 0 0 5px;
   padding: 10px;
@@ -480,7 +481,7 @@ button {
   position: absolute;
   width: 18px;
   height: 18px;
-  color: var(--settings-btn-dark);
+  color: var(--settings-btn);
   background-color: transparent;
   cursor: pointer; }
 .tasks__create-subtree-button {
