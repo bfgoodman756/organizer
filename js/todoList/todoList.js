@@ -1,10 +1,17 @@
 const toDoListWrapper = document.querySelector('.todo-list-wrapper');
-const tasksList = document.querySelector('.tasks-list');
+const tasksContainer = document.querySelector('.tasks-container');
 const taskInput = document.querySelector('.tasks__input-field');
 
-let currentListName = appManager.options.lastUsedList;
+let currentListName = appManager.options.lastUsedMenuSubCategory;
+
+            let btnsWrapper = document.querySelector(".tasks__control-buttons-wrapper");
+            let logBtn = document.createElement("button");
+            logBtn.className = "tasks__manual-backup-save-button";
+            logBtn.innerText = "Console log current list";
+            btnsWrapper.append(logBtn);
 
 console.log(createConsoleLogMessage("toDoList.js initialized"));
+
 
 let taskManager = {
     toDoLists: {},
@@ -13,13 +20,14 @@ let taskManager = {
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = listName;
         
-        clearOnlyDOMList();
+        clearDOMList();
         
         currentListName = listName;
         
         if (!this.toDoLists[listName].tasks) {
             this.toDoLists[listName].tasks = {};
         }
+        
         renderList(this.toDoLists[listName].tasks);
         bottomControlsAppearance();
     },
@@ -39,6 +47,7 @@ let taskManager = {
         if (!this.toDoLists[list].options) {
             this.toDoLists[list].options = {};
         }
+        
         let options = {};
         options.dateCreated = Date.now();
         options.order = Object.keys(this.toDoLists).length + 1;
@@ -46,15 +55,7 @@ let taskManager = {
     },
     
     
-    createNewTask: function(list, taskStr, isDone = false, priority = "unset") {
-        if (!this.toDoLists) {
-            this.toDoLists = {};
-        }
-
-        if (!this.toDoLists[list]) {
-             this.toDoLists[list] = {};
-        }
-
+    createNewTask: function(list, taskStr, isDone = false, isSubtree = false, priority = "unset") {
         if (!this.toDoLists[list].tasks) {
             this.toDoLists[list].tasks = {};
         }
@@ -66,7 +67,64 @@ let taskManager = {
         taskObj.priority = priority;
 //      taskObj.order = taskIndex;
 
+        if (isSubtree) {
+            return taskObj;
+        }
+
+        if (!this.toDoLists) {
+            this.toDoLists = {};
+        }
+
+        if (!this.toDoLists[list]) {
+             this.toDoLists[list] = {};
+        }
+
+        if (!this.toDoLists[list].tasks) {
+            this.toDoLists[list].tasks = {};
+        }
+
         this.toDoLists[list].tasks[taskIndex] = taskObj;
+
+        let taskNode = renderTask(taskStr, isDone, taskIndex, isSubtree);
+
+        tasksContainer.append(taskNode);
+
+        console.log(createConsoleLogMessage(`new task "${taskStr}" for "${currentListName}" was succesfully created`));
+
+        saveCurrentListToLocalStorage();
+    },
+
+
+    createSubTask: function(list, taskIndex,taskStr, node, isNewSubList = false) {
+        let subtree = this.toDoLists[list].tasks[taskIndex].subtree;
+        
+        if (!subtree) {
+            this.toDoLists[list].tasks[taskIndex].subtree = {};
+            isNewSubList = true;
+        }
+        
+        let subTaskIndex = Object.keys(this.toDoLists[list].tasks[taskIndex].subtree).length + 1;
+        
+        let taskObj = this.createNewTask(list, taskStr, false, "subtree");
+        this.toDoLists[list].tasks[taskIndex].subtree[subTaskIndex] = taskObj;
+
+        //sets subtree div if sublist already exists
+        let subList = node.children[1];
+
+        //if new sublist for selected task
+        if (isNewSubList) {
+            subList = document.createElement("div");
+            subList.className = "task-container__subtree";
+            node.append(subList);
+        }
+
+        let taskNode = renderTask(taskStr, false, taskIndex, subTaskIndex, "subtask");
+
+        subList.append(taskNode);
+
+//         console.log(createConsoleLogMessage(`sub task "${taskStr}" for "${currentListName}" was succesfully created`));
+
+        saveCurrentListToLocalStorage();
     },
 
 
@@ -74,6 +132,7 @@ let taskManager = {
         if(!this.toDoLists[list].tasks) {
             return;
         }
+        
         delete this.toDoLists[list].tasks;
         console.log(createConsoleLogMessage(`toDoLists[${[list]}].tasks was deleted`));
     },
@@ -124,8 +183,7 @@ let taskManager = {
             return;
         }
 
-        let currentTasks = getCurrentTasksFromDOM();
-        currentTasks.forEach(li => li.remove());
+        clearDOMList();
         
         this.toDoLists[list].tasks = Object.assign({}, this.toDoLists[list][backupType]);
         
@@ -144,6 +202,7 @@ let taskManager = {
             console.log(createConsoleLogMessage("Changing list name was aborted, new name is already equal to current"));
             return;
         }
+        
         let obj = Object.assign({}, this.toDoLists[prevName]);
 
         if (obj === {}) {
@@ -164,13 +223,18 @@ let taskManager = {
 
     deleteList: function(listName) {
         delete this.toDoLists[listName];
-        saveCurrentListToLocalStorage();
+        if (Object.keys(this.toDoLists).length === 0) {
+            createFirstListIfThereIsNoAnyList();
+        } else {
+          saveCurrentListToLocalStorage();  
+        }
     },
 
     countListTasks: function(listName) {
         if (!this.toDoLists[listName].tasks) {
             this.toDoLists[listName].tasks = {};
         }
+        
         let tasks = Object.assign(this.toDoLists[listName].tasks);
         let tasksArr = Object.keys(this.toDoLists[listName].tasks);
         let totalTasks = tasksArr.length;
@@ -188,22 +252,40 @@ let taskManager = {
 
 
 
-tasksList.addEventListener('mouseover', function(event){
-    let elem = event.target;
+tasksContainer.addEventListener('mouseover', function(event){
+    let target = event.target;
 
-    if (elem.tagName !== "LI") return;
+    if (target.tagName === "P") {
+        target = target.parentNode.parentNode;
+    }
+
+    if (!target.className.includes("task-container")) return;
 
     let doneStatus = "notDone";
 
-    if (elem.classList.contains('task-is-done')) {
+    if (target.classList.contains('task-is-done')) {
         doneStatus = "done";
     }
-    createOptionButtonsOnHover(elem, "tasks__remove-task-button", "remove");
-    createOptionButtonsOnHover(elem, "tasks__mark-as-done-button", doneStatus);
-    createOptionButtonsOnHover(elem, "tasks__create-subtree-button", "create subtree");
+
+    if (target.nextSibling &&
+        target.nextSibling.classList.contains("task__create-subtree--wrapper")) {
+        return;
+    }
+
+    createOptionButtonsOnHover(target, "tasks__mark-as-done--button", doneStatus);    
+    createOptionButtonsOnHover(target, "tasks__remove-task--button", "remove task");
+
+
+    if (event.target.dataset.taskType === "origin") {
+        createOptionButtonsOnHover(target, "task__create-subtree--wrapper", "create subtask");
+    } else {
+        createOptionButtonsOnHover(target.closest(`.task-container__origin`), "task__create-subtree--wrapper", "create subtask");
+    }
 });
 
-tasksList.addEventListener('mouseleave', removeTaskControlButtons);
+tasksContainer.addEventListener('mouseleave', function(event) {
+    removeTaskControlButtons();
+});
 
 
 
@@ -212,25 +294,35 @@ toDoListWrapper.addEventListener('click', function(event) {
     clickListener(event);
 });
 
+toDoListWrapper.addEventListener('mousedown', function(event) {
+    mousedownListener(event);
+});
+
 
 
 
 // Adds posiblity to submit new task by "enter" key from the input
 taskInput.addEventListener("keydown", function(event) {
     if (event.key !== "Enter") return;
-    renderTask(event.target.value, true);
+    let taskStr = taskInput.value;
+    taskManager.createNewTask(currentListName, taskStr);
+    resetInputFieldAfterSubmit();
 });
 
 
 
-
-currentListName = appManager.options.lastUsedList;
+loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
+currentListName = appManager.options.lastUsedMenuSubCategory;
 
 if (!currentListName) {
+    createFirstListIfThereIsNoAnyList();
+}
+
+function createFirstListIfThereIsNoAnyList() {
     currentListName = "Your first list";
     taskManager.createNewList(currentListName);
     highlightCurrentList(currentListName);
-    appManager.rememberLastUsedList(currentListName);
+    appManager.rememberLastUsedSubCategory(currentListName);
 }
 
 
@@ -248,13 +340,6 @@ listHeader.addEventListener("keydown", function(event) {
 listHeader.addEventListener("blur", editCurrentListName);
 
 
-
-
-loadDataFromLocalStorage(localStorage.getItem("toDoLists"));
-
-
-
-
 // Loads saved localStorage data
 function loadDataFromLocalStorage(JsonData) {
     if (JsonData === "{}") {
@@ -265,21 +350,17 @@ function loadDataFromLocalStorage(JsonData) {
         createRestoreButton(JsonData);
         return;
     }
+    
     let obj = JSON.parse(JsonData);
     taskManager.toDoLists = Object.assign(obj.toDoLists);
     console.log(createConsoleLogMessage("taskManager data was loaded from {localStorage.toDoLists}"));
 
-//     //create restore button if there is no tasks key for current list or if there are less tasks than 1
-//     if (!obj.toDoLists[currentListName].tasks || Object.keys(obj.toDoLists[currentListName].tasks).length === 0) {
-//         createRestoreButton();
-//         return;
-//     }
-
     //create restore button if there is no tasks key for current list or if there are less tasks than 1
-    if (!taskManager.toDoLists[currentListName].tasks || Object.keys(taskManager.toDoLists[currentListName].tasks).length === 0) {
+    if (!taskManager.toDoLists[currentListName] || !taskManager.toDoLists[currentListName].tasks || Object.keys(taskManager.toDoLists[currentListName].tasks).length === 0) {
         createRestoreButton();
         return;
     }
+    
     renderList(taskManager.toDoLists[currentListName].tasks); 
 }
 
@@ -328,9 +409,37 @@ function renderList(tasksData) {
 
     let startIndex = 1;
     while (startIndex <= totalTasks) {
-        renderTask(tasksData[startIndex].taskName, false, tasksData[startIndex].isDone);
+        
+        let taskNode = renderTask(tasksData[startIndex].taskName, tasksData[startIndex].isDone, startIndex);
+        
+        if (tasksData[startIndex].subtree) {
+            let subtree = document.createElement("div");
+            subtree.classList.add("task-container__subtree");
+            subtree.dataset.parentTaskIndex = startIndex;
+
+            let subtreeStartIndex = 1;
+            let totalSubtreeTasks = Object.keys(tasksData[startIndex].subtree).length;
+
+            while(subtreeStartIndex <= totalSubtreeTasks) {
+                let taskName = tasksData[startIndex].subtree[subtreeStartIndex].taskName;
+                let isDone = tasksData[startIndex].subtree[subtreeStartIndex].isDone;
+                
+                if (taskName === undefined) {
+                    continue;
+                }
+
+                let subTask = renderTask(taskName, isDone, startIndex, subtreeStartIndex, "sub");
+                subtree.append(subTask);
+                subtreeStartIndex++;
+            }
+
+            taskNode.append(subtree);
+        }
+
+        tasksContainer.append(taskNode);
         startIndex++;
     }
+    
     bottomControlsAppearance();
 }
 
@@ -338,7 +447,7 @@ function renderList(tasksData) {
 
 
 // Renders task by input, submits or from localStorage
-function renderTask(string, isNew = false, isDone = false) {
+function renderTask(string, isDone = false, originTaskIndex, subTaskIndex = 0, isSubTask = false) {
     if (!string && string !== "")
         return;
 
@@ -350,32 +459,37 @@ function renderTask(string, isNew = false, isDone = false) {
     }
 
 
-    let newTaskElem = document.createElement("li");
-    newTaskElem.innerText = string;
-    newTaskElem.setAttribute("contenteditable","true");
-    newTaskElem.setAttribute("spellcheck", false);
-    
-    tasksList.append(newTaskElem);
+    isDone ? isDone = `task-is-done` : isDone = "";
 
-    resetInputFieldAfterSubmit(string);
-    
-    if (isDone) newTaskElem.classList.add('task-is-done');
-    
-    if (isNew) {
-        taskManager.createNewTask(currentListName, string, isDone);
-        
-        console.log(createConsoleLogMessage(`new task "${string}" for "${currentListName}" was succesfully created`));
-        
-        saveCurrentListToLocalStorage();
+    let taskWrapper = document.createElement("div");
+
+    let taskTypeDataset = `data-task-type="origin"`;
+
+    if (isSubTask){
+        taskTypeDataset = `data-task-type="subtask"`;
+        taskWrapper.classList.add("task-container__subtask");
+    } else {
+        taskWrapper.classList.add("task-container__origin");
     }
+    string = string.replace(/\n/g, "<br />");
+    taskWrapper.innerHTML = `<div class="task-wrapper ${isDone}">
+                                <p class="task-index">${isSubTask ? subTaskIndex : originTaskIndex}.</p>
+                                <p ${taskTypeDataset} data-task-index="${originTaskIndex},${subTaskIndex}" contenteditable="true" spellcheck="false">${string}</p>
+                             </div>`;
+
+    return taskWrapper;
 }
 
 
 
 function clickListener(event) {
     let elem = event.target;
+
+    let isButton = elem.tagName === "BUTTON";
+    let isPlaceholder = elem.className === "tasks-placeholder";
+
     
-    if (elem.tagName !== "BUTTON" && elem.tagName !== "LI" && elem.className !== "tasks-placeholder")
+    if (!isButton && !isPlaceholder)
         return;
     
     if (elem.className === "tasks-placeholder")
@@ -383,17 +497,15 @@ function clickListener(event) {
 
     let actionType = elem.innerHTML;
     let taskString = taskInput.value;
-
-    if (elem.tagName === "LI") {
-        actionType = "Edit elements innerHTML";
-    }
     
     switch (actionType) {
-        case ("Add task"):
-            renderTask(taskString, true);
+        case ("+"):            
             if (taskString) {
                 removeRestoreButton();
             }
+
+            taskManager.createNewTask(currentListName, taskString);
+            resetInputFieldAfterSubmit();
             break;
 
         case ("Clear tasks"):
@@ -408,7 +520,7 @@ function clickListener(event) {
         case ("Restore autosaved list"):
             backupManager("loadBackup", "autoBackup");
             createConsoleLogMessage("Last task list was restored");
-            controls.removeAttribute("style");
+//             controls.removeAttribute("style");
             break;
 
 
@@ -422,16 +534,30 @@ function clickListener(event) {
             backupManager("loadBackup");
             break;
 
-        case ("Edit elements innerHTML"):
-            editElementsInnerHTML(event.target);
+        case ("Console log current list"):
+            console.log(taskManager.toDoLists[currentListName]);
             break;
     }
+}
+
+function mousedownListener(event) {
+    let elem = event.target;
+
+    let isContentEditable = elem.contentEditable === "true";
+    let isP = elem.tagName === "P";
+
+    if (!isP || !isContentEditable) {
+        return;
+    }
+
+    editElementsInnerHTML(elem);
 }
 
 
 // Reset task list by clear button.
 function clearTaskList() {
     let curListName = currentListName;
+    
     if (document.querySelector('.tasks-placeholder')) {
         console.log(createConsoleLogMessage('list is already empty'));
         return;    
@@ -445,8 +571,7 @@ function clearTaskList() {
         saveCurrentListToLocalStorage();
     }
 
-    let currentTasks = getCurrentTasksFromDOM();
-    currentTasks.forEach(item => item.remove());
+    clearDOMList();
 
     createRestoreButton();
     bottomControlsAppearance();
@@ -493,50 +618,70 @@ function backupManager(saveOrLoad = null, backupType = "manualBackup") {
 
 // Edit li task-element on click
 function editElementsInnerHTML(element) {
-    let prevValue = element.innerHTML;
+    if (element.dataset.isFocused) {
+        return;
+    }
+        
+    let prevValue = element.innerText;
 
     element.setAttribute("spellcheck", true);
-
+    element.dataset.isFocused = "true";
+    
     element.addEventListener('keydown', keydownListener);
+    document.addEventListener('click', simulateBlur);
+//     element.addEventListener("blur", submitOnBlur);
 
-    element.addEventListener("blur", submitOnBlur);
+    function simulateBlur(event) {
+        if (event.target === element) {
+            return
+        }
+        submitOnBlur();
+    }
 
+    
 
     function keydownListener(event) {
-        if (event.key === "Enter") {
-            event.target.blur();
+        if (event.key === "Enter" && event.ctrlKey) {
+            submitOnBlur()
         }
         
         if (event.key === "Escape") {
-            event.target.blur();
+            element.innerText = prevValue;
+            submitOnBlur()
         }
     }
 
 
+
     function submitOnBlur() {
         element.removeEventListener('keydown', keydownListener);
-        element.removeEventListener("blur", submitOnBlur);
+        document.removeEventListener('click', simulateBlur);
+        delete element.dataset.isFocused;
 
-        if (element.innerHTML === prevValue) {
+        if (element.innerText === prevValue) {
             element.setAttribute("spellcheck", false);
-            element.innerHTML = prevValue; //to reset done spellcheck after blur
+            element.innerText = prevValue; //to reset spellchecked task after blur
             console.log(createConsoleLogMessage("task value has not changed"));
             return;
+        }        
+
+//         element.dataset.status = "procesing";
+
+        let [newTaskValue, originTaskIndex, subTaskIndex] = getElementIndexAndValueFromObject(element);
+
+        if (element.dataset.taskType === "origin") {
+            taskManager.toDoLists[currentListName].tasks[originTaskIndex].taskName = newTaskValue;
+            console.log(createConsoleLogMessage(`Task #${originTaskIndex} was edited`));
+        
+        } else if (element.dataset.taskType === "subtask") {
+            taskManager.toDoLists[currentListName].tasks[originTaskIndex].subtree[subTaskIndex].taskName = newTaskValue;
+            console.log(createConsoleLogMessage(`Subtask #${subTaskIndex} of task #${originTaskIndex} was edited`));
         }
-        
 
-        element.dataset.status = "processing";
-
-        let taskData = getElementIndexAndValueFromObject(element);
-        let [taskIndex, taskValue] = taskData;
-
-        taskManager.toDoLists[currentListName].tasks[taskIndex].taskName = taskValue;
-        console.log(createConsoleLogMessage(`Task #${taskIndex} was edited`));
-        
         saveCurrentListToLocalStorage();
 
         element.setAttribute("spellcheck", false);
-        element.innerHTML = taskValue;
+        element.innerText = newTaskValue; //to reset spellchecked task after blur
     }
 }
 
@@ -552,23 +697,20 @@ function removeRestoreButton() {
 }
 
 
-function createSubTree() {
-
-}
-
-function createSubTreeButton() {
-    createButton("tasks__subtree-button", "Create subtree");
-}
 
 
 
-function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDataset) {    
+
+function createOptionButtonsOnHover(target, buttonSelector, buttonName) {    
     let existButton = document.querySelector(`.${buttonSelector}`);
+    let subTreeInputNode = document.querySelector(".task__create-subtree--input");
     let button = null;
     
-    if (document.querySelector('.tasks-edit') || target.className === "tasks-placeholder") {
-        return;
-    }
+    if (document.querySelector('.tasks-edit') || target.className === "tasks-placeholder") return;
+    
+    if (!target.classList[0].includes("task-container")) return;
+
+    if (subTreeInputNode && subTreeInputNode.dataset.focus === "focused") return;
     
     if (existButton) {
         if (existButton.previousSibling === target) {
@@ -578,19 +720,23 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         }
     }
 
-    if (buttonSelector === "tasks__mark-as-done-button") {
+    if (buttonSelector === "tasks__mark-as-done--button") {
         button = createButton(buttonSelector, buttonName, "input");
+    
+    } else if (buttonSelector === "task__create-subtree--wrapper") {
+        button = createSubTaskInput();
+    
     } else {
         button = createButton(buttonSelector, buttonName);
     }
-    
+        
 
     target.after(button);
 
     let targetCoords = target.getBoundingClientRect();
     let taskSection = document.querySelector(".tasks-section");
     
-    if (buttonName === "remove") {
+    if (buttonName === "remove task") {
         button.innerText ="X";
         button.style.top = target.offsetTop + "px";
         button.style.left = taskSection.clientWidth - button.clientWidth + "px";
@@ -611,17 +757,60 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
         } else {
             button.checked = false;
         }
-
-        if (target) {
-
+        
+        let left = 0;
+        let top = target.offsetTop + 2;
+        
+        if (target.className.includes("subtask")) {
+            left = left + 30;
         }
 
         button.dataset.taskStatus = buttonName;
-        button.style.top = target.offsetTop + 5 + "px";
-        button.style.left = "-10px";       
-    
-    } else {
+        button.style.top = `${top}px`;
+        button.style.left = `${left}px`;       
+    }
 
+    if (buttonName === "create subtask") {
+        let addButton = document.querySelector(".task__create-subtree--button");
+        let input = document.querySelector(".task__create-subtree--input");
+
+        button.style.top = target.offsetTop + target.clientHeight - 18 + "px";
+        button.style.left = taskSection.clientWidth - button.clientWidth + "px";
+
+        input.addEventListener("click", function() {
+            input.dataset.focus = "focused";
+        });
+
+
+        input.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                input.value = "";
+                delete input.dataset.focus;
+                input.blur();
+                return;
+            }
+            if (event.key === "Enter") {
+                addValue();
+                button.style.top = target.offsetTop + target.clientHeight - 15 + "px";
+                button.style.left = taskSection.clientWidth - button.clientWidth + "px";  
+            }
+        });
+
+        input.addEventListener("blur", function() {
+            delete input.dataset.focus;
+            removeTaskControlButtons();
+        })
+
+
+        addButton.addEventListener("click", function() {
+            addValue();
+        });
+
+        function addValue() {
+            let [newTaskValue, originTaskIndex, subTaskIndex] = getElementIndexAndValueFromObject(target);
+            taskManager.createSubTask(currentListName, originTaskIndex, input.value, target);
+            input.value = "";
+        }
     }
     
 
@@ -629,30 +818,43 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
     button.addEventListener("click", function() {
         
         if (button.dataset.taskStatus === "done" || button.dataset.taskStatus === "notDone") {
-            target.dataset.status = "processing";
+//             target.dataset.status = "processing";
+            target.nextElementSibling.dataset.status = "processing";
             buttonName = "done/notDone";
         }
 
         switch(buttonName) {
-            case("remove"):
+            case("remove task"):
+                let [taskIndex, subIndex] = target.children[0].children[1].dataset.taskIndex.split(",");
+                updateSubIndexes(taskIndex, subIndex);
                 removeOnClick(target);
+//                 clearDOMList();
+//                 renderList(taskManager.toDoLists[currentListName].tasks); 
                 break;
 
             case("done/notDone"):
                 markAsDoneOnClick(target);
                 break;
             
-            case("create subtree"):
-                
+            case("+"):
                 break;
         }
     });
 
 
 
-    function markAsDoneOnClick(element, button) {
-        element.classList.toggle("task-is-done");
-        storeNewDataToList(element);   
+    function markAsDoneOnClick(taskContainer) {
+        taskContainer.children[0].classList.toggle("task-is-done");
+        storeNewDataToList(taskContainer);   
+    }
+
+
+    function createSubTaskInput() {
+        let div = document.createElement("div");
+        div.className = "task__create-subtree--wrapper";
+
+        div.innerHTML = `<input type="text" placeholder="add subtask" class="task__create-subtree--input"></input><button class="task__create-subtree--button">+</button>`;
+        return div;
     }
 
 
@@ -660,14 +862,34 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
     function removeOnClick(element) {
         element.dataset.status = "processing";
         storeNewDataToList(element, "remove");
+
+        if (element.parentNode.className === "task-container__origin") {
+            element = element.parentNode;
+        }
         element.remove();
         console.log(createConsoleLogMessage(`Task "${element.innerHTML}" was removed`));
 
-        document.querySelector('.tasks__remove-task-button').remove();
-        document.querySelector('.tasks__mark-as-done-button').remove();
-        document.querySelector('.tasks__create-subtree-button').remove();
+        let removeButton = document.querySelector('.tasks__remove-task--button');
+        let markButton = document.querySelector('.tasks__mark-as-done--button');
+        let subtreeButton = document.querySelector('.task__create-subtree--button');
+        let subtreeinput = document.querySelector('.task__create-subtree--input');
 
-        let currentTasks = getCurrentTasksFromDOM();
+        if (removeButton) {
+            removeButton.remove();
+        }
+
+        if (markButton) {
+            markButton.remove();
+        }
+
+        if (element.classList[0] === "task-container__origin" || element.classList[0] === "task-container__subtask") {
+            subtreeButton.remove();
+        }
+        if (subtreeinput) {
+            subtreeinput.remove();
+        }
+
+        let currentTasks = Array.from(document.querySelectorAll(`[data-task-type]`));
         
         if (currentTasks.length === 0) {
             createTasksPlaceholder();
@@ -678,16 +900,63 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName, buttonDa
 }
 
 
+function updateSubIndexes(taskIndex, subTaskIndex) {
+    taskIndex = parseInt(taskIndex);
+    subTaskIndex = parseInt(subTaskIndex);
+    
+    //pushes origin or subtask nodes to an array
+    let nodes = Array.from(document.querySelectorAll(`[data-task-index]`))
+               .filter(node => {
+                   if (subTaskIndex === 0){
+                       return node.dataset.taskIndex.endsWith(`,0`);
+                   } else {
+                       return node.dataset.taskIndex.startsWith(`${taskIndex},`)
+                   }
+
+               });
+
+    //reindexates origin tasks on DOM
+    if (subTaskIndex === 0) {
+        nodes.forEach((node, index) => {
+            if (index > taskIndex-1) {
+               node.dataset.taskIndex = `${index},${subTaskIndex}`;
+               node.previousElementSibling.innerText = `${index}.`;
+
+            }
+        });
+        
+        return;
+    
+    //reindexate sub tasks on DOM
+    } else {
+        nodes.forEach((node, index) => {
+            if (index > subTaskIndex) {
+               node.dataset.taskIndex = `${taskIndex},${index-1}`;
+               node.previousElementSibling.innerText = `${index-1}.`;
+
+            }
+        });
+    }
+}
+
+
 
 function storeNewDataToList(node, ifRemoving = false, priority = "unset") {
-    let taskData = getElementIndexAndValueFromObject(node);
-    let taskIndex = taskData[0];
-    let taskValue = taskData[1];
+    let [taskValue, taskIndex, subTaskIndex] = getElementIndexAndValueFromObject(node);
+    
+    let currentTask = {};
+    let isSubTaskEditing = false;
 
-    let currentTask = taskManager.toDoLists[currentListName].tasks[taskIndex];
+    if (subTaskIndex > 0) {
+        isSubTaskEditing = true;
+        currentTask = taskManager.toDoLists[currentListName].tasks[taskIndex].subtree[subTaskIndex];
+    } else {
+        currentTask = taskManager.toDoLists[currentListName].tasks[taskIndex];
+    }
 
     if (ifRemoving) {
-        removeTaskFromDataAndUpdateIndexes(taskIndex);
+        //<VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV FIX HERE
+        removeTaskFromDataAndUpdateIndexes(taskIndex, subTaskIndex);
         return;
     }
 
@@ -711,20 +980,44 @@ function storeNewDataToList(node, ifRemoving = false, priority = "unset") {
     saveCurrentListToLocalStorage();
 
 
-    function removeTaskFromDataAndUpdateIndexes(taskIndex) {
-        let totalTasks = Object.keys(taskManager.toDoLists[currentListName].tasks).length;
+    function removeTaskFromDataAndUpdateIndexes(taskIndex, subTaskIndex) {
+        
+        //if subtask
+        if (subTaskIndex > 0) {
+            let totalSubTasks = Object.keys(taskManager.toDoLists[currentListName].tasks[taskIndex].subtree).length; 
 
-        delete taskManager.toDoLists[currentListName].tasks[taskIndex];
+            delete taskManager.toDoLists[currentListName].tasks[taskIndex].subtree[subTaskIndex];
+            
+            //do not reindexate if last task
+            if (subTaskIndex === totalSubTasks) {
+                return;
+            }
 
-        if (taskIndex === totalTasks) {
-            return;
-        }
+            for (let i = subTaskIndex; i <= totalSubTasks; i++) {
+                taskManager.toDoLists[currentListName].tasks[taskIndex].subtree[i] = taskManager.toDoLists[currentListName].tasks[taskIndex].subtree[i+1];
 
-        for (let i = taskIndex; i <= totalTasks; i++) {
-            taskManager.toDoLists[currentListName].tasks[i] = taskManager.toDoLists[currentListName].tasks[i+1];
+                if (i === totalSubTasks) {
+                    delete taskManager.toDoLists[currentListName].tasks[taskIndex].subtree[totalSubTasks]
+                }
+            }
+        
+        // if origin tasks
+        } else {
+            let totalTasks = Object.keys(taskManager.toDoLists[currentListName].tasks).length;
 
-            if (i === totalTasks) {
-                delete taskManager.toDoLists[currentListName].tasks[totalTasks]
+            delete taskManager.toDoLists[currentListName].tasks[taskIndex];
+        
+            //do not reindexate if last task
+            if (taskIndex === totalTasks) {
+                return;
+            }
+
+            for (let i = taskIndex; i <= totalTasks; i++) {
+                taskManager.toDoLists[currentListName].tasks[i] = taskManager.toDoLists[currentListName].tasks[i+1];
+
+                if (i === totalTasks) {
+                    delete taskManager.toDoLists[currentListName].tasks[totalTasks]
+                }
             }
         }
     }
@@ -733,7 +1026,7 @@ function storeNewDataToList(node, ifRemoving = false, priority = "unset") {
     function checkIfIsDone(node) {
         let isTaskDone = false;
 
-        if (node.classList.contains('task-is-done')) {
+        if (node.children[0].classList.contains('task-is-done')) {
             isTaskDone = true;
         }
         return isTaskDone;
@@ -744,56 +1037,47 @@ function storeNewDataToList(node, ifRemoving = false, priority = "unset") {
 
 
 function getElementIndexAndValueFromObject(node) {
-    let currentTasks = getCurrentTasksFromDOM();
-    
-    let liIndex = 0;
-    let liValue = node.innerHTML;
-    
-    let itemCounter = 0;
-    
-    currentTasks.forEach(item => {
-        if (item.tagName === "LI") {
-            
-            if (item.dataset.status === node.dataset.status) {
-                liIndex = itemCounter;
-            }
-            
-            itemCounter++; 
-        }
-    });
-    delete node.dataset.status;
-    return [liIndex + 1, liValue];
+//     if (node.tagName === "P") {
+//         node = node.children[1];
+//     }
+//     let j = "";
+    if (node.className.includes("task-container")) {
+        node = node.children[0].children[1];
+    }
+    let [originTaskIndex, subTaskIndex] = node.dataset.taskIndex.split(",").map(item => parseInt(item));
+    let taskValue = node.innerText;
+
+    return [taskValue, originTaskIndex, subTaskIndex];
 }
 
 
 
 function getCurrentTasksFromDOM() {
-    let liList = [];
-
-    let tasksList = document.querySelector('.tasks-list');
-    
-    let taskListElements = Array.prototype.slice.call(tasksList.children);
-    taskListElements.map(item => item.tagName === "LI" ?  liList.push(item) : false);
-
-    return liList;
+    return document.querySelectorAll(`[data-task-type]`);
 }
 
 
 
-function clearOnlyDOMList() {
-    let currentTasks = getCurrentTasksFromDOM();
-    currentTasks.forEach(li => li.remove());
+function clearDOMList() {
+    let placeholder = document.querySelector(".tasks-placeholder");
+    
+    if (placeholder) {
+        placeholder.remove();
+    }
+
+    let currentTasks = Array.from(document.querySelector(`.tasks-container`).children);
+    currentTasks.forEach(node => node.remove());
 }
 
 
 
 // Create placeholder for task list.
 function createTasksPlaceholder() {
-    let placeholder = document.createElement('li');
+    let placeholder = document.createElement('div');
     placeholder.className = "tasks-placeholder";
     placeholder.innerHTML = "Your new tasks will appear here...";
     
-    tasksList.append(placeholder);
+    tasksContainer.append(placeholder);
 
     bottomControlsAppearance()
     
@@ -818,9 +1102,9 @@ function bottomControlsAppearance() {
         saveBackupButton.style.display = "none";
         clearTasksButton.style.display = "none";
 
-        if (!taskManager.toDoLists[currentListName].autoBackup) {
+//         if (!taskManager.toDoLists[currentListName].autoBackup) {
 
-        }
+//         }
     }
 
     if (!taskManager.toDoLists[currentListName].manualBackup) {
@@ -842,6 +1126,10 @@ function resetInputFieldAfterSubmit() {
 
 function createRestoreButton() {
     let currList = taskManager.toDoLists[currentListName];
+    
+    if (!currList) {
+        return;
+    }
 
     if (currList.autoBackup || currList.manualBackup) {
         let restoreButton = createButton("tasks__restore-button", "Restore autosaved list");
@@ -862,7 +1150,7 @@ function createButton(buttonClass, buttonName, buttonType = "button") {
 
     if (buttonType === "button") {
         button.innerHTML = buttonName;
-    } else {
+    } else  {
         button.type = "checkbox";
     }
    
@@ -875,14 +1163,18 @@ function createButton(buttonClass, buttonName, buttonType = "button") {
 
 //Remove task hover control buttons after leaving tasks section
 function removeTaskControlButtons() {
-    let removeTaskButton = document.querySelector('.tasks__remove-task-button');
-    let markAsDoneButton = document.querySelector('.tasks__mark-as-done-button');
-    let createSubTreeButton = document.querySelector('.tasks__create-subtree-button');
+    let subtreeInputNode = document.querySelector(".task__create-subtree--input");
+    if (subtreeInputNode && subtreeInputNode.dataset.focus === "focused") {
+        return;
+    }
+    let removeTaskButton = document.querySelector('.tasks__remove-task--button');
+    let markAsDoneButton = document.querySelector('.tasks__mark-as-done--button');
+    let createSubTaskButton = document.querySelector('.task__create-subtree--wrapper');
     
-    if (removeTaskButton && markAsDoneButton && createSubTreeButton) {
+    if (removeTaskButton && markAsDoneButton && createSubTaskButton) {
         removeTaskButton.remove();
         markAsDoneButton.remove();
-        createSubTreeButton.remove();
+        createSubTaskButton.remove();
     }
 }
 

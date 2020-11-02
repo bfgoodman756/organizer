@@ -1,11 +1,16 @@
 .menu {
   position: fixed;
+  //display: flex;
+  //flex-direction: column;
   z-index: 1;
   width: 300px;
-  height: 100vh;
+  //height: 100vh;
   overflow: scroll;
   transition: all .2s ease-out;
   background-color: var(--accent-secondary-bg);
+  //min-height: 100vh;
+  //min-width: 300px;
+  height: 100%;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -23,25 +28,30 @@
   }
 
   &__tab {
+    position: relative;
     font-size: 35px;
     letter-spacing: 1px;
     width: 100%;
-    height: 150px;
+    max-height: 158px;
+    min-height: 158px;
     margin: 0;
     cursor: pointer;
     user-select: none;
     transition: all .2s ease-out;
     background-color: var(--accent-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     &:hover {
       background-color: var(--accent-active-bg);
     }
 
     &-header {
-      position: absolute;
-      top: 50px;
+      //position: absolute;
+      margin-top: 50px;
       width: 100%;
-      margin: 0;
+      //margin: 0;
       padding: 0;
       text-align: center;
       color: var(--active-text);
@@ -84,11 +94,86 @@
     }
   }
 
+  &__sub {
+    &-items_container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    &-item,
+    &__add-new-list {
+      font-size: 20px;
+      width: 100%;
+      padding: 3px 0;
+      color: var(--accent-text);
+      border: 0;
+      outline: none;
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--accent-hover);
+      }
+    }
+
+    &-item {
+      border-top: 1px solid var(--separator);
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &--header {
+        padding-left: 5px;
+        width: 66.6%;
+        margin: 0 auto;
+        word-break: break-all;
+        border: 1px solid transparent;
+
+        &:focus {
+          cursor: text;
+          border: 1px solid var(--focus);
+        }
+      }
+
+      &--list-create {
+        width: 10px;
+        height: 30px;
+        margin: 0 auto;
+        padding: 0;
+      }
+    }
+
+    &-item--active {
+      font-size: 20px;
+      width: 100%;
+      padding: 3px 0;
+      cursor: cell;
+      color: var(--menu-selected-list);
+      border-top: 1px solid var(--separator);
+      outline: none;
+      background-color: var(--main-bg);
+
+      &:hover {
+        cursor: auto;
+        background-color: var(--main-bg);
+      }
+    }
+
+    &__add-new-list {
+      &:hover {
+        cursor: pointer;
+        background-color: var(--accent-hover);
+      }
+    }
+  }
+
+  &__drift,
   &__timer,
   &__calendar,
   &__converter,
   &__main {
-    position: relative;
+    //position: relative;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -106,10 +191,7 @@
   }
 }
 
-
 .menu__todo-list {
-  position: relative;
-  transition: all .2s ease-out;
 
   &-heading {
     position: relative;
@@ -125,20 +207,27 @@
   }
 
   &-dropdown {
-    position: absolute;
-    display: none;
-    top: 105px;
-    width: 30px;
-    height: 30px;
+    margin: 0 auto;
+    top: 64px;
+    width: 20px;
+    height: 20px;
     fill: var(--active-text);
+    align-self: center;
+    position: absolute;
+    left: 240px;
+    transition: all .1s ease-out;
+    fill-opacity: 0.5;
   }
 
-  &-names {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
+  //&-names {
+  //  //position: absolute;
+  //  display: flex;
+  //  flex-direction: column;
+  //  width: 100%;
+  //  //overflow: hidden;
+  //  //max-height: 0;
+  //  //transition: all .2s ease-out;
+  //}
 
   &-name,
   &__add-new-list {
@@ -163,20 +252,20 @@
     }
 
     &--header {
+      padding-left: 5px;
       width: 66.6%;
       margin: 0 auto;
       word-break: break-all;
       border: 1px solid transparent;
 
       &:focus {
-        padding-left: 5px;
         cursor: text;
         border: 1px solid var(--focus);
       }
     }
 
     &--list-create {
-      width: fit-content;
+      width: 10px;
       height: 30px;
       margin: 0 auto;
       padding: 0;
@@ -310,10 +399,16 @@
   }
 }
 
-.rotate180 {
-  transform: rotate(-180deg);
-}
+//.rotate180 {
+//  transform: rotate(-180deg);
+//}
 
 .active-tab {
+  max-height: 1000px;
+  transition: all .2s ease-out;
   background-color: var(--accent-active-bg);
+
+  .menu__todo-list-dropdown {
+    transform: rotate(-180deg);
+  }
 }

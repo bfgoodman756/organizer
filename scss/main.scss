@@ -143,6 +143,10 @@ body {
   height: 100vh;
 }
 
+.waitingToLoad {
+  opacity: 0;
+}
+
 p,
 h1,
 h2,
@@ -168,6 +172,7 @@ button {
 @import 'content/content';
 @import 'content/apps/main-page';
 @import 'content/apps/todo-list';
+@import 'content/apps/drift';
 @import 'content/apps/timer';
 @import 'content/apps/converter';
 @import 'content/apps/calendar';

@@ -1,22 +1,24 @@
 let menu = document.querySelector('.menu');
+let menuCloseButton = document.querySelector(".menu__controls");
+
 // let toDoListApp = document.querySelector('.menu__todo-list');
 // let timerApp = document.querySelector('.menu__timer');
 // let calendarApp = document.querySelector('.menu__calendar');
 // let converterApp = document.querySelector('.menu__converter');
 
-menuCloseOpenToggle();
+menuCloseButton.addEventListener("click", function(event) {
+    let menuState = menuCloseButton.dataset.menuState;
+    menuState === "opened" ? menuState = "close" : menuState = "open";
+    menuSwitcher(menuState);
+})
+setTimeout(()=> {document.querySelector("body").removeAttribute("class")}, 280)
 
-menu.addEventListener('click', function(event) {
+menu.addEventListener("click", function(event) {
     let node = getNode(event);
-
+    let start = Date.now();
     if (!node) {
         return;
     }
-    
-    if (event.target.classList.contains("menu__list-settings__button")) {
-        return;
-    }
-
 
     if (node.dataset.type === "menu_list-create") {
         menuCreateNewTaskList(node);
@@ -24,24 +26,55 @@ menu.addEventListener('click', function(event) {
     }
     
     if (node.tagName === "BUTTON" && node.dataset.status === "changingName") {
-       console.log('waiting for input');
+       console.log("waiting for input");
        return;
     }
 
+    let menuAppName = node.closest(".menu__tab").dataset.menuAppName;
 
-    if (node.dataset.type === "menu_list-name") {
-        loadTaskListOnClick(node.firstChild.innerText);
+    if (node.classList.contains("menu__sub-item") && menuAppName === "ToDoList") {
+        renderTaskList(node.firstChild.innerText);
+        
+        let end = Date.now();
+        console.log(`[click: ${end-start}ms]`)
         return;
+
+    } else if (node.classList.contains("menu__sub-item") && menuAppName === "Drift") {
+        let existTable = document.querySelector("[data-season-year]");
+        let currentYear = existTable ? +existTable.dataset.seasonYear : 2020;
+        let selectedYear = +node.firstChild.innerText;
+        
+        if (currentYear === selectedYear) {
+            return
+        } else {
+            renderResultsTable( null , selectedYear)
+
+            let end = Date.now();
+            let div = document.createElement("div");
+            div.style.position = "fixed";
+            div.style.fontSize = "50px";
+            div.style.color = "blue";
+            div.style.zIndex = "100";
+            div.style.top = "0";
+            div.innerText = `${end-start}ms`;
+            setTimeout(()=> div.remove(), 800)
+            document.body.append(div);
+            console.log(`[click: ${end-start}ms]`);
+        }
     }
-
-
     
-    let selectedAppName = node.dataset.appName;    
- 
-    appManager.rememberLastUsedApp(selectedAppName); 
-    activateAppsContent(selectedAppName);  
-    showActiveAppOnMenu(selectedAppName);
+    let selectedAppName = node.dataset.menuAppName;
 
+    if (!selectedAppName) {
+        selectedAppName = node.closest(".menu__tab").dataset.menuAppName
+    }    
+ 
+    appManager.rememberLastUsedApp(selectedAppName);
+
+    if (event.target.classList.contains("menu__tab") ||
+        event.target.classList.contains("menu__tab-header")) {
+        showActiveAppOnMenu(selectedAppName);
+    }
 
     function getNode(event) {
         let path = event.composedPath();
@@ -57,7 +90,7 @@ menu.addEventListener('click', function(event) {
             } else if (item.dataset.type === "menu_list-create"){
                 return item;
             
-            } else if (item.dataset.type === "menu_list-name") {
+            } else if (item.dataset.type === "menu_sub-item") {
                 return item;
             
             } else if (item.classList.contains("menu__tab")) {
@@ -69,95 +102,225 @@ menu.addEventListener('click', function(event) {
 
 
 
-function menuCloseOpenToggle() {
+function menuSwitcher(menuOperation = "loadLastMenuState") {
     let menu = document.querySelector(".menu");
-    let menuSpacer = document.querySelector(".menu__space-holder");
+    let menuSpacer = document.querySelector("[class^=menu__space-holder]");
     let button = document.querySelector(".menu__controls");
-
-    let menuStatus = button.dataset.menuStatus;
 
     let openButton = document.querySelector(".menu__controls--open-button");
     let closeButton = document.querySelector(".menu__controls--close-button");
 
-    button.addEventListener("click", function(event) {
-        let menuStatus = button.dataset.menuStatus;
-        let menuRect = menu.getBoundingClientRect();
-        switch(menuStatus) {
+    let menuRect = menu.getBoundingClientRect();
 
-            //close if opened
-            case("opened"):
-                button.dataset.menuStatus = "closed";
-                closeButton.style.display = "none";
-                openButton.style.display = "block";
-//                 menu.offsetHeight = menu.offsetHeight + 1;
-                menu.style.left = `-${menuRect.width}px`;
-                button.style.left = "0px";
-                menuSpacer.className = "menu__space-holder--closed";
-                break;
-            
-            //open if closed
-            case("closed"):
-                button.dataset.menuStatus = "opened";
-                closeButton.style.display = "block";
-                openButton.style.display = "none";
-                menu.style.left = `0px`;
-                button.removeAttribute("style");
-                menuSpacer.className = "menu__space-holder";
-                break;
-        }
-    })
+    if (menuOperation === "loadLastMenuState") {
+        appManager.options.lastMenuState === "opened" ? menuOperation = "open" : menuOperation = "close";
+    }
+
+    switch(menuOperation) {
+        //close if opened
+        case("close"):
+            button.dataset.menuState = "closed";
+            closeButton.style.display = "none";
+            openButton.style.display = "block";
+            menu.style.left = `-${menuRect.width}px`;
+            button.style.left = "0px";
+            menuSpacer.className = "menu__space-holder--closed";
+
+            appManager.options.lastMenuState = "closed";
+            appManager.saveToLocalStorage();
+            break;
+
+        //open if closed
+        case("open"):
+            if (button.dataset.menuState !== "open") {
+                appManager.saveToLocalStorage();
+            }
+            button.dataset.menuState = "opened";
+            closeButton.style.display = "block";
+            openButton.style.display = "none";
+            menu.style.left = "0px";
+            button.removeAttribute("style");
+            menuSpacer.className = "menu__space-holder";
+
+            appManager.options.lastMenuState = "opened";
+            appManager.saveToLocalStorage();
+            break;
+    }
 }
 
 
 
 
 function showActiveAppOnMenu(appName) {
-    let mainPage = document.querySelector('.menu__main');    
-    let toDoList = document.querySelector('.menu__todo-list');
-    let timer = document.querySelector('.menu__timer');
-    let calendar = document.querySelector('.menu__calendar');
-    let converter = document.querySelector('.menu__converter');
-    
-    let menuTabs = [mainPage, toDoList, timer, calendar, converter];
+    let menuTabs = document.querySelectorAll('[data-menu-app-name]');
+
     activateTab(menuTabs, appName);
+//     if (appName === "ToDoList") {
+//         createMenuSubItems(".menu__todo-list", getListNamesFromTaskManager());
+//     } else if (appName === "Drift") {
+//         let lastUsedSubItem = appManager.options.lastUsedMenuSubCategory || 2020;
+//             createTable(lastUsedSubItem,"rdsGp");
+//         createMenuSubItems(".menu__drift", [2017, 2018, 2019, 2020]);
+//         highlightMenuSubItem(lastUsedSubItem)
+//     } else {
+//         removeMenuSubItems();
+//     }
+
+    switch(appName) {
+        case("Mainpage"):
+            appPlaceholder.classList.add("active-app");
+            break;
+        
+        case("ToDoList"):
+            createMenuSubItems(".menu__todo-list", getListNamesFromTaskManager());
+            break;
+        
+        case("Drift"):
+            let lastUsedMenuItem = appManager.options.lastUsedDriftYear || 2020;
+            
+            createMenuSubItems(".menu__drift", [2017, 2018, 2019, 2020]);
+            
+            highlightMenuSubItem(lastUsedMenuItem)
+            
+            createTable(lastUsedMenuItem,"rdsGp");
+            break;
+        
+        default:
+            removeMenuSubItems();
+            break;
+
+    }
     
-    loadListNamesToMenu();
+    
+//     loadListNamesToMenu(); 
 
-    function activateTab(arr, appName) {
-
-        arr.forEach(tab => {
-             //set main page active if we click on currently active tab
-            if (tab.dataset.appName === appName && tab.classList.contains('active-tab')) {
+    function activateTab(tabs, appName) {
+        tabs.forEach(tab => {
+             //show main page active if we click on currently active tab
+            if (tab.dataset.menuAppName === appName && tab.classList.contains('active-tab')) {
                 tab.classList.remove('active-tab');
-                mainPage.classList.add('active-tab');
+                tabs[0].classList.add('active-tab');
                 appManager.rememberLastUsedApp("MainPage");
                 activateAppsContent("MainPage");
                 return;
             }
 
-            //set tab as active if it was not active before
-            if (tab.dataset.appName === appName && !tab.classList.contains('active-tab')) {
+            //show tab as active if it was not active before
+            if (tab.dataset.menuAppName === appName && !tab.classList.contains('active-tab')) {
                 tab.classList.add('active-tab');
+                activateAppsContent(appName);
                 console.log(`tab ${tab.innerText} is active now`);
             } else {
                 tab.classList.remove('active-tab');
             }  
         });
-
-        let app = document.querySelector('.active-tab');
-//         let appName = app.dataset.appName || "MainPage";
-        switch(appName || "MainPage") {
-            case("Mainpage"):
-                break;
-            case("ToDoList"):
-//                 initializeToDoList();
-                break;
-            case("Timer"):
-                break;
-        }
     }
 }
 
+function removeMenuSubItems() {
+    let menuSubItems = document.querySelectorAll(".menu__sub-items_container");
+    Array.from(menuSubItems).forEach(item => item.remove());
+}
+
+
+function activateAppsContent(selectedAppName) {    
+    let apps = document.querySelectorAll('[data-app-name]');
+
+    apps.forEach(item => {
+        if (item.dataset.appName === selectedAppName) {
+            item.classList.add('active-app');
+            item.classList.remove('inactive-app');
+
+        } else {
+            item.classList.add('inactive-app');
+            item.classList.remove('active-app');
+        }
+    });
+
+    let app = document.querySelector('.active-tab');
+    
+    let appName = "";
+    if (!app) {
+        appName = "MainPage";
+    } else {
+        appName = app.dataset.menuAppName;
+    }
+    
+//     switch(appName) {
+//         case("Mainpage"):
+//             appPlaceholder.classList.add("active-app");
+//             break;
+//         case("ToDoList"):
+//             let lastUsedMenuItem = appManager.options.lastUsedMenuSubCategory;
+//             createTable(lastUsedMenuItem,"rdsGp");
+//             break;
+//         case("Timer"):
+//             break;
+//     }
+}
+
+
+function createMenuSubItems(parentSelector, subItemsArr) {
+    let menuItemWrapper = document.querySelector(`${parentSelector}`);
+    let subItemsContainer = document.querySelector('.menu__sub-items_container'); //.menu__todo-list-names
+    
+    if (!menuItemWrapper.classList.contains('active-tab')) {
+        if (!subItemsContainer) return;
+        
+        removeMenuSubItems();
+        return;
+    }
+    
+    if (subItemsContainer) {
+        removeMenuSubItems();
+    }
+
+    subItemsContainer = document.createElement('div');
+    subItemsContainer.classList.add('menu__sub-items_container'); //.menu__todo-list-names
+
+    menuItemWrapper.append(subItemsContainer);
+
+    subItemsArr.forEach(list => {
+        createSubCatergory(subItemsContainer, list);
+    })
+    
+    if (parentSelector === "menu__todo-list") {
+        createSubCatergory(subItemsContainer, "+", true);
+    }
+}
+
+function createSubCatergory(subsCountainer, subCatName, isPlusSign = false) {
+    let div = document.createElement("div");
+    let dataType = "menu_sub-item"; //menu_list-name
+    let pClass = "menu__sub-item--header"; //menu__todo-list-name--list-create
+
+    if (isPlusSign) {
+        dataType = "menu_list-create";
+        pClass = "menu__sub-item--list-create";
+    }
+
+    div.dataset.type = dataType;
+    div.classList.add("menu__sub-item");
+    
+    let p = document.createElement("p");
+    p.innerText = subCatName;
+    p.classList.add(pClass);
+
+//     if (subItemsArr.length === 1 && !isPlusSign) {
+//        div.classList.add("menu__sub-item--active"); //menu__todo-list-name--active
+//     } else {
+//         div.classList.add("menu__sub-item");
+//     }
+
+    div.append(p);
+
+    subsCountainer.append(div);
+
+    if (subCatName === appManager.options.lastUsedMenuSubCategory) {
+        div.classList.add("menu__sub-item--active");
+        createMenuListSettings(div);
+    }
+}
 
 function loadListNamesToMenu() {
     let listNamesWrapper = document.querySelector(".menu__todo-list");
@@ -167,31 +330,22 @@ function loadListNamesToMenu() {
         if (!listNames) return;
         
         document.querySelector('.menu__todo-list-names').remove();
-        updateDropDownPosition();
         return;
     }
     
 
     if (document.querySelector('.menu__todo-list-names')) {
         document.querySelector('.menu__todo-list-names').remove();
-        listNamesWrapper.style.removeProperty("height");
     }
 
     let listNamesData = getListNamesFromTaskManager();
     let listNamesNode = document.createElement('div');
     listNamesNode.classList.add('menu__todo-list-names');
 
-    listNamesNode.style.top = 100 + "px";
     listNamesWrapper.append(listNamesNode);
-
 
     listNamesData.forEach(list => createTaskLinkInMenu(list));
     createTaskLinkInMenu("+", true);
-    
-    updateDropDownPosition(listNamesNode.clientHeight + 5);
-    updateMenuToDoListsHeight();
-
-    listNamesWrapper.classList.remove("no-transition");
 
 
     function createTaskLinkInMenu(listName, isPlusSign = false) {
@@ -220,7 +374,7 @@ function loadListNamesToMenu() {
         
         listNamesNode.append(div);
 
-        if (listName === appManager.options.lastUsedList) {
+        if (listName === appManager.options.lastUsedMenuSubCategory) {
             div.classList.add("menu__todo-list-name--active");
             createMenuListSettings(div);
         }
@@ -229,49 +383,8 @@ function loadListNamesToMenu() {
 
 
 
-function activateAppsContent(selectedAppName) {    
-    let mainPage = document.querySelector('.welcome-page-wrapper');
-    let toDoList = document.querySelector('.todo-list-wrapper');
-    let timer = document.querySelector('.timer-wrapper');
-    let calendar = document.querySelector('.calendar-wrapper');
-    let converter = document.querySelector('.converter-wrapper');
 
-    let apps = [mainPage, toDoList, timer, calendar, converter];
-
-    apps.forEach(item => {
-        if (item.dataset.appName === selectedAppName) {
-            item.classList.add('active-app');
-            item.classList.remove('inactive-app');
-
-        } else {
-            item.classList.add('inactive-app');
-            item.classList.remove('active-app');
-        }
-    });
-
-    let app = document.querySelector('.active-tab');
-    
-    let appName = "";
-    if (!app) {
-        appName = "MainPage";
-    } else {
-        appName = app.dataset.appName;
-    }
-    
-    switch(appName) {
-        case("Mainpage"):
-            appPlaceholder.classList.add("active-app");
-            break;
-        case("ToDoList"):
-            break;
-        case("Timer"):
-            break;
-    }
-}
-
-
-
-function loadTaskListOnClick(listName) {
+function renderTaskList(listName) {
     let currentListHeader = document.querySelector('.todo__list-name');
 
     if (listName === currentListHeader.innerText) {
@@ -288,10 +401,10 @@ function loadTaskListOnClick(listName) {
         taskManager.loadList(listName);
 
         currentListHeader.innerHTML = listName;
-        appManager.rememberLastUsedList(listName);
+        appManager.rememberLastUsedSubCategory(listName);
 
         console.log(createConsoleLogMessage(`[${listName}] list was loaded`));
-        highlightCurrentList(listName);
+        highlightMenuSubItem(listName);
     }
 }
 
@@ -319,12 +432,17 @@ function createMenuListSettings(target) {
     if (target.classList.contains("menu__todo-list-name--active")) {
         settings.dataset.buttonParentStatus = "active";
     }
-    
-    let rect = calculateOffsets(target.childNodes[0]);
-    target.append(settings);
 
-    settings.style.left = target.clientWidth - 36 + "px";
-    settings.style.top = rect.top - 250 + menu.scrollTop - 1 + "px";
+    //setTimeout to give DOM extra time to load before calculate offsets
+    setTimeout(() => {
+        let rect = target.childNodes[0].getBoundingClientRect();
+        target.append(settings);
+
+        settings.style.left = target.clientWidth - 36 + "px";
+        settings.style.top = rect.top - 150 + menu.scrollTop + (-9) + "px";
+    }, 0)
+    
+
 
     target.addEventListener('mouseleave', removeSettingsIcon);
 
@@ -351,8 +469,8 @@ function createMenuListSettings(target) {
     function openListSettings(node, settingsButton) {
         let listName = node.firstChild.innerText;
         
-        if (appManager.options.lastUsedList !== listName) {
-            loadTaskListOnClick(listName)
+        if (appManager.options.lastUsedMenuSubCategory !== listName) {
+            renderTaskList(listName)
         }
         
         if (node.dataset.settingsStatus === "opened") {
@@ -361,7 +479,7 @@ function createMenuListSettings(target) {
             
             delete node.dataset.settingsStatus;
             
-            updateMenuToDoListsHeight();
+//             updateMenuToDoListsHeight();
             return;
         }
 
@@ -394,15 +512,9 @@ function createMenuListSettings(target) {
         node.dataset.settingsStatus = "opened";
 
         node.append(sWrapper);
-
-        updateMenuToDoListsHeight(sWrapper.clientHeight + 15);
         
         settingsButton.remove();
         createMenuListSettings(node);
-
-//         sWrapper.addEventListener("blur", function() {
-//             sWrapper.remove();
-//         })
 
         sWrapper.addEventListener("click", function(event) {
             if (event.target.dataset.buttonType !== "toDoControls") {
@@ -412,7 +524,7 @@ function createMenuListSettings(target) {
             let listNameHeader = this.previousSibling;
             
             menuListControlsHandler(listNameHeader, event.target.innerText);
-            });
+         });
     }
 }
 
@@ -427,9 +539,14 @@ function menuListControlsHandler(target, buttonPressed) {
             target.setAttribute("contenteditable", "true");
             
             delete target.dataset.status;
+
+            let range = document.createRange();
+            let sel = window.getSelection();
+            range.setStart(target.childNodes[0], target.childNodes[0].length);
+            sel.removeAllRanges();
+            sel.addRange(range);
             
             target.focus();
-            target.selectionEnd = target.innerText.length;
 
             target.addEventListener("blur", blurListener);
 
@@ -440,45 +557,31 @@ function menuListControlsHandler(target, buttonPressed) {
                 }
             });
 
-            function blurListener() {
-                let newListName = target.innerText;
-
-                if (newListName === prevListName) {
-                    target.removeEventListener("blur", blurListener);
-                    target.removeAttribute("contenteditable");
-                    return;
-                }
-                
-                target.removeAttribute("contenteditable");
-                target.dataset.status === "changingName";
-
-                taskManager.changeListName(prevListName, newListName);
-                appManager.rememberLastUsedList(newListName);
-                target.removeEventListener("blur", blurListener);
-            }
-
             console.log("task is ready to be renamed");
             break;
 
+
         case("remove list"):
             taskManager.deleteList(target.innerText);
+            target.parentNode.remove();
 
-            loadListNamesToMenu();
-            updateMenuToDoListsHeight();
-
-            let firstList = document.querySelector(".menu__todo-list-name").innerText;
-
+            let firstList = document.querySelector(`.menu__todo-list-name--header`).innerText;
+            let listContentHeader = document.querySelector(".tasks-header");
+            
+            listContentHeader = firstList;
             taskManager.loadList(firstList);
-            appManager.rememberLastUsedList(firstList);
-            highlightCurrentList(firstList);
+            appManager.rememberLastUsedSubCategory(firstList);
+            highlightMenuSubItem(firstList);
 
             console.log(`${target.innerText} was deleted from TaskManager.toDoLists`);
             break;
+
 
         case("save lists backup"):
             localStorage.setItem("toDoListsBackup", JSON.stringify(taskManager));
             console.log(createConsoleLogMessage("toDoListsBackup saved to localStorage"));
             break;
+
 
         case("load lists backup"):
             loadDataFromLocalStorage(localStorage.getItem("toDoListsBackup"));
@@ -486,15 +589,32 @@ function menuListControlsHandler(target, buttonPressed) {
             console.log(createConsoleLogMessage("toDoListsBackup loaded from localStorage"));
             break;
     }
+
+    function blurListener() {
+        let newListName = target.innerText;
+
+        if (newListName === prevListName) {
+            target.removeEventListener("blur", blurListener);
+            target.removeAttribute("contenteditable");
+            return;
+        }
+
+        target.removeAttribute("contenteditable");
+        target.dataset.status === "changingName";
+
+        taskManager.changeListName(prevListName, newListName);
+        appManager.rememberLastUsedSubCategory(newListName);
+        target.removeEventListener("blur", blurListener);
+    }
 }
 
 
-function highlightCurrentList(listName) {
-    let menuLists = document.querySelectorAll("[data-type='menu_list-name']");
+function highlightMenuSubItem(menuSubItem) {
+    let menuLists = document.querySelectorAll("[data-type='menu_sub-item']");
 
     menuLists.forEach(list => {
-        if (list.firstChild.innerText === listName) {
-            list.className = "menu__todo-list-name--active";
+        if (list.firstChild.innerText == menuSubItem) {
+            list.className = "menu__sub-item--active";
             createMenuListSettings(list);//////////////////////
 
             let settingsSelector = "menu__list-settings__button";
@@ -504,7 +624,7 @@ function highlightCurrentList(listName) {
             }
         
         } else {
-            list.className = "menu__todo-list-name";
+            list.className = "menu__sub-item";
             
             if (list.dataset.settingsStatus === "opened") {
                 delete list.dataset.settingsStatus;
@@ -512,7 +632,7 @@ function highlightCurrentList(listName) {
             
             if (document.querySelector(".menu__list-settings--wrapper")) {
                 document.querySelector(".menu__list-settings--wrapper").remove();
-                updateMenuToDoListsHeight();
+//                 updateMenuToDoListsHeight();
             }
         }
     })
@@ -568,19 +688,18 @@ function menuCreateNewTaskList(node) {
         taskManager.createNewList(listName);
         input.replaceWith(node);
         loadListNamesToMenu();
-        updateMenuToDoListsHeight();
-        highlightCurrentList(listName);
-        appManager.rememberLastUsedList(listName);
+//         updateMenuToDoListsHeight();
+        highlightMenuSubItem(listName);
+        appManager.rememberLastUsedSubCategory(listName);
     })
 }
 
 
 
-function getListNamesFromTaskManager() {
+function getListNamesFromTaskManager(forMenu = false) {
     listsCount = Object.keys(taskManager.toDoLists).length;
     let toDoLists = Object.keys(taskManager.toDoLists);
-    toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated);
-
+    toDoLists.sort((a, b) => taskManager.toDoLists[a].options.dateCreated - taskManager.toDoLists[b].options.dateCreated);    
     return toDoLists;
 }
 
@@ -615,7 +734,5 @@ function updateDropDownPosition(extraHeight = 0) {
 
     if (dropdown.style.display = "none") {
         dropdown.style.display = "block";
-    }
-
-   
+    }   
 }

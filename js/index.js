@@ -1,16 +1,43 @@
+
+// let scripts = ["menu", "todoList", "drift", "timer", "calendar", "converter"];
+// let scripts = ["menu", "todoList", "drift"];
+// insertScript(scripts);
+
+// function insertScript(scripts) {
+//     let body = document.querySelector("body");
+//     scripts.forEach(scirpt => {
+//         let node = document.createElement("script"); 
+//         node.src  = `js/${scirpt}/${scirpt}.js`;
+//         body.append(node);
+//     });
+//     //     node.type = 'text/javascript'; 
+//     //     node.defer = true; 
+// }
+
+
 let mainWrapper = document.querySelector(".main-wrapper");
 
 let appManager = {
     options: {},
 
-    rememberLastUsedList: function(listName) {
-        if (!this.options.lastUsedList) {
-            this.options.lastUsedList = {};
+    rememberLastUsedSubCategory: function(SubCategory) {
+        if (!this.options.lastUsedMenuSubCategory) {
+            this.options.lastUsedMenuSubCategory = {};
         }
         
-        this.options.lastUsedList = listName;
+        this.options.lastUsedMenuSubCategory = SubCategory;
         localStorage.setItem("appManager", JSON.stringify(this));
-        console.log(`[${listName}] is last used list now`);
+        console.log(`[${SubCategory}] is last used list now`);
+    },
+
+    rememberLastUsedDriftYear: function(year) {
+        if (!this.options.lastUsedDriftYear) {
+            this.options.lastUsedDriftYear = {};
+        }
+        
+        this.options.lastUsedDriftYear = year;
+        localStorage.setItem("appManager", JSON.stringify(this));
+        console.log(`[${year}] is last used list now`);
     },
 
     rememberLastUsedApp: function(appName) {
@@ -31,13 +58,17 @@ let appManager = {
         this.options.lastUsedTheme = themeName;
         localStorage.setItem("appManager", JSON.stringify(this));
         console.log(`[${themeName}] is last used app now`);
+    },
+
+    saveToLocalStorage: function() {
+        localStorage.setItem("appManager", JSON.stringify(appManager));
+        console.log("appManager saved to localStorage");
     }
 };
 
 if (!localStorage.getItem("appManager")) {
     localStorage.setItem("appManager", JSON.stringify(appManager));
 }
-
 
 let appData = JSON.parse(localStorage.appManager);
 appManager.options = Object.assign(appData.options);
@@ -51,8 +82,9 @@ lightDarkModeToggle();
 
 function loadLastAppState() {
     let lastUsedAppName = appManager.options.lastUsedApp;
-    activateAppsContent(lastUsedAppName);
     showActiveAppOnMenu(lastUsedAppName);
+    activateAppsContent(lastUsedAppName);
+    menuSwitcher();
 }
 
 
@@ -101,15 +133,9 @@ function lightDarkModeToggle() {
         }
 
         let listNamesWrapper = document.querySelector(".menu__todo-list");
-//         listNamesWrapper.classList.add("no-transition");
-
-//         listNamesWrapper.offsetHeight;
 
         html.dataset.theme = themeName;
         themeSelector.setAttribute("theme", themeName);
         appManager.rememberLastUsedTheme(themeName);
-
-
-//         listNamesWrapper.classList.remove("no-transition");
     })
 }
