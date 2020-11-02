@@ -321,7 +321,7 @@ if (!currentListName) {
 function createFirstListIfThereIsNoAnyList() {
     currentListName = "Your first list";
     taskManager.createNewList(currentListName);
-    highlightCurrentList(currentListName);
+    highlightMenuSubItem(currentListName);
     appManager.rememberLastUsedSubCategory(currentListName);
 }
 

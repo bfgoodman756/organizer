@@ -284,7 +284,7 @@ function createMenuSubItems(parentSelector, subItemsArr) {
         createSubCatergory(subItemsContainer, list);
     })
     
-    if (parentSelector === "menu__todo-list") {
+    if (parentSelector === ".menu__todo-list") {
         createSubCatergory(subItemsContainer, "+", true);
     }
 }
