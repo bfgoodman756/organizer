@@ -47,7 +47,7 @@ menu.addEventListener("click", function(event) {
         if (currentYear === selectedYear) {
             return
         } else {
-//             renderResultsTable( null , selectedYear)
+            renderResultsTable( null , selectedYear)
 
             let end = Date.now();
             let div = document.createElement("div");
@@ -182,7 +182,7 @@ function showActiveAppOnMenu(appName) {
             
             highlightMenuSubItem(lastUsedMenuItem)
             
-//             createTable(lastUsedMenuItem,"rdsGp");
+            createTable(lastUsedMenuItem,"rdsGp");
             break;
         
         default:
