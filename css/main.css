@@ -606,13 +606,17 @@ button {
 table[class^="table-rds-"] {
   border-collapse: collapse;
   border-spacing: 0;
-  margin: 0 auto; }
+  margin: 0 auto;
+  /* min-width: 2000px; */
+  }
   table[class^="table-rds-"] td {
     border-color: #000;
     border-style: solid;
     border-width: 1px;
     font-family: Arial, sans-serif;
-    font-size: 14px; }
+    font-size: 14px;
+    white-space: nowrap;
+    }
   table[class^="table-rds-"] th {
     border: 1px solid #000;
     font-family: Arial, sans-serif;

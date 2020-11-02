@@ -11,7 +11,7 @@ menuCloseButton.addEventListener("click", function(event) {
     menuState === "opened" ? menuState = "close" : menuState = "open";
     menuSwitcher(menuState);
 })
-setTimeout(()=> {document.querySelector("body").removeAttribute("class")}, 280)
+// setTimeout(()=> {document.querySelector("body").removeAttribute("class")}, 280)
 
 menu.addEventListener("click", function(event) {
     let node = getNode(event);
@@ -182,7 +182,7 @@ function showActiveAppOnMenu(appName) {
             
             highlightMenuSubItem(lastUsedMenuItem)
             
-            createTable(lastUsedMenuItem,"rdsGp");
+            renderResultsTable( null , lastUsedMenuItem)
             break;
         
         default:
