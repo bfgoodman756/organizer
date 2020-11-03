@@ -13,102 +13,196 @@ let driftDataS = {
                 info: {
                     stagesCount: 7,
                     participants: [],
-                    participantsCount: null,
-
                 },
             },
             2018: {
                 info: {
                     stagesCount: 7,
                     participants: [],
-                    participantsCount: null,
-
                 },
             },
             2019: {
                 info: {
                     stagesCount: 6,
                     participants: [],
-                    participantsCount: null,
-
                 },
             },
             2020: {
                 info: {
                     stagesCount: 6,
                     participants: [],
-                    participantsCount: null,
-
                 },
                 stages: {
                     moscowCup: {
                         country: "Russia",
-                        city: "Москва",
+                        place: "Москва",
                         trackName: "Moscow Raceway",
                         date: "11-12.07.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     1: {
                         country: "Russia",
-                        city: "Рязань",
+                        place: "Рязань",
                         trackName: "Atron Circuit",
                         date: "25-26.07.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     2: {
                         country: "Russia",
-                        city: "Нижний Новгород",
+                        place: "Нижний Новгород",
                         trackName: "NRing",
                         date: "8-9.08.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     3: {
                         country: "Russia",
-                        city: "Санкт-Петербург",
+                        place: "Санкт-Петербург",
                         trackName: "Igora Drive",
                         date: "29-30.08.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     4: {
                         country: "Russia",
-                        city: "Москва",
+                        place: "Москва",
                         trackName: "ADM Raceway",
                         date: "12-13.09.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     5: {
                         country: "Russia",
-                        city: "Рязань",
+                        place: "Рязань",
                         trackName: "Atron Circuit",
                         date: "26-27.09.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
 
                     6: {
                         country: "Russia",
-                        city: "Сочи",
+                        place: "Сочи",
                         trackName: "Sochi Autodrom",
                         date: "17-18.10.2020",
                         participants: [],
-                        participantsCount: null,
+                        averageTrackConfigTime: null,
                     },
                 }
             },
         },
     },
+
     driftMasters: {},
-    formulaDrift: {},
+    
+    formulaDrift: {
+        years: {
+            2017: {
+                info: {
+                    stagesCount: 7,
+                    participants: [],
+                },
+            },
+            2018: {
+                info: {
+                    stagesCount: 7,
+                    participants: [],
+                },
+            },
+            2019: {
+                info: {
+                    stagesCount: 6,
+                    participants: [],
+                },
+            },
+            2020: {
+                info: {
+                    stagesCount: 8,
+                    participants: [],
+                },
+                stages: {
+                    1: {
+                        country: "USA",
+                        place: "St. Louis, Missouri",
+                        trackName: "World Wide Technology Raceway",
+                        date: "05.09.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+
+                    2: {
+                        country: "USA",
+                        place: "St. Louis, Missouri",
+                        trackName: "World Wide Technology Raceway",
+                        date: "06.09.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+
+                    3: {
+                        country: "USA",
+                        place: "Monroe, Washington",
+                        trackName: "Texas Motor Speedway",
+                        date: "26.09.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+
+                    4: {
+                        country: "USA",
+                        place: "Monroe, Washington",
+                        trackName: "Texas Motor Speedway",
+                        date: "27.09.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+
+                    5: {
+                        country: "USA",
+                        place: "Dallas, Texas",
+                        trackName: "Texas Motor Speedway",
+                        date: "31.10.2020",
+                        participants: [],
+                        averageTrackConfigTime: 19,
+                    },
+
+                    6: {
+                        country: "USA",
+                        place: "Dallas, Texas",
+                        trackName: "Texas Motor Speedway",
+                        date: "01.11.2020",
+                        participants: ["Fredric Aasbo", "Adam LZ", "Taylor Hull", "Jeff Jones", "Vaughn Gittin Jr", "Chris Forsberg", "Ryan Tuerck", "Jonathan Nerren", "Chelsea DeNofa", "Dean Kearney", "Aurimas Bakchis", "Matt Field", "Kazuya Taguchi", "Daijiro Yoshihara", "Michael Essa", "Jhonnattan Castro", "Justin Pawlak", "Dylan Hughes", "Wataru Masuyama", "Dan Burkett", "Ken Gushi", "Travis Reeder", "Ryan Litteral", "Rome Charpentier", "Faruk Kugay", "Tyler Nelson", "Kyle Mohan"],
+                        averageTrackConfigTime: 19,
+                    },
+
+                    7: {
+                        country: "USA",
+                        place: "Irwindale, California",
+                        trackName: "Irwindale Speedway",
+                        date: "21.11.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+
+                    8: {
+                        country: "USA",
+                        place: "Irwindale, California",
+                        trackName: "Irwindale Speedway",
+                        date: "22.11.2020",
+                        participants: [],
+                        averageTrackConfigTime: null,
+                    },
+                }
+            },
+        },
+    },
 }
 
 
@@ -481,7 +575,7 @@ let driftDataManager = {
             nickname: "",
             age: null,
             country: "",
-            city: "",
+            place: "",
             careerSince: null,
             carNumbers: carNumber,
             currentTeam: team,
@@ -739,11 +833,11 @@ async function createTable(year, series, minusOne = false) {
     let count = 1;
     
     for (let i = 0; i < totalPilots; i++) {
-//         setTimeout(() => {
+        setTimeout(() => {
             let fullName = pilots[i];
 
             if (!pilotsData[fullName].years[year] || !pilotsData[fullName].years[year][series]) {
-                continue
+                return
             }
 
             let carNumber = pilotsData[fullName].years[year][series]["info"].carNumber;
@@ -817,7 +911,7 @@ async function createTable(year, series, minusOne = false) {
             tableBody.append(tr);
 
             count++;
-//         }, 0);
+        }, 0);
     }
 
     let end = Date.now();
@@ -1032,7 +1126,7 @@ async function renderResultsTable(series = "rdsGp", year = 2020) {
 //             nickname: "",
 //             age: null,
 //             country: "",
-//             city: "",
+//             place: "",
 //             careerSince: null,
 //             carNumbers: [],
 //             currentTeam: "",
