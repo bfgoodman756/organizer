@@ -16,7 +16,7 @@ menuCloseButton.addEventListener("click", function(event) {
 menu.addEventListener("click", function(event) {
     let node = getNode(event);
     let start = Date.now();
-    if (!node) {
+    if (!node || event.target.className === "menu__list-settings--controls remove-list") {
         return;
     }
 
@@ -59,6 +59,7 @@ menu.addEventListener("click", function(event) {
             div.innerText = `${end-start}ms`;
             setTimeout(()=> div.remove(), 800)
             document.body.append(div);
+            
             console.log(`[click: ${end-start}ms]`);
         }
     }
@@ -155,16 +156,6 @@ function showActiveAppOnMenu(appName) {
     let menuTabs = document.querySelectorAll('[data-menu-app-name]');
 
     activateTab(menuTabs, appName);
-//     if (appName === "ToDoList") {
-//         createMenuSubItems(".menu__todo-list", getListNamesFromTaskManager());
-//     } else if (appName === "Drift") {
-//         let lastUsedSubItem = appManager.options.lastUsedMenuSubCategory || 2020;
-//             createTable(lastUsedSubItem,"rdsGp");
-//         createMenuSubItems(".menu__drift", [2017, 2018, 2019, 2020]);
-//         highlightMenuSubItem(lastUsedSubItem)
-//     } else {
-//         removeMenuSubItems();
-//     }
 
     switch(appName) {
         case("Mainpage"):
@@ -281,15 +272,17 @@ function createMenuSubItems(parentSelector, subItemsArr) {
     menuItemWrapper.append(subItemsContainer);
 
     subItemsArr.forEach(list => {
-        createSubCatergory(subItemsContainer, list);
+        let listNode = createSubCatergory(list);
+        subItemsContainer.append(listNode);
     })
     
     if (parentSelector === ".menu__todo-list") {
-        createSubCatergory(subItemsContainer, "+", true);
+        let listNode = createSubCatergory("+", true);
+        subItemsContainer.append(listNode);
     }
 }
 
-function createSubCatergory(subsCountainer, subCatName, isPlusSign = false) {
+function createSubCatergory(subCatName, isPlusSign = false) {
     let div = document.createElement("div");
     let dataType = "menu_sub-item"; //menu_list-name
     let pClass = "menu__sub-item--header"; //menu__todo-list-name--list-create
@@ -306,41 +299,37 @@ function createSubCatergory(subsCountainer, subCatName, isPlusSign = false) {
     p.innerText = subCatName;
     p.classList.add(pClass);
 
-//     if (subItemsArr.length === 1 && !isPlusSign) {
-//        div.classList.add("menu__sub-item--active"); //menu__todo-list-name--active
-//     } else {
-//         div.classList.add("menu__sub-item");
-//     }
-
     div.append(p);
 
-    subsCountainer.append(div);
+//     subsContainer.append(div);
 
     if (subCatName === appManager.options.lastUsedMenuSubCategory) {
         div.classList.add("menu__sub-item--active");
         createMenuListSettings(div);
     }
+
+    return div;
 }
 
 function loadListNamesToMenu() {
     let listNamesWrapper = document.querySelector(".menu__todo-list");
 
     if (!listNamesWrapper.classList.contains('active-tab')) {
-        let listNames = document.querySelector('.menu__todo-list-names');
+        let listNames = document.querySelector('.menu__sub-items_container');
         if (!listNames) return;
         
-        document.querySelector('.menu__todo-list-names').remove();
+        document.querySelector('.menu__sub-items_container').remove();
         return;
     }
     
 
-    if (document.querySelector('.menu__todo-list-names')) {
-        document.querySelector('.menu__todo-list-names').remove();
+    if (document.querySelector('.menu__sub-items_container')) {
+        document.querySelector('.menu__sub-items_container').remove();
     }
 
     let listNamesData = getListNamesFromTaskManager();
     let listNamesNode = document.createElement('div');
-    listNamesNode.classList.add('menu__todo-list-names');
+    listNamesNode.classList.add('menu__sub-items_container');
 
     listNamesWrapper.append(listNamesNode);
 
@@ -351,11 +340,11 @@ function loadListNamesToMenu() {
     function createTaskLinkInMenu(listName, isPlusSign = false) {
         let div = document.createElement("div");
         let dataType = "menu_list-name";
-        let pClass = "menu__todo-list-name--header";
+        let pClass = "menu__sub-item--header";
 
         if (isPlusSign) {
             dataType = "menu_list-create";
-            pClass = "menu__todo-list-name--list-create";
+            pClass = "menu__sub-item--list-create";
         }
         
         div.dataset.type = dataType;
@@ -365,9 +354,9 @@ function loadListNamesToMenu() {
         p.classList.add(pClass);
 
         if (listNamesData.length === 1 && !isPlusSign) {
-           div.classList.add("menu__todo-list-name--active");
+           div.classList.add("menu__sub-item--active");
         } else {
-            div.classList.add("menu__todo-list-name");
+            div.classList.add("menu__sub-item");
         }
         
         div.append(p);
@@ -375,7 +364,7 @@ function loadListNamesToMenu() {
         listNamesNode.append(div);
 
         if (listName === appManager.options.lastUsedMenuSubCategory) {
-            div.classList.add("menu__todo-list-name--active");
+            div.classList.add("menu__sub-item--active");
             createMenuListSettings(div);
         }
     }
@@ -400,7 +389,7 @@ function renderTaskList(listName) {
     if (taskManager.toDoLists[listName]) {
         taskManager.loadList(listName);
 
-        currentListHeader.innerHTML = listName;
+        currentListHeader.innerText = listName;
         appManager.rememberLastUsedSubCategory(listName);
 
         console.log(createConsoleLogMessage(`[${listName}] list was loaded`));
@@ -429,7 +418,7 @@ function createMenuListSettings(target) {
     settings.classList.add(settingsSelector);
     settings.dataset.type = "menu_list-settings";
 
-    if (target.classList.contains("menu__todo-list-name--active")) {
+    if (target.classList.contains("menu__sub-item--active")) {
         settings.dataset.buttonParentStatus = "active";
     }
 
@@ -441,18 +430,6 @@ function createMenuListSettings(target) {
         settings.style.left = target.clientWidth - 36 + "px";
         settings.style.top = rect.top - 150 + menu.scrollTop + (-9) + "px";
     }, 0)
-    
-
-
-    target.addEventListener('mouseleave', removeSettingsIcon);
-
-    function removeSettingsIcon(event) {
-        if (event.target.classList.contains("menu__todo-list-name--active")) {
-            return;
-        }
-        settings.remove();
-        event.target.removeEventListener('mouseleave', removeSettingsIcon);
-    }
 
     settings.addEventListener('click', () => openListSettings(target, settings));    
 
@@ -563,15 +540,18 @@ function menuListControlsHandler(target, buttonPressed) {
 
         case("remove list"):
             taskManager.deleteList(target.innerText);
-            target.parentNode.remove();
-
-            let firstList = document.querySelector(`.menu__todo-list-name--header`).innerText;
-            let listContentHeader = document.querySelector(".tasks-header");
             
-            listContentHeader = firstList;
-            taskManager.loadList(firstList);
-            appManager.rememberLastUsedSubCategory(firstList);
-            highlightMenuSubItem(firstList);
+            let closestList = target.closest(".menu__sub-item--active").previousSibling.childNodes[0].innerText;
+//                                    closestList.closest(`.menu__sub-item--header`).innerText;
+//             let closestList = document.querySelector(`.menu__sub-item--header`).innerText;
+            let listContentHeader = document.querySelector(".tasks-header");
+
+            target.parentNode.remove();
+            
+            listContentHeader = closestList;
+            taskManager.loadList(closestList);
+            appManager.rememberLastUsedSubCategory(closestList);
+            highlightMenuSubItem(closestList);
 
             console.log(`${target.innerText} was deleted from TaskManager.toDoLists`);
             break;
@@ -670,7 +650,7 @@ function menuCreateNewTaskList(node) {
             let contentZone = document.querySelector(".content-wrapper");
 
             let inputPlacement = input.getBoundingClientRect();
-            let menuLists = document.querySelector('.menu__todo-list-names');
+            let menuLists = document.querySelector('.menu__sub-items_container');
 
             let popup = document.createElement('div');
             popup.classList.add('task-name__already-used');
@@ -687,7 +667,14 @@ function menuCreateNewTaskList(node) {
 
         taskManager.createNewList(listName);
         input.replaceWith(node);
-        loadListNamesToMenu();
+
+        // сделать так, чтобы див с новым листом возвращался из функции и его можно было засунуть куда угодно
+        // вместо того, что оно само вставляет в указанное место внутри функции (677) (283 - функция)
+        let createTaskNode = document.querySelector("[data-type='menu_list-create']");
+        let newListName = createSubCatergory(listName);
+        createTaskNode.before(newListName)
+//         createSubCatergory(subItemsContainer, listName);
+//         loadListNamesToMenu();
 //         updateMenuToDoListsHeight();
         highlightMenuSubItem(listName);
         appManager.rememberLastUsedSubCategory(listName);
@@ -707,7 +694,7 @@ function getListNamesFromTaskManager(forMenu = false) {
 
 function updateMenuToDoListsHeight(extraHeight = 0) {
     let toDoTabWrapper = document.querySelector(".menu__todo-list");
-    let listNamesNode = document.querySelector(".menu__todo-list-names");
+    let listNamesNode = document.querySelector(".menu__sub-items_container");
 
     let wrapperBasicHeight = 150;
 
@@ -720,7 +707,7 @@ function updateMenuToDoListsHeight(extraHeight = 0) {
 function updateDropDownPosition(extraHeight = 0) {
     let listsTab = document.querySelector(".menu__todo-list");
     let dropdown = document.querySelector(".menu__todo-list-dropdown");
-    let namesSection = document.querySelector(".menu__todo-list-names");
+    let namesSection = document.querySelector(".menu__sub-items_container");
 
     if (listsTab.classList.contains('active-tab')) {
         dropdown.style.top = namesSection.clientHeight + 107 + extraHeight + "px";

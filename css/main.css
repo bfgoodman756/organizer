@@ -371,10 +371,9 @@ button {
   border-radius: 10px; }
 
 .active-tab {
-  max-height: 100000px;
+  max-height: 1000px;
   transition: all .2s ease-out;
-  background-color: var(--accent-active-bg);
-  }
+  background-color: var(--accent-active-bg); }
   .active-tab .menu__todo-list-dropdown {
     transform: rotate(-180deg); }
 
@@ -423,7 +422,7 @@ button {
   border-radius: 5px;
   box-shadow: inset 0 0 0 1px var(--warning-color); }
 .tasks-placeholder {
-  padding: 5px 0;
+  padding: 5px 0 5px 30px;
   font-family: Gudea-Italic, sans-serif;
   font-size: 1.4rem;
   cursor: default;
@@ -606,36 +605,26 @@ button {
 table[class^="table-rds-"] {
   border-collapse: collapse;
   border-spacing: 0;
-  margin: 0 auto;
-  /* min-width: 2000px; */
-  }
+  margin: 0 auto; }
   table[class^="table-rds-"] td {
     border-color: #000;
     border-style: solid;
     border-width: 1px;
     font-family: Arial, sans-serif;
-    font-size: 14px;
-    white-space: nowrap;
-    }
+    font-size: 14px; }
   table[class^="table-rds-"] th {
     border: 1px solid #000;
     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: normal;
     overflow: hidden;
-    padding: 10px 4px;
-    /* position: sticky; */
-    /* top: 0; */
-    /* background: white; */
-    /* opacity: 100%; */
-    }
+    padding: 10px 4px; }
   table[class^="table-rds-"] .rotate {
     width: auto;
     white-space: nowrap;
     padding: 0;
     writing-mode: vertical-rl;
-    transform: rotate(0deg);
-    }
+    transform: rotate(0deg); }
   table[class^="table-rds-"] tbody tr {
     mix-blend-mode: multiply; }
     table[class^="table-rds-"] tbody tr:hover {

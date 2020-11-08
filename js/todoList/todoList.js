@@ -212,12 +212,12 @@ let taskManager = {
         let listHeader = document.querySelector('.todo__list-name');
         listHeader.innerText = newName;
 
-        let menuListName = document.querySelector(".menu__todo-list-name--active").firstChild;
+        let menuListName = document.querySelector(".menu__sub-item--active").firstChild;
         menuListName.innerText = newName;
 
         delete this.toDoLists[prevName];
         this.toDoLists[newName] = Object.assign({}, obj);
-        appManager.rememberLastUsedList(newName);
+        appManager.rememberLastUsedSubCategory(newName);
         saveCurrentListToLocalStorage();
     },
 
@@ -267,10 +267,10 @@ tasksContainer.addEventListener('mouseover', function(event){
         doneStatus = "done";
     }
 
-    if (target.nextSibling &&
-        target.nextSibling.classList.contains("task__create-subtree--wrapper")) {
-        return;
-    }
+//     if (target.nextSibling &&
+//         target.nextSibling.classList.contains("task__create-subtree--wrapper")) {
+//         return;
+//     }
 
     createOptionButtonsOnHover(target, "tasks__mark-as-done--button", doneStatus);    
     createOptionButtonsOnHover(target, "tasks__remove-task--button", "remove task");
@@ -294,7 +294,7 @@ toDoListWrapper.addEventListener('click', function(event) {
     clickListener(event);
 });
 
-toDoListWrapper.addEventListener('mousedown', function(event) {
+tasksContainer.addEventListener('mousedown', function(event) {
     mousedownListener(event);
 });
 
@@ -378,8 +378,8 @@ function editCurrentListName() {
         taskManager.setListOptions(newName);
     }
 
-    appManager.rememberLastUsedList(newName);
-    loadListNamesToMenu();
+    appManager.rememberLastUsedSubCategory(newName);
+//     loadListNamesToMenu();
 
     currentListName = newName;
 }
@@ -499,7 +499,7 @@ function clickListener(event) {
     let taskString = taskInput.value;
     
     switch (actionType) {
-        case ("+"):            
+        case ("Add task"):            
             if (taskString) {
                 removeRestoreButton();
             }
@@ -546,7 +546,7 @@ function mousedownListener(event) {
     let isContentEditable = elem.contentEditable === "true";
     let isP = elem.tagName === "P";
 
-    if (!isP || !isContentEditable) {
+    if (!isP && !isContentEditable) {
         return;
     }
 
@@ -618,7 +618,7 @@ function backupManager(saveOrLoad = null, backupType = "manualBackup") {
 
 // Edit li task-element on click
 function editElementsInnerHTML(element) {
-    if (element.dataset.isFocused) {
+    if (element.dataset.isFocused || element.tagName === "SPAN") {
         return;
     }
         
@@ -643,14 +643,26 @@ function editElementsInnerHTML(element) {
     function keydownListener(event) {
         if (event.key === "Enter" && event.ctrlKey) {
             submitOnBlur()
-        }
         
-        if (event.key === "Escape") {
+        } else if (event.key === "Escape") {
             element.innerText = prevValue;
             submitOnBlur()
+        
+        } else {
+            updateAddSubTaskBarHeight();
         }
     }
 
+    function updateAddSubTaskBarHeight() {
+        let taskWrapper = event.target.closest(".task-container__origin");
+        let addSubtaskBar = document.querySelector(".task__create-subtree--wrapper");
+        if (addSubtaskBar) {
+            setTimeout(() => {
+                addSubtaskBar.style.top = taskWrapper.offsetTop + taskWrapper.clientHeight - 18 + "px";
+            }, 0)
+            
+        }
+    }
 
 
     function submitOnBlur() {
@@ -661,7 +673,10 @@ function editElementsInnerHTML(element) {
         if (element.innerText === prevValue) {
             element.setAttribute("spellcheck", false);
             element.innerText = prevValue; //to reset spellchecked task after blur
+            
             console.log(createConsoleLogMessage("task value has not changed"));
+            
+            element.blur();
             return;
         }        
 
@@ -679,7 +694,8 @@ function editElementsInnerHTML(element) {
         }
 
         saveCurrentListToLocalStorage();
-
+        
+        element.blur();
         element.setAttribute("spellcheck", false);
         element.innerText = newTaskValue; //to reset spellchecked task after blur
     }
@@ -789,6 +805,7 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName) {
                 input.blur();
                 return;
             }
+
             if (event.key === "Enter") {
                 addValue();
                 button.style.top = target.offsetTop + target.clientHeight - 15 + "px";
