@@ -455,8 +455,6 @@ function createMenuListSettings(target) {
             settingsNode.remove();
             
             delete node.dataset.settingsStatus;
-            
-//             updateMenuToDoListsHeight();
             return;
         }
 
@@ -464,36 +462,20 @@ function createMenuListSettings(target) {
             document.querySelector(".menu__list-settings--wrapper").remove();
             return;
         }
+        let settingsNode = document.createElement("div");
+        settingsNode.classList.add("menu__list-settings--wrapper");
         
-        let [totalTasks, tasksDone] = taskManager.countListTasks(listName);
+        let settingsHTML = createSettingsHTML(listName);
+
+        settingsNode.innerHTML = settingsHTML;
         
-        let listCreated = taskManager.toDoLists[listName].options.dateCreated;
-        listCreated = getDate(listCreated);
-        
-
-        let sWrapper = document.createElement("div");
-        sWrapper.classList.add("menu__list-settings--wrapper");
-
-        let settings = `
-            <p>tasks count: ${totalTasks}</p>
-            <p>tasks done: ${tasksDone}</p>
-            <p>tasks undone: ${totalTasks - tasksDone}</p>
-            <p>list created: ${listCreated}</p>
-            <div class="menu__list-settings--controls edit-name" data-button-type="toDoControls">edit list name</div>
-            <div class="menu__list-settings--controls save-backup" data-button-type="toDoControls">save lists backup</div>
-            <div class="menu__list-settings--controls load-backup" data-button-type="toDoControls">load lists backup</div>
-            <div class="menu__list-settings--controls remove-list" data-button-type="toDoControls">remove list</div>
-        `;
-
-        sWrapper.innerHTML += settings;
+        node.append(settingsNode);
         node.dataset.settingsStatus = "opened";
-
-        node.append(sWrapper);
         
         settingsButton.remove();
         createMenuListSettings(node);
 
-        sWrapper.addEventListener("click", function(event) {
+        settingsNode.addEventListener("click", function(event) {
             if (event.target.dataset.buttonType !== "toDoControls") {
                 return;
             }
@@ -503,6 +485,29 @@ function createMenuListSettings(target) {
             menuListControlsHandler(listNameHeader, event.target.innerText);
          });
     }
+}
+
+function createSettingsHTML(listName) {
+    let [totalTasks, tasksDone, totalSubTasks, subTasksDone] = taskManager.countListTasks(listName);
+
+    let listCreated = taskManager.toDoLists[listName].options.dateCreated;
+    listCreated = getDate(listCreated);
+
+    let settings = `
+        <p>tasks total: ${totalTasks}</p>
+        <p>tasks done: ${tasksDone}</p>
+        <p>tasks undone: ${totalTasks - tasksDone}</p>
+        <p>subtasks total: ${totalSubTasks}</p>
+        <p>subtasks done: ${subTasksDone}</p>
+        <p>subtasks undone: ${totalSubTasks - subTasksDone}</p>
+        <p>list created: ${listCreated}</p>
+        <div class="menu__list-settings--controls edit-name" data-button-type="toDoControls">edit list name</div>
+        <div class="menu__list-settings--controls save-backup" data-button-type="toDoControls">save lists backup</div>
+        <div class="menu__list-settings--controls load-backup" data-button-type="toDoControls">load lists backup</div>
+        <div class="menu__list-settings--controls remove-list" data-button-type="toDoControls">remove list</div>
+    `;
+
+    return settings;
 }
 
 

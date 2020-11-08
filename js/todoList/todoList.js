@@ -237,16 +237,30 @@ let taskManager = {
         
         let tasks = Object.assign(this.toDoLists[listName].tasks);
         let tasksArr = Object.keys(this.toDoLists[listName].tasks);
+        
         let totalTasks = tasksArr.length;
         let tasksDone =  0;
+        let totalSubTasks = 0;
+        let subTasksDone = 0;
 
         for (let task in tasks) {
             if (tasks[task].isDone === true) {
                 tasksDone++;
             }
+            
+            if (tasks[task].subtree) {
+                for (let subtask in tasks[task].subtree) {
+                    let i = tasks[task].subtree[subtask];
+                    totalSubTasks++;
+
+                    if (tasks[task].subtree[subtask].isDone === true) {
+                        subTasksDone++
+                    }
+                }
+            }
         }
 
-        return [totalTasks, tasksDone];
+        return [totalTasks, tasksDone, totalSubTasks, subTasksDone];
     }
 };
 
@@ -851,6 +865,13 @@ function createOptionButtonsOnHover(target, buttonSelector, buttonName) {
 
             case("done/notDone"):
                 markAsDoneOnClick(target);
+                
+                let settingsNode = document.querySelector('.menu__list-settings--wrapper');
+                
+                if (settingsNode) {
+                    let settingsHTML = createSettingsHTML(currentListName);
+                    settingsNode.innerHTML = settingsHTML;
+                }
                 break;
             
             case("+"):
