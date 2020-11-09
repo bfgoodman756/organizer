@@ -129,10 +129,10 @@ button {
   position: fixed;
   z-index: 1;
   width: 300px;
+  height: 100%;
   overflow: scroll;
   transition: all .2s ease-out;
-  background-color: var(--accent-secondary-bg);
-  height: 100%; }
+  background-color: var(--accent-secondary-bg); }
   .menu::-webkit-scrollbar {
     width: 0;
     height: 0; }
@@ -143,25 +143,25 @@ button {
       min-width: auto;
       transition: all .2s ease-out; }
   .menu__tab {
-    position: relative;
     font-size: 35px;
     letter-spacing: 1px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    max-height: 158px;
     min-height: 158px;
+    max-height: 158px;
     margin: 0;
+    overflow: hidden;
     cursor: pointer;
     user-select: none;
     transition: all .2s ease-out;
-    background-color: var(--accent-bg);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; }
+    background-color: var(--accent-bg); }
     .menu__tab:hover {
       background-color: var(--accent-active-bg); }
     .menu__tab-header {
-      margin-top: 50px;
       width: 100%;
+      margin-top: 50px;
       padding: 0;
       text-align: center;
       color: var(--active-text); }
@@ -209,9 +209,9 @@ button {
     .menu__sub-item:hover {
       cursor: pointer; }
     .menu__sub-item--header {
-      padding-left: 5px;
       width: 66.6%;
       margin: 0 auto;
+      padding-left: 5px;
       word-break: break-word;
       border: 1px solid transparent; }
       .menu__sub-item--header:focus {
@@ -258,15 +258,15 @@ button {
   top: 50px;
   margin: 0; }
 .menu__todo-list-dropdown {
-  margin: 0 auto;
+  position: absolute;
   top: 64px;
+  left: 240px;
+  align-self: center;
   width: 20px;
   height: 20px;
-  fill: var(--active-text);
-  align-self: center;
-  position: absolute;
-  left: 240px;
+  margin: 0 auto;
   transition: all .1s ease-out;
+  fill: var(--active-text);
   fill-opacity: 0.5; }
 .menu__todo-list-name, .menu__todo-list__add-new-list {
   font-size: 20px;
@@ -283,9 +283,9 @@ button {
   .menu__todo-list-name:hover {
     cursor: pointer; }
   .menu__todo-list-name--header {
-    padding-left: 5px;
     width: 66.6%;
     margin: 0 auto;
+    padding-left: 5px;
     word-break: break-word;
     border: 1px solid transparent; }
     .menu__todo-list-name--header:focus {
@@ -367,8 +367,8 @@ button {
   text-align: center;
   color: var(--main-text);
   border: 2px solid var(--accent-hover);
-  background-color: var(--main-bg);
-  border-radius: 10px; }
+  border-radius: 10px;
+  background-color: var(--main-bg); }
 
 .active-tab {
   max-height: 1000px;
@@ -603,28 +603,30 @@ button {
     outline: none; }
 
 table[class^="table-rds-"] {
-  border-collapse: collapse;
+  margin: 0 auto;
   border-spacing: 0;
-  margin: 0 auto; }
+  border-collapse: collapse;
+  min-width: 1280px; }
   table[class^="table-rds-"] td {
-    border-color: #000;
-    border-style: solid;
-    border-width: 1px;
-    font-family: Arial, sans-serif;
-    font-size: 14px; }
-  table[class^="table-rds-"] th {
-    border: 1px solid #000;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000;
+    white-space: nowrap; }
+  table[class^="table-rds-"] th {
+    font-family: Arial, sans-serif;
     font-weight: normal;
+    font-size: 14px;
+    padding: 10px 4px;
     overflow: hidden;
-    padding: 10px 4px; }
+    border: 1px solid #000; }
   table[class^="table-rds-"] .rotate {
     width: auto;
-    white-space: nowrap;
     padding: 0;
-    writing-mode: vertical-rl;
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+    white-space: nowrap;
+    writing-mode: vertical-rl; }
   table[class^="table-rds-"] tbody tr {
     mix-blend-mode: multiply; }
     table[class^="table-rds-"] tbody tr:hover {
@@ -641,8 +643,8 @@ table[class^="table-rds-"] {
     table[class^="table-rds-"] .table-total-pts_minus-one-worst {
       background-color: rgba(80, 235, 148, 0.81); }
   table[class^="table-rds-"] .table-stage-missed {
-    background-color: rgba(196, 196, 196, 0.36);
-    opacity: 60%; }
+    opacity: 60%;
+    background-color: rgba(196, 196, 196, 0.36); }
   table[class^="table-rds-"] .table-qualification-failed {
     background-color: rgba(255, 20, 0, 0.64); }
   table[class^="table-rds-"] .table-column-colored {
@@ -650,13 +652,13 @@ table[class^="table-rds-"] {
   table[class^="table-rds-"] [data-table-sort] {
     cursor: pointer; }
     table[class^="table-rds-"] [data-table-sort]:hover {
-      background-color: rgba(30, 144, 255, 0.61);
-      opacity: 80%; }
+      opacity: 80%;
+      background-color: rgba(30, 144, 255, 0.61); }
 
 tr > td {
-  padding: 5px;
   min-width: 15px;
   min-height: 15px;
+  padding: 5px;
   text-align: center; }
 
 /*# sourceMappingURL=main.css.map */

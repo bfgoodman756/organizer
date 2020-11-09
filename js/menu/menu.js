@@ -10,7 +10,8 @@ menuCloseButton.addEventListener("click", function(event) {
     let menuState = menuCloseButton.dataset.menuState;
     menuState === "opened" ? menuState = "close" : menuState = "open";
     menuSwitcher(menuState);
-})
+});
+
 // setTimeout(()=> {document.querySelector("body").removeAttribute("class")}, 280)
 
 menu.addEventListener("click", function(event) {
@@ -36,7 +37,7 @@ menu.addEventListener("click", function(event) {
         renderTaskList(node.firstChild.innerText);
         
         let end = Date.now();
-        console.log(`[click: ${end-start}ms]`)
+        console.log(`[click: ${end-start}ms]`);
         return;
 
     } else if (node.classList.contains("menu__sub-item") && menuAppName === "Drift") {
@@ -47,7 +48,7 @@ menu.addEventListener("click", function(event) {
         if (currentYear === selectedYear) {
             return
         } else {
-            renderResultsTable( null , selectedYear)
+            renderResultsTable( null , selectedYear);
 
             let end = Date.now();
             let div = document.createElement("div");
@@ -57,7 +58,7 @@ menu.addEventListener("click", function(event) {
             div.style.zIndex = "100";
             div.style.top = "0";
             div.innerText = `${end-start}ms`;
-            setTimeout(()=> div.remove(), 800)
+            setTimeout(()=> div.remove(), 800);
             document.body.append(div);
             
             console.log(`[click: ${end-start}ms]`);
@@ -237,17 +238,20 @@ function activateAppsContent(selectedAppName) {
         appName = app.dataset.menuAppName;
     }
     
-//     switch(appName) {
-//         case("Mainpage"):
-//             appPlaceholder.classList.add("active-app");
-//             break;
-//         case("ToDoList"):
-//             let lastUsedMenuItem = appManager.options.lastUsedMenuSubCategory;
-//             createTable(lastUsedMenuItem,"rdsGp");
-//             break;
-//         case("Timer"):
-//             break;
-//     }
+    switch(appName) {
+        case("Mainpage"):
+            appPlaceholder.classList.add("active-app");
+            break;
+        case("ToDoList"):
+
+            break;
+        case("Drift"):
+            let lastUsedMenuItem = appManager.options.lastUsedDriftYear;
+            createTable(lastUsedMenuItem,"rdsGp");
+            break;
+        case("Timer"):
+            break;
+    }
 }
 
 

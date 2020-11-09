@@ -1,31 +1,33 @@
 table[class^="table-rds-"] {
-  border-collapse: collapse;
-  border-spacing: 0;
   margin: 0 auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+  min-width: 1280px;
 
   td {
-    border-color: #000;
-    border-style: solid;
-    border-width: 1px;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000;
+    white-space: nowrap;
   }
 
   th {
-    border: 1px solid #000;
     font-family: Arial, sans-serif;
-    font-size: 14px;
     font-weight: normal;
-    overflow: hidden;
+    font-size: 14px;
     padding: 10px 4px;
+    overflow: hidden;
+    border: 1px solid #000;
   }
 
   .rotate {
     width: auto;
-    white-space: nowrap;
     padding: 0;
-    writing-mode: vertical-rl;
     transform: rotate(0deg);
+    white-space: nowrap;
+    writing-mode: vertical-rl;
     //margin: 0 auto;
   }
 
@@ -34,20 +36,20 @@ table[class^="table-rds-"] {
       mix-blend-mode: multiply;
 
       &:hover {
-        background-color: rgba(79, 239, 153, 0.26);
+        background-color: rgba(79, 239, 153, .26);
         mix-blend-mode: multiply;
       }
     }
 
     tr:nth-child(1) {
-      background-color: rgba(255, 215, 0, 0.55);
+      background-color: rgba(255, 215, 0, .55);
       //td:nth-child(1) {
       //  background-color: gold;
       //}
     }
 
     tr:nth-child(2) {
-      background-color: rgba(211, 211, 211, 0.78);
+      background-color: rgba(211, 211, 211, .78);
       //td:nth-child(1) {
       //  background-color: lightgray;
       //}
@@ -72,8 +74,8 @@ table[class^="table-rds-"] {
     }
 
     &-stage-missed {
-      background-color: rgba(196, 196, 196, .36);
       opacity: 60%;
+      background-color: rgba(196, 196, 196, .36);
     }
 
     &-qualification-failed {
@@ -93,18 +95,20 @@ table[class^="table-rds-"] {
       }
     }
   }
+
   [data-table-sort] {
     cursor: pointer;
+
     &:hover {
-      background-color: rgba(30, 144, 255, 0.61);
       opacity: 80%;
+      background-color: rgba(30, 144, 255, .61);
     }
   }
 }
 
 tr > td {
-  padding: 5px;
   min-width: 15px;
   min-height: 15px;
+  padding: 5px;
   text-align: center;
 }
