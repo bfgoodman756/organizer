@@ -689,7 +689,7 @@ function tableSortCLickListener(event) {
 }
 
 function sortTable(th, dataset) {
-    if (th.dataset.isSorted === true) {
+    if (!th.dataset.isSorted || th.dataset.isSorted === false) {
         let ths = Array.from(document.querySelectorAll(`[class^=table-rds] > thead > tr > th`));
         ths.forEach(th=> delete th.removeAttribute("data-is-sorted"));
     }
