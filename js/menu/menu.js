@@ -17,6 +17,7 @@ menuCloseButton.addEventListener("click", function(event) {
 menu.addEventListener("click", function(event) {
     let node = getNode(event);
     let start = Date.now();
+    
     if (!node || event.target.className === "menu__list-settings--controls remove-list") {
         return;
     }
@@ -73,8 +74,7 @@ menu.addEventListener("click", function(event) {
  
     appManager.rememberLastUsedApp(selectedAppName);
 
-    if (event.target.classList.contains("menu__tab") ||
-        event.target.classList.contains("menu__tab-header")) {
+    if (node.classList.contains("menu__tab")) {
         showActiveAppOnMenu(selectedAppName);
     }
 
